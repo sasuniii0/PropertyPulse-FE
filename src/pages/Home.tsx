@@ -1,0 +1,668 @@
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import ActionCard from "../components/ActionCard";
+import StatCard from "../components/StatCard";
+import InquiryCard from "../components/InquiryCard";
+import ActivityCard from "../components/ActivityCard";
+import { useState , useEffect, use } from "react";
+import { approveListingAPI, rejectListingAPI , getPendingListings} from "../services/Admin";
+import type { ListingData} from "../services/Admin";
+import { SettingsIcon , HomeIcon,PulseIcon,SearchIcon,HeartIcon,PlusIcon,HomeIconSmall,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
+import toast from "react-hot-toast";
+import { getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
+
+
+export default function Home() {
+  const { user, loading } = useAuth();
+  const [pendingListings, setPendingListings] = useState<ListingData[]>([]);
+  const [myListings, setMyListings] = useState<EdiitListningData[]>([]);
+  const [properties, setProperties] = useState<EdiitListningData[]>([]);
+  const [approvedListings, setApprovedListings] = useState<EdiitListningData[]>([]);
+
+
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    setPreview(URL.createObjectURL(file)); // only for preview in browser
+  };
+
+   useEffect(() => {
+    if (!user) return;
+
+    const fetchListings = async () => {
+      try {
+        const res = await getPendingListings(user.token);
+        console.log("Pending listings response:", res);
+        console.log("User token used:", user.token);
+        if (!user.token) {
+          throw new Error("No access token");
+        }
+        if (res.data && Array.isArray(res.data.data)) {
+          setPendingListings(res.data.data);
+        } else {
+          console.warn("Unexpected response:", res.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch pending listings:", error);
+      }
+    };
+
+    fetchListings();
+  }, [user]);
+
+    const fetchPendingListings = async () => {
+    if (!user) return;
+    try {
+      const res = await getPendingListings(user.token);
+      if (res.data && Array.isArray(res.data.data)) {
+        setPendingListings(res.data.data);
+      }
+    } catch (error) {
+      console.error("Failed to fetch pending listings:", error);
+    }
+  };
+
+  const handleApprove = async (id: string) => {
+    if (!user) return;
+
+    try {
+      await approveListingAPI(id, user.token);
+      setPendingListings(prev => prev.filter(item => item._id !== id));
+      toast.success("Listing Approved!");
+      fetchPendingListings(); // refresh UI
+    } catch (err) {
+      console.error("Approval failed:", err);
+      toast.error("Approval failed!");
+    }
+  };
+
+  const handleReject = async (id: string) => {
+    if (!user) return;
+
+    try {
+      await rejectListingAPI(id, user.token);
+      setPendingListings(prev => prev.filter(item => item._id !== id));
+      toast.success("Listing Rejected!");
+      fetchPendingListings();
+    } catch (err) {
+      console.error("Rejection failed:", err);
+      toast.error("Rejection failed!");
+    }
+  };
+
+
+  if (loading) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center text-gray-700 text-xl font-semibold">
+        Loading...
+      </div>
+    );
+  }
+
+  if (!user) {
+    return (
+      <div className="w-full h-screen flex justify-center items-center text-gray-700 text-xl font-semibold">
+        Unauthorized — please log in.
+      </div>
+    );
+  }
+  const navigate = useNavigate()
+
+  const recentUsers = [
+    {
+      id: 1,
+      name: "Kamal Silva",
+      role: "Client",
+      date: "2 days ago",
+      status: "active",
+    },
+    {
+      id: 2,
+      name: "Anusha Jayawardena",
+      role: "Agent",
+      date: "3 days ago",
+      status: "pending",
+    },
+    {      id: 3,
+      name: "Ravi Kumar",
+      role: "Client", 
+      date: "5 days ago",
+      status: "active",
+    },
+  ];
+
+  useEffect(() => {
+  if (!user) return;
+
+  const loadAvailableProperties = async () => {
+      try {
+        const res = await getAllListingsAPI(user.token);
+        if (res.data && Array.isArray(res.data.data)) {
+          setProperties(res.data.data); // <- set all listings for client
+        } else {
+          console.warn("Unexpected response from getAllListingsAPI:", res.data);
+        }
+      } catch (err) {
+        console.error("Failed to load available properties:", err);
+      }
+    };
+
+    loadAvailableProperties();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadAgentListings = async () => {
+      if (user.role === "AGENT") {
+        try {
+          const res = await getMyListningsAPI(user.token);
+          if (res.data && Array.isArray(res.data.data)) {
+            setMyListings(res.data.data); // <- only agent listings
+          }
+        } catch (err) {
+          console.error("Failed to load agent listings:", err);
+        }
+      }
+    };
+
+    loadAgentListings();
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+    const loadApprovedListings = async () => {
+      try {
+        const data = await getApprovedListingsAPI(user.token);
+        setApprovedListings(data);
+      } catch (err) {
+        console.error("Failed to fetch approved listings:", err);
+      }
+    };
+    loadApprovedListings();
+  }, [user]);
+
+  const topAgents = [
+    {
+      rank: 1,
+      name: "Nimal Perera",
+      sales: 34,
+      value: "150M",
+      badge: "🥇",
+    },
+  ];
+
+  useEffect(() => {
+  return () => {
+    if (preview) {
+      URL.revokeObjectURL(preview);
+    }
+  };
+}, [preview]);
+
+
+  // CLIENT DASHBOARD
+  if (user.role === "CLIENT") {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        {/* Main Content */}
+        <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+          {/* Welcome Section */}
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
+            <p className="text-gray-500 mt-1">Find your dream property today</p>
+          </div>
+
+          <div className="w-full h-[350px]">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126745.75055197858!2d79.786164!3d6.927079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2593d15db80b1%3A0x6d3ef1d3dbed1e72!2sColombo!5e0!3m2!1sen!2slk!4v1700000000000"
+              className="w-full h-full border-0 rounded-none"
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+
+          {/* Quick Actions */}
+          <div className="grid md:grid-cols-4 gap-4">
+            <ActionCard icon={<SearchIcon />} title="Search Properties" desc="Browse all listings" color="bg-teal-100" onClick={() => navigate("/search")} />
+            <ActionCard icon={<HeartIcon />} title="Saved Properties" desc="View your favorites" color="bg-red-100" onClick={() => navigate("/favourites")}/>
+            <ActionCard icon={<UserIcon />} title="My Profile" desc="Update your details" color="bg-blue-100" onClick={() => navigate("/editme")}/>
+            <ActionCard icon={<HomeIconSmall />} title="My Inquiries" desc="Track your requests" color="bg-purple-100" onClick={() => navigate("/inquaries")}/>
+          </div>
+
+          {/* Available Properties */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+            <h2 className="text-xl font-bold text-gray-900 mb-6">Available Properties</h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              {approvedListings.map((p) => (
+                <div 
+                  key={p._id} 
+                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 cursor-pointer group border border-gray-100"
+                >
+                  <div className="relative h-48 overflow-hidden">
+                    <img 
+                      src={p.images && p.images.length > 0 
+                          ? p.images[0] 
+                          : "/placeholder.png"} 
+                      alt={p.title || "Property Image"} 
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                      onError={(e) => {
+                        // fallback if image URL fails
+                        (e.currentTarget as HTMLImageElement).src = "/placeholder.png";
+                      }}
+                    />
+                  </div>
+                  {preview && (
+                    <div className="mt-4 w-48 h-48 border border-gray-200 rounded-lg overflow-hidden">
+                      <img 
+                        src={preview} 
+                        alt="Preview" 
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/placeholder.png";
+                        }}
+                      />
+                    </div>
+                  )}
+
+                  <div className="p-5">
+                    <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                      <MapPinIcon />
+                      {p.location?.address || "Unknown Address"}
+                    </div>
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="font-bold text-gray-900 text-base">{p.title || "Untitled"}</h3>
+                        <p className="text-teal-600 font-bold text-lg mt-1">
+                          LKR {p.price?.toLocaleString() || "N/A"}
+                        </p>
+                      </div>
+                      <div className="flex gap-3 text-gray-500 text-sm">
+                        <span className="flex items-center gap-1"><BedIcon /> {p.bedrooms || 0}</span>
+                        <span className="flex items-center gap-1"><BathIcon /> {p.bathrooms || 0}</span>
+                      </div>
+                    </div>
+                    <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                      View Details
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+
+          {/* Market Overview */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <PulseIcon /> Market Overview
+            </h2>
+            <div className="grid md:grid-cols-3 gap-6">
+              <StatCard label="Properties Available" value="452" />
+              <StatCard label="Average Price" value="LKR 320M" />
+              <StatCard label="New Listings This Week" value="38" />
+            </div>
+          </div>
+
+          {/* Recent Inquiries */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Recent Inquiries</h2>
+            <div className="space-y-4">
+              <InquiryCard name="Oceanview Apartment" date="2 days ago" />
+              <InquiryCard name="Lakeside Villa" date="5 days ago" />
+              <InquiryCard name="City Center Studio" date="1 week ago" />
+            </div>
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if(user.role === "ADMIN"){
+    return(
+      <div className="min-h-screen bg-gray-50">
+      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+        {/* Welcome Section */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Admin Control Panel</h1>
+          <p className="text-gray-500 mt-1">Monitor and manage the entire platform</p>
+        </div>
+
+        {/* Key Metrics */}
+        <div className="grid md:grid-cols-5 gap-4">
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">1,248</div>
+            <div className="text-blue-100 mt-1">Total Users</div>
+            <div className="text-xs text-blue-200 mt-2">↑ 12% this month</div>
+          </div>
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">452</div>
+            <div className="text-teal-100 mt-1">Active Listings</div>
+            <div className="text-xs text-teal-200 mt-2">↑ 8% this month</div>
+          </div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">89</div>
+            <div className="text-purple-100 mt-1">Active Agents</div>
+            <div className="text-xs text-purple-200 mt-2">↑ 5% this month</div>
+          </div>
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">23</div>
+            <div className="text-orange-100 mt-1">Pending Approvals</div>
+            <div className="text-xs text-orange-200 mt-2">Requires attention</div>
+          </div>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">156</div>
+            <div className="text-green-100 mt-1">Sales This Month</div>
+            <div className="text-xs text-green-200 mt-2">↑ 18% vs last month</div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid md:grid-cols-4 gap-4">
+          <ActionCard 
+            icon={<UserIcon />} 
+            title="Manage Users" 
+            desc="View all users & roles" 
+            color="bg-blue-100"
+            onClick={() => navigate("/admin/manage-users")} 
+            
+          />
+          <ActionCard 
+            icon={<HomeIcon />} 
+            title="Property Approvals" 
+            desc="Review pending listings" 
+            color="bg-orange-100" 
+            
+          />
+          <ActionCard 
+            icon={<ChartIcon />} 
+            title="Platform Analytics" 
+            desc="View detailed reports" 
+            color="bg-purple-100" 
+          />
+          <ActionCard 
+            icon={<SettingsIcon />} 
+            title="System Settings" 
+            desc="Configure platform" 
+            color="bg-gray-100" 
+          />
+        </div>
+
+        {/* Pending Approvals Section */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+              <span className="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+                {pendingListings.length}
+              </span>
+              Pending Property Approvals
+            </h2>
+            <button className="text-teal-600 text-sm font-medium hover:underline">
+              View All
+            </button>
+          </div>
+          <div className="space-y-3">
+            {pendingListings.map((listing) => (
+              <div
+                key={listing._id}
+                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+              >
+                {/* Listing Title */}
+                <div className="flex-1">
+                  <h3 className="font-semibold text-gray-900">
+                    {listing.title || "Untitled Listing"}
+                  </h3>
+                  <p className="text-sm text-gray-500">
+                    Property Type: {listing.propertyType || "N/A"}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    Agent:{" "}
+                    {listing.agent
+                      ? typeof listing.agent === "object"
+                        ? listing.agent.name
+                        : listing.agent
+                      : "Unknown"}
+                  </p>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                  <button
+                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm"
+                    onClick={() => handleApprove(listing._id)}
+                  >
+                    Approve
+                  </button>
+
+                  <button
+                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm"
+                    onClick={() => handleReject(listing._id)}
+                  >
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+
+        {/* Recent Users & Activity Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {/* Recent User Registrations */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent User Registrations</h2>
+            <div className="space-y-3">
+              {recentUsers.map((user) => (
+                <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
+                      {user.name.charAt(0)}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-900 text-sm">{user.name}</h3>
+                      <p className="text-xs text-gray-500">{user.role} • {user.date}</p>
+                    </div>
+                  </div>
+                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                    user.status === 'active' 
+                      ? 'bg-green-100 text-green-700' 
+                      : 'bg-yellow-100 text-yellow-700'
+                  }`}>
+                    {user.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* System Activity */}
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">System Activity Log</h2>
+            <div className="space-y-3">
+              <ActivityCard 
+                activity="New agent registration: Priya Fernando" 
+                time="1 hour ago" 
+              />
+              <ActivityCard 
+                activity="Property listing approved: Marine Drive Suite" 
+                time="2 hours ago" 
+              />
+              <ActivityCard 
+                activity="User reported: Spam listing flagged" 
+                time="4 hours ago" 
+              />
+              <ActivityCard 
+                activity="Payment processed: LKR 2.5M transaction" 
+                time="6 hours ago" 
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Platform Statistics */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+            <PulseIcon /> Platform Statistics
+          </h2>
+          <div className="grid md:grid-cols-4 gap-6">
+            <StatCard label="Total Revenue" value="LKR 45.2M" />
+            <StatCard label="Active Sessions" value="326" />
+            <StatCard label="Avg. Response Time" value="2.3 mins" />
+            <StatCard label="Customer Satisfaction" value="4.8/5.0" />
+          </div>
+        </div>
+
+        {/* Top Performing Agents */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Performing Agents</h2>
+          <div className="space-y-3">
+            {topAgents.map((agent, index) => (
+              <div 
+                key={agent.rank} 
+                className={`flex items-center justify-between p-4 rounded-lg border ${
+                  index === 0 
+                    ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' 
+                    : 'bg-gray-50 border-gray-200'
+                }`}
+              >
+                <div className="flex items-center gap-4">
+                  <div className="text-2xl font-bold">{agent.badge}</div>
+                  <div>
+                    <h3 className="font-bold text-gray-900">{agent.name}</h3>
+                    <p className="text-sm text-gray-600">
+                      {agent.sales} sales • LKR {agent.value} total value
+                    </p>
+                  </div>
+                </div>
+                <button className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
+                  View Profile
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </main>
+    </div>
+    )
+  }
+
+  // AGENT DASHBOARD
+  return (
+    <div className="min-h-screen bg-gray-50">
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+        {/* Welcome Section */}
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Agent Dashboard</h1>
+          <p className="text-gray-500 mt-1">Manage your property listings and track performance</p>
+        </div>
+
+        {/* Stats */}
+        <div className="grid md:grid-cols-4 gap-4">
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">12</div>
+            <div className="text-teal-100 mt-1">Active Listings</div>
+          </div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">328</div>
+            <div className="text-blue-100 mt-1">Total Views</div>
+          </div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">15</div>
+            <div className="text-purple-100 mt-1">Inquiries</div>
+          </div>
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-xl shadow-lg text-white">
+            <div className="text-3xl font-bold">3</div>
+            <div className="text-orange-100 mt-1">Sold This Month</div>
+          </div>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="grid md:grid-cols-3 gap-4">
+          <ActionCard icon={<PlusIcon />} title="Create New Listing" desc="Add a new property" color="bg-green-100" onClick={() => navigate("/createListnings")}/>
+          <ActionCard icon={<EditIcon />} title="Manage Listings" desc="Edit or remove properties" color="bg-blue-100" onClick={() => navigate("/manageListnings")}/>
+          <ActionCard icon={<ChartIcon />} title="View Analytics" desc="Track performance" color="bg-orange-100" onClick={() => navigate("/viewAll")}/>
+        </div>
+
+        {/* My Active Listings */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold text-gray-900">My Active Listings</h2>
+            <button className="text-teal-600 text-sm font-medium hover:underline">View All</button>
+          </div>
+          
+          {/* My Active Listings */}
+          <div className="grid md:grid-cols-3 gap-6">
+            {myListings.map((p) => (
+              <div
+                key={p._id}
+                onClick={() => navigate(`/listning/${p._id}`)}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 cursor-pointer group border border-gray-100"
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={p.images && p.images.length > 0 ? p.images[0] : "/placeholder.png"}
+                    alt={p.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-5">
+                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                    <MapPinIcon />
+                    {p.location?.address || "Unknown Address"}
+                  </div>
+                  <div className="flex justify-between items-start mb-3">
+                    <div>
+                      <h3 className="font-bold text-gray-900 text-base">{p.title || "Untitled"}</h3>
+                      <p className="text-teal-600 font-bold text-lg mt-1">
+                        LKR {p.price?.toLocaleString() || "N/A"}
+                      </p>
+                    </div>
+                    <div className="flex gap-3 text-gray-500 text-sm">
+                      <span className="flex items-center gap-1">
+                        <BedIcon /> {p.bedrooms || 0}
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <BathIcon /> {p.bathrooms || 0}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex gap-2">
+                    <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                      Edit
+                    </button>
+                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+        </div>
+
+        {/* Recent Activity */}
+        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
+          <div className="space-y-4">
+            <ActivityCard activity="New inquiry for Cinnamon Gardens Villa" time="2 hours ago" />
+            <ActivityCard activity="Marine Drive Suite viewed 15 times" time="5 hours ago" />
+            <ActivityCard activity="Nuwara Eliya Plot listing updated" time="1 day ago" />
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+}
+
+// REUSABLE COMPONENTS
+
+
+
+
+
+
