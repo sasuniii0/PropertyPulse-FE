@@ -206,19 +206,19 @@ export default function Home() {
   // CLIENT DASHBOARD
   if (user.role === "CLIENT") {
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
         {/* Main Content */}
-        <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+        <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
           {/* Welcome Section */}
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
-            <p className="text-gray-500 mt-1">Find your dream property today</p>
+            <h1 className="text-2xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
+            <p className="text-gray-600 text-sm mt-0.5">Find your dream property today</p>
           </div>
 
-          <div className="w-full h-[350px]">
+          <div className="w-full h-[300px] shadow-sm border border-gray-200">
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126745.75055197858!2d79.786164!3d6.927079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2593d15db80b1%3A0x6d3ef1d3dbed1e72!2sColombo!5e0!3m2!1sen!2slk!4v1700000000000"
-              className="w-full h-full border-0 rounded-none"
+              className="w-full h-full border-0"
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
             ></iframe>
@@ -233,29 +233,28 @@ export default function Home() {
           </div>
 
           {/* Available Properties */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-xl font-bold text-gray-900 mb-6">Available Properties</h2>
-            <div className="grid md:grid-cols-3 gap-6">
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <h2 className="text-lg font-bold text-gray-900 mb-5">Available Properties</h2>
+            <div className="grid md:grid-cols-3 gap-5">
               {approvedListings.map((p) => (
                 <div 
                   key={p._id} 
-                  className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 cursor-pointer group border border-gray-100"
+                  className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100"
                 >
-                  <div className="relative h-48 overflow-hidden">
+                  <div className="relative h-44 overflow-hidden">
                     <img 
                       src={p.images && p.images.length > 0 
                           ? p.images[0] 
                           : "/placeholder.png"} 
                       alt={p.title || "Property Image"} 
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
                       onError={(e) => {
-                        // fallback if image URL fails
                         (e.currentTarget as HTMLImageElement).src = "/placeholder.png";
                       }}
                     />
                   </div>
                   {preview && (
-                    <div className="mt-4 w-48 h-48 border border-gray-200 rounded-lg overflow-hidden">
+                    <div className="mt-4 w-48 h-48 border border-gray-200 overflow-hidden">
                       <img 
                         src={preview} 
                         alt="Preview" 
@@ -267,24 +266,24 @@ export default function Home() {
                     </div>
                   )}
 
-                  <div className="p-5">
-                    <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                  <div className="p-4">
+                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                       <MapPinIcon />
                       {p.location?.address || "Unknown Address"}
                     </div>
                     <div className="flex justify-between items-start mb-3">
                       <div>
-                        <h3 className="font-bold text-gray-900 text-base">{p.title || "Untitled"}</h3>
-                        <p className="text-teal-600 font-bold text-lg mt-1">
+                        <h3 className="font-bold text-gray-900 text-sm">{p.title || "Untitled"}</h3>
+                        <p className="text-teal-600 font-bold text-base mt-1">
                           LKR {p.price?.toLocaleString() || "N/A"}
                         </p>
                       </div>
-                      <div className="flex gap-3 text-gray-500 text-sm">
+                      <div className="flex gap-3 text-gray-500 text-xs">
                         <span className="flex items-center gap-1"><BedIcon /> {p.bedrooms || 0}</span>
                         <span className="flex items-center gap-1"><BathIcon /> {p.bathrooms || 0}</span>
                       </div>
                     </div>
-                    <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium">
                       View Details
                     </button>
                   </div>
@@ -293,13 +292,12 @@ export default function Home() {
             </div>
           </div>
 
-
           {/* Market Overview */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <PulseIcon /> Market Overview
             </h2>
-            <div className="grid md:grid-cols-3 gap-6">
+            <div className="grid md:grid-cols-3 gap-5">
               <StatCard label="Properties Available" value="452" />
               <StatCard label="Average Price" value="LKR 320M" />
               <StatCard label="New Listings This Week" value="38" />
@@ -307,9 +305,9 @@ export default function Home() {
           </div>
 
           {/* Recent Inquiries */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Your Recent Inquiries</h2>
-            <div className="space-y-4">
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Your Recent Inquiries</h2>
+            <div className="space-y-3">
               <InquiryCard name="Oceanview Apartment" date="2 days ago" />
               <InquiryCard name="Lakeside Villa" date="5 days ago" />
               <InquiryCard name="City Center Studio" date="1 week ago" />
@@ -322,39 +320,39 @@ export default function Home() {
 
   if(user.role === "ADMIN"){
     return(
-      <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Welcome Section */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Admin Control Panel</h1>
-          <p className="text-gray-500 mt-1">Monitor and manage the entire platform</p>
+          <h1 className="text-2xl font-bold text-gray-900">Admin Control Panel</h1>
+          <p className="text-gray-600 text-sm mt-0.5">Monitor and manage the entire platform</p>
         </div>
 
         {/* Key Metrics */}
         <div className="grid md:grid-cols-5 gap-4">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">1,248</div>
-            <div className="text-blue-100 mt-1">Total Users</div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">1,248</div>
+            <div className="text-blue-100 text-xs mt-1">Total Users</div>
             <div className="text-xs text-blue-200 mt-2">↑ 12% this month</div>
           </div>
-          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">452</div>
-            <div className="text-teal-100 mt-1">Active Listings</div>
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">452</div>
+            <div className="text-teal-100 text-xs mt-1">Active Listings</div>
             <div className="text-xs text-teal-200 mt-2">↑ 8% this month</div>
           </div>
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">89</div>
-            <div className="text-purple-100 mt-1">Active Agents</div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">89</div>
+            <div className="text-purple-100 text-xs mt-1">Active Agents</div>
             <div className="text-xs text-purple-200 mt-2">↑ 5% this month</div>
           </div>
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">23</div>
-            <div className="text-orange-100 mt-1">Pending Approvals</div>
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">23</div>
+            <div className="text-orange-100 text-xs mt-1">Pending Approvals</div>
             <div className="text-xs text-orange-200 mt-2">Requires attention</div>
           </div>
-          <div className="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">156</div>
-            <div className="text-green-100 mt-1">Sales This Month</div>
+          <div className="bg-gradient-to-br from-green-500 to-green-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">156</div>
+            <div className="text-green-100 text-xs mt-1">Sales This Month</div>
             <div className="text-xs text-green-200 mt-2">↑ 18% vs last month</div>
           </div>
         </div>
@@ -367,14 +365,12 @@ export default function Home() {
             desc="View all users & roles" 
             color="bg-blue-100"
             onClick={() => navigate("/admin/manage-users")} 
-            
           />
           <ActionCard 
             icon={<HomeIcon />} 
             title="Property Approvals" 
             desc="Review pending listings" 
             color="bg-orange-100" 
-            
           />
           <ActionCard 
             icon={<ChartIcon />} 
@@ -391,33 +387,32 @@ export default function Home() {
         </div>
 
         {/* Pending Approvals Section */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
-              <span className="bg-orange-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm">
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold text-gray-900 flex items-center gap-2">
+              <span className="bg-orange-500 text-white w-5 h-5 flex items-center justify-center text-xs">
                 {pendingListings.length}
               </span>
               Pending Property Approvals
             </h2>
-            <button className="text-teal-600 text-sm font-medium hover:underline">
+            <button className="text-teal-600 text-xs font-medium hover:underline">
               View All
             </button>
           </div>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {pendingListings.map((listing) => (
               <div
                 key={listing._id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border border-gray-200"
+                className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200"
               >
-                {/* Listing Title */}
                 <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900">
+                  <h3 className="font-semibold text-gray-900 text-sm">
                     {listing.title || "Untitled Listing"}
                   </h3>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs text-gray-500">
                     Property Type: {listing.propertyType || "N/A"}
                   </p>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-xs text-gray-500">
                     Agent:{" "}
                     {listing.agent
                       ? typeof listing.agent === "object"
@@ -427,17 +422,16 @@ export default function Home() {
                   </p>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex gap-2">
                   <button
-                    className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm"
+                    className="px-3 py-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-medium"
                     onClick={() => handleApprove(listing._id)}
                   >
                     Approve
                   </button>
 
                   <button
-                    className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm"
+                    className="px-3 py-1.5 bg-red-500 hover:bg-red-600 text-white text-xs font-medium"
                     onClick={() => handleReject(listing._id)}
                   >
                     Reject
@@ -446,27 +440,26 @@ export default function Home() {
               </div>
             ))}
           </div>
-
         </div>
 
         {/* Recent Users & Activity Grid */}
-        <div className="grid md:grid-cols-2 gap-6">
+        <div className="grid md:grid-cols-2 gap-5">
           {/* Recent User Registrations */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent User Registrations</h2>
-            <div className="space-y-3">
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Recent User Registrations</h2>
+            <div className="space-y-2">
               {recentUsers.map((user) => (
-                <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 bg-gradient-to-br from-teal-400 to-teal-600 rounded-full flex items-center justify-center text-white font-bold">
+                    <div className="w-9 h-9 bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-sm">
                       {user.name.charAt(0)}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm">{user.name}</h3>
+                      <h3 className="font-semibold text-gray-900 text-xs">{user.name}</h3>
                       <p className="text-xs text-gray-500">{user.role} • {user.date}</p>
                     </div>
                   </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${
+                  <span className={`px-2 py-0.5 text-xs font-medium ${
                     user.status === 'active' 
                       ? 'bg-green-100 text-green-700' 
                       : 'bg-yellow-100 text-yellow-700'
@@ -479,9 +472,9 @@ export default function Home() {
           </div>
 
           {/* System Activity */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">System Activity Log</h2>
-            <div className="space-y-3">
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">System Activity Log</h2>
+            <div className="space-y-2">
               <ActivityCard 
                 activity="New agent registration: Priya Fernando" 
                 time="1 hour ago" 
@@ -503,11 +496,11 @@ export default function Home() {
         </div>
 
         {/* Platform Statistics */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
+          <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
             <PulseIcon /> Platform Statistics
           </h2>
-          <div className="grid md:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-4 gap-5">
             <StatCard label="Total Revenue" value="LKR 45.2M" />
             <StatCard label="Active Sessions" value="326" />
             <StatCard label="Avg. Response Time" value="2.3 mins" />
@@ -516,28 +509,28 @@ export default function Home() {
         </div>
 
         {/* Top Performing Agents */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Top Performing Agents</h2>
-          <div className="space-y-3">
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Top Performing Agents</h2>
+          <div className="space-y-2">
             {topAgents.map((agent, index) => (
               <div 
                 key={agent.rank} 
-                className={`flex items-center justify-between p-4 rounded-lg border ${
+                className={`flex items-center justify-between p-3 border ${
                   index === 0 
                     ? 'bg-gradient-to-r from-yellow-50 to-orange-50 border-yellow-200' 
                     : 'bg-gray-50 border-gray-200'
                 }`}
               >
-                <div className="flex items-center gap-4">
-                  <div className="text-2xl font-bold">{agent.badge}</div>
+                <div className="flex items-center gap-3">
+                  <div className="text-xl font-bold">{agent.badge}</div>
                   <div>
-                    <h3 className="font-bold text-gray-900">{agent.name}</h3>
-                    <p className="text-sm text-gray-600">
+                    <h3 className="font-bold text-gray-900 text-sm">{agent.name}</h3>
+                    <p className="text-xs text-gray-600">
                       {agent.sales} sales • LKR {agent.value} total value
                     </p>
                   </div>
                 </div>
-                <button className="px-4 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg text-sm font-medium">
+                <button className="px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium">
                   View Profile
                 </button>
               </div>
@@ -551,32 +544,32 @@ export default function Home() {
 
   // AGENT DASHBOARD
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Welcome Section */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Agent Dashboard</h1>
-          <p className="text-gray-500 mt-1">Manage your property listings and track performance</p>
+          <h1 className="text-2xl font-bold text-gray-900">Agent Dashboard</h1>
+          <p className="text-gray-600 text-sm mt-0.5">Manage your property listings and track performance</p>
         </div>
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">12</div>
-            <div className="text-teal-100 mt-1">Active Listings</div>
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">12</div>
+            <div className="text-teal-100 text-xs mt-1">Active Listings</div>
           </div>
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">328</div>
-            <div className="text-blue-100 mt-1">Total Views</div>
+          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">328</div>
+            <div className="text-blue-100 text-xs mt-1">Total Views</div>
           </div>
-          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">15</div>
-            <div className="text-purple-100 mt-1">Inquiries</div>
+          <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">15</div>
+            <div className="text-purple-100 text-xs mt-1">Inquiries</div>
           </div>
-          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-6 rounded-xl shadow-lg text-white">
-            <div className="text-3xl font-bold">3</div>
-            <div className="text-orange-100 mt-1">Sold This Month</div>
+          <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-5 shadow-sm text-white">
+            <div className="text-2xl font-bold">3</div>
+            <div className="text-orange-100 text-xs mt-1">Sold This Month</div>
           </div>
         </div>
 
@@ -588,40 +581,40 @@ export default function Home() {
         </div>
 
         {/* My Active Listings */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">My Active Listings</h2>
-            <button className="text-teal-600 text-sm font-medium hover:underline">View All</button>
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-lg font-bold text-gray-900">My Active Listings</h2>
+            <button className="text-teal-600 text-xs font-medium hover:underline">View All</button>
           </div>
           
           {/* My Active Listings */}
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {myListings.map((p) => (
               <div
                 key={p._id}
                 onClick={() => navigate(`/listning/${p._id}`)}
-                className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 cursor-pointer group border border-gray-100"
+                className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100"
               >
-                <div className="relative h-48 overflow-hidden">
+                <div className="relative h-44 overflow-hidden">
                   <img
                     src={p.images && p.images.length > 0 ? p.images[0] : "/placeholder.png"}
                     alt={p.title}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                <div className="p-4">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                     <MapPinIcon />
                     {p.location?.address || "Unknown Address"}
                   </div>
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-bold text-gray-900 text-base">{p.title || "Untitled"}</h3>
-                      <p className="text-teal-600 font-bold text-lg mt-1">
+                      <h3 className="font-bold text-gray-900 text-sm">{p.title || "Untitled"}</h3>
+                      <p className="text-teal-600 font-bold text-base mt-1">
                         LKR {p.price?.toLocaleString() || "N/A"}
                       </p>
                     </div>
-                    <div className="flex gap-3 text-gray-500 text-sm">
+                    <div className="flex gap-3 text-gray-500 text-xs">
                       <span className="flex items-center gap-1">
                         <BedIcon /> {p.bedrooms || 0}
                       </span>
@@ -631,10 +624,10 @@ export default function Home() {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-1.5 transition-colors text-xs font-medium">
                       Edit
                     </button>
-                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-1.5 transition-colors text-xs font-medium">
                       Delete
                     </button>
                   </div>
@@ -642,13 +635,12 @@ export default function Home() {
               </div>
             ))}
           </div>
-
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
-          <div className="space-y-4">
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Recent Activity</h2>
+          <div className="space-y-3">
             <ActivityCard activity="New inquiry for Cinnamon Gardens Villa" time="2 hours ago" />
             <ActivityCard activity="Marine Drive Suite viewed 15 times" time="5 hours ago" />
             <ActivityCard activity="Nuwara Eliya Plot listing updated" time="1 day ago" />

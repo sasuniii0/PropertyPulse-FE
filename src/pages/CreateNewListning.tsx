@@ -15,6 +15,7 @@ export default function CreateNewListing() {
     lat: '',
     lng: '',
     propertyType: 'House',
+    listingType: 'SALE',
     bedrooms: '',
     bathrooms: '',
     size: '',
@@ -79,6 +80,7 @@ export default function CreateNewListing() {
     form.append("price", formData.price);
     form.append("size", formData.size);
     form.append("propertyType", formData.propertyType);
+    form.append("listingType", formData.listingType);
 
     // Correct way to append nested location fields
     form.append("location[address]", formData.address);
@@ -109,27 +111,29 @@ export default function CreateNewListing() {
 
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-5xl mx-auto px-8 py-8">
-        {/* Header */}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <main className="max-w-6xl mx-auto px-6 py-10">
+        {/* Header Section */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Create New Listing</h1>
-          <p className="text-gray-500 mt-1">Add a new property to your listings</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1">Create New Listing</h1>
+          <p className="text-sm text-gray-600">Add a new property to your listings and reach potential buyers</p>
         </div>
 
         <div className="space-y-6">
-          {/* Basic Information */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <HomeIcon />
-              Basic Information
-            </h2>
+          {/* Basic Information Card */}
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+            <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
+              <div className="p-2 bg-teal-50">
+                <HomeIcon />
+              </div>
+              <h2 className="text-lg font-semibold text-gray-900">Basic Information</h2>
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               {/* Title */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Property Title *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Property Title <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -137,14 +141,14 @@ export default function CreateNewListing() {
                   value={formData.title}
                   onChange={handleInputChange}
                   placeholder="e.g., Spacious 4-Bedroom House in Colombo 05"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                 />
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Description *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Description <span className="text-red-500">*</span>
                 </label>
                 <textarea
                   name="description"
@@ -152,21 +156,21 @@ export default function CreateNewListing() {
                   onChange={handleInputChange}
                   placeholder="Provide a detailed description of the property..."
                   rows={5}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent resize-none"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white resize-none"
                 />
               </div>
 
               {/* AI Summary */}
               <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label className="block text-sm font-medium text-gray-700">
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold text-gray-700">
                     AI Summary
                   </label>
                   <button
                     type="button"
                     onClick={generateAISummary}
                     disabled={!formData.description || isGeneratingAI}
-                    className="flex items-center gap-2 px-3 py-1 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white rounded-lg transition-colors text-sm font-medium"
+                    className="flex items-center gap-2 px-3 py-1.5 bg-purple-500 hover:bg-purple-600 disabled:bg-gray-300 text-white transition-all duration-200 text-xs font-medium"
                   >
                     <SparklesIcon />
                     {isGeneratingAI ? 'Generating...' : 'Generate AI Summary'}
@@ -177,42 +181,65 @@ export default function CreateNewListing() {
                   onChange={(e) => setAiSummary(e.target.value)}
                   placeholder="AI-generated summary will appear here..."
                   rows={2}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none bg-purple-50"
+                  className="w-full px-3 py-2 text-sm border border-purple-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-purple-50"
                 />
-
               </div>
 
-              {/* Property Type */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Property Type *
-                </label>
-                <select
-                  name="propertyType"
-                  value={formData.propertyType}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
-                >
-                  <option value="HOUSE">House</option>
-                  <option value="APARTMENT">Apartment</option>
-                  <option value="COMMERCIAL">Commercial</option>
-                  <option value="VILLA">Villa</option>
-                  <option value="LAND">Land</option>
-                </select>
+              {/* Property Type and Listing Type */}
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Property Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="propertyType"
+                    value={formData.propertyType}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white appearance-none cursor-pointer"
+                  >
+                    <option value="HOUSE">House</option>
+                    <option value="APARTMENT">Apartment</option>
+                    <option value="COMMERCIAL">Commercial</option>
+                    <option value="VILLA">Villa</option>
+                    <option value="LAND">Land</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Listing Type <span className="text-red-500">*</span>
+                  </label>
+                  <select
+                    name="listingType"
+                    value={formData.listingType}
+                    onChange={(e) => setFormData(prev => ({
+                      ...prev,
+                      listingType: e.target.value
+                    }))}
+                    className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white appearance-none cursor-pointer"
+                  >
+                    <option value="SALE">Sale</option>
+                    <option value="RENT">Rent</option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
 
-          {/* Property Details */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4">Property Details</h2>
+          {/* Property Details Card */}
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+            <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
+              <div className="p-2 bg-teal-50">
+                <DollarIcon />
+              </div>
+              <h2 className="text-lg font-semibold text-gray-900">Property Details</h2>
+            </div>
 
             <div className="grid md:grid-cols-2 gap-4">
               {/* Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center gap-2">
-                  <DollarIcon />
-                  Price (LKR) *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Price (LKR) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -220,14 +247,14 @@ export default function CreateNewListing() {
                   value={formData.price}
                   onChange={handleInputChange}
                   placeholder="12000000"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                 />
               </div>
 
               {/* Size */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Size (sqft) *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Size (sqft) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -235,14 +262,14 @@ export default function CreateNewListing() {
                   value={formData.size}
                   onChange={handleInputChange}
                   placeholder="2100"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                 />
               </div>
 
               {/* Bedrooms */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bedrooms *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Bedrooms <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -251,14 +278,14 @@ export default function CreateNewListing() {
                   onChange={handleInputChange}
                   placeholder="4"
                   min="0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                 />
               </div>
 
               {/* Bathrooms */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Bathrooms *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Bathrooms <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -267,23 +294,26 @@ export default function CreateNewListing() {
                   onChange={handleInputChange}
                   placeholder="2"
                   min="0"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                 />
               </div>
             </div>
           </div>
 
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <MapPinIcon />
-              Location
-            </h2>
+          {/* Location Card */}
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+            <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
+              <div className="p-2 bg-teal-50">
+                <MapPinIcon />
+              </div>
+              <h2 className="text-lg font-semibold text-gray-900">Location</h2>
+            </div>
 
-            <div className="space-y-4">
+            <div className="space-y-5">
               {/* Address */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Address *
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                  Address <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -291,15 +321,15 @@ export default function CreateNewListing() {
                   value={formData.address}
                   onChange={handleInputChange}
                   placeholder="Colombo 05"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                 />
               </div>
 
               {/* Coordinates */}
               <div className="grid md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Latitude *
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Latitude <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
@@ -308,13 +338,13 @@ export default function CreateNewListing() {
                     onChange={handleInputChange}
                     placeholder="6.9271"
                     step="any"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Longitude *
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">
+                    Longitude <span className="text-red-500">*</span>
                   </label>
                   <input
                     type="number"
@@ -323,40 +353,45 @@ export default function CreateNewListing() {
                     onChange={handleInputChange}
                     placeholder="79.8612"
                     step="any"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                    className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all duration-200 bg-white"
                   />
                 </div>
               </div>
-            </div>
 
-            {/* Map Location Picker */}
-            <div className="mt-4">
-              <LocationPickerMap
-                lat={formData.lat}
-                lng={formData.lng}
-                setFormData={setFormData}
-              />
-              <p className="text-sm text-gray-500 mt-2">
+              {/* Map Location Picker */}
+              <div className="overflow-hidden border border-gray-200">
+                <LocationPickerMap
+                  lat={formData.lat}
+                  lng={formData.lng}
+                  setFormData={setFormData}
+                />
+              </div>
+              <p className="text-xs text-gray-500 flex items-center gap-2">
+                <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
                 Click on the map to select the property location
               </p>
             </div>
           </div>
 
-          
-
-          {/* Images */}
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <ImageIcon />
-              Property Images
-            </h2>
+          {/* Images Card */}
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 p-6">
+            <div className="flex items-center gap-3 mb-5 pb-3 border-b border-gray-100">
+              <div className="p-2 bg-teal-50">
+                <ImageIcon />
+              </div>
+              <h2 className="text-lg font-semibold text-gray-900">Property Images</h2>
+            </div>
 
             {/* Upload Area */}
-            <div className="mb-4">
-              <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-teal-500 transition-colors bg-gray-50 hover:bg-gray-100">
+            <div className="mb-5">
+              <label className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed border-gray-300 cursor-pointer hover:border-teal-400 transition-all duration-300 bg-gray-50 hover:bg-teal-50 group">
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <UploadIcon />
-                  <p className="mb-2 text-sm text-gray-600 font-medium">
+                  <div className="p-3 bg-gray-100 mb-3 group-hover:bg-teal-100 transition-colors duration-300">
+                    <UploadIcon />
+                  </div>
+                  <p className="mb-2 text-sm text-gray-700 font-semibold">
                     Click to upload images
                   </p>
                   <p className="text-xs text-gray-500">PNG, JPG or WEBP (MAX. 5MB)</p>
@@ -373,24 +408,25 @@ export default function CreateNewListing() {
 
             {/* Image Preview */}
             {images.length > 0 && (
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {images.map((file, index) => (
                   <div key={index} className="relative group">
-                    <img
-                      key={index}
-                      src={URL.createObjectURL(file)}
-                      alt={`Property ${index + 1}`}
-                      className="w-full h-32 object-cover rounded-lg"
+                    <div className="overflow-hidden border border-gray-200 hover:border-teal-400 transition-all duration-300">
+                      <img
+                        src={URL.createObjectURL(file)}
+                        alt={`Property ${index + 1}`}
+                        className="w-full h-32 object-cover group-hover:scale-105 transition-transform duration-300"
                       />
+                    </div>
                     <button
                       type="button"
                       onClick={() => removeImage(index)}
-                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white p-1.5 opacity-0 group-hover:opacity-100 transition-all duration-200 shadow-lg"
                     >
                       <XIcon />
                     </button>
                     {index === 0 && (
-                      <span className="absolute bottom-2 left-2 bg-teal-500 text-white text-xs px-2 py-1 rounded">
+                      <span className="absolute bottom-2 left-2 bg-teal-500 text-white text-xs px-2 py-0.5 font-medium">
                         Primary
                       </span>
                     )}
@@ -400,17 +436,17 @@ export default function CreateNewListing() {
             )}
           </div>
 
-          {/* Submit Button */}
-          <div className="flex gap-4">
+          {/* Submit Buttons */}
+          <div className="flex gap-3 pt-2">
             <button
               onClick={handleSubmit}
-              className="flex-1 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors font-semibold text-lg"
+              className="flex-1 px-6 py-2.5 bg-teal-500 hover:bg-teal-600 text-white transition-all duration-300 font-semibold text-sm shadow-sm hover:shadow-md"
             >
               Create Listing
             </button>
             <button
               type="button"
-              className="px-6 py-3 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-lg transition-colors font-semibold"
+              className="px-6 py-2.5 bg-white hover:bg-gray-50 text-gray-700 transition-all duration-300 font-semibold border border-gray-300 hover:border-gray-400 shadow-sm text-sm"
             >
               Cancel
             </button>
@@ -419,4 +455,5 @@ export default function CreateNewListing() {
       </main>
     </div>
   );
+
 }

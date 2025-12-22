@@ -124,20 +124,20 @@ export default function SearchProperties() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Search Properties</h1>
-          <p className="text-gray-500 mt-1">Find your dream property from our listings</p>
+          <h1 className="text-2xl font-bold text-gray-900">Search Properties</h1>
+          <p className="text-gray-600 text-sm mt-0.5">Find your dream property from our listings</p>
         </div>
 
         {/* Search and Filters */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
           <div className="grid md:grid-cols-5 gap-4">
             {/* Search Input */}
             <div className="md:col-span-2">
-              <label className="block text-sm font-medium text-gray-700 mb-2">Search</label>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Search</label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <SearchIcon />
@@ -147,18 +147,18 @@ export default function SearchProperties() {
                   placeholder="Search by name or location..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                  className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
                 />
               </div>
             </div>
 
             {/* Property Type Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Property Type</label>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Property Type</label>
               <select
                 value={propertyType}
                 onChange={(e) => setPropertyType(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="all">All Types</option>
                 <option value="house">House</option>
@@ -170,11 +170,11 @@ export default function SearchProperties() {
 
             {/* Price Range Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Price Range</label>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Price Range</label>
               <select
                 value={priceRange}
                 onChange={(e) => setPriceRange(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="all">All Prices</option>
                 <option value="low">Under 50M</option>
@@ -185,11 +185,11 @@ export default function SearchProperties() {
 
             {/* Bedrooms Filter */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Bedrooms</label>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Bedrooms</label>
               <select
                 value={bedrooms}
                 onChange={(e) => setBedrooms(e.target.value)}
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="all">Any</option>
                 <option value="1">1 Bed</option>
@@ -203,20 +203,23 @@ export default function SearchProperties() {
 
         {/* Results Count */}
         <div className="flex items-center justify-between">
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm">
             <span className="font-semibold text-gray-900">{filteredProperties.length}</span> properties found
           </p>
-          <button className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">
+          <button className="flex items-center gap-2 px-3 py-1.5 text-gray-700 hover:bg-gray-100 transition-colors border border-gray-200">
             <FilterIcon />
-            <span className="text-sm font-medium">Sort By</span>
+            <span className="text-xs font-medium">Sort By</span>
           </button>
         </div>
 
         {/* Properties Grid */}
-        <div className="grid md:grid-cols-3 gap-6">
+        <div className="grid md:grid-cols-3 gap-5">
           {filteredProperties.length === 0 ? (
             <div className="col-span-3 text-center py-12">
-              <p className="text-gray-500 text-lg">No properties found matching your criteria.</p>
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 mb-3">
+                <SearchIcon />
+              </div>
+              <p className="text-gray-500 text-base mb-4">No properties found matching your criteria.</p>
               <button
                 onClick={() => {
                   setSearchTerm('');
@@ -224,38 +227,38 @@ export default function SearchProperties() {
                   setPropertyType('all');
                   setBedrooms('all');
                 }}
-                className="mt-4 px-6 py-2 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors"
+                className="px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white transition-colors text-sm font-medium"
               >
                 Clear Filters
               </button>
             </div>
           ) : (
             filteredProperties.map((p) => (
-              <div key={p.id} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 cursor-pointer group border border-gray-100">
-                <div className="relative h-48 overflow-hidden">
-                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <div className="absolute top-3 right-3 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-medium capitalize">
+              <div key={p.id} className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100">
+                <div className="relative h-44 overflow-hidden">
+                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute top-2 right-2 bg-teal-500 text-white px-2.5 py-0.5 text-xs font-medium capitalize">
                     {p.type}
                   </div>
                 </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                <div className="p-4">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                     <MapPinIcon />
                     {p.address}
                   </div>
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-bold text-gray-900 text-base">{p.name}</h3>
-                      <p className="text-teal-600 font-bold text-lg mt-1">LKR {p.price}</p>
+                      <h3 className="font-bold text-gray-900 text-sm">{p.name}</h3>
+                      <p className="text-teal-600 font-bold text-base mt-1">LKR {p.price}</p>
                     </div>
                     {p.beds > 0 && (
-                      <div className="flex gap-3 text-gray-500 text-sm">
+                      <div className="flex gap-3 text-gray-500 text-xs">
                         <span className="flex items-center gap-1"><BedIcon /> {p.beds}</span>
                         <span className="flex items-center gap-1"><BathIcon /> {p.baths}</span>
                       </div>
                     )}
                   </div>
-                  <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                  <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium">
                     View Details
                   </button>
                 </div>

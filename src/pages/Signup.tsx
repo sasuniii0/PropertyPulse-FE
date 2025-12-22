@@ -81,7 +81,7 @@ export default function SignUp() {
       />
       
       {/* Modal */}
-      <div className="relative bg-white rounded-3xl shadow-2xl w-[90%] max-w-md p-8 z-10 max-h-[90vh] overflow-y-auto">
+      <div className="relative bg-white shadow-2xl w-[90%] max-w-md p-8 z-10 max-h-[90vh] overflow-y-auto">
         {/* Close Button */}
         <button 
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors text-2xl"
@@ -93,80 +93,78 @@ export default function SignUp() {
         {/* Logo */}
         <div className="flex items-center justify-center gap-2 mb-6">
           <PulseIcon />
-          <span className="font-bold text-xl text-gray-800">PropertyPulse</span>
+          <span className="font-bold text-lg text-gray-800">PropertyPulse</span>
         </div>
 
         {/* Title */}
-        <h2 className="text-2xl font-bold text-center text-gray-900 mb-2">
+        <h2 className="text-xl font-bold text-center text-gray-900 mb-1">
           Create Account
         </h2>
-        <p className="text-gray-500 text-center mb-6">
+        <p className="text-gray-600 text-center text-sm mb-6">
           Sign up to find your dream property in Sri Lanka
         </p>
 
         {/* Role Selector */}
-        <div className="flex flex-col gap-3 mb-6">
-        <div className="flex items-center justify-center gap-4">
+        <div className="flex flex-col gap-3 mb-5">
+        <div className="flex items-center justify-center gap-3">
 
             {/* Client Option */}
             <button
                 type="button"
                 onClick={() => setRole("client")}
-                className={`w-40 py-3 rounded-xl border flex flex-col items-center gap-1 transition-all ${
+                className={`w-40 py-2.5 border flex flex-col items-center gap-1 transition-all ${
                     role === "client"
                     ? "bg-teal-500 text-white border-teal-500"
                     : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"
                 }`}
                 >
-                <span className="font-medium">I am a Client</span>
+                <span className="font-medium text-sm">I am a Client</span>
             </button>
 
             {/* Agent Option */}
             <button
                 type="button"
                 onClick={() => setRole("agent")}
-                className={`w-40 py-3 rounded-xl border flex flex-col items-center gap-1 transition-all ${
+                className={`w-40 py-2.5 border flex flex-col items-center gap-1 transition-all ${
                     role === "agent"
                     ? "bg-teal-500 text-white border-teal-500"
                     : "bg-white text-gray-600 border-gray-300 hover:bg-gray-100"
                 }`}
                 >
-                <span className="font-medium">I am an Agent</span>
+                <span className="font-medium text-sm">I am an Agent</span>
             </button>
 
         </div>
         </div>
 
-
-
         {/* Social Login */}
-        <div className="flex gap-4 mb-6">
-          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-3 hover:bg-gray-50 transition-all">
+        <div className="flex gap-3 mb-5">
+          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 py-2.5 hover:bg-gray-50 transition-colors">
             <GoogleIcon />
-            <span className="text-sm font-medium text-gray-700">Google</span>
+            <span className="text-xs font-medium text-gray-700">Google</span>
           </button>
-          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-200 rounded-xl py-3 hover:bg-gray-50 transition-all">
+          <button className="flex-1 flex items-center justify-center gap-2 border border-gray-300 py-2.5 hover:bg-gray-50 transition-colors">
             <FacebookIcon />
-            <span className="text-sm font-medium text-gray-700">Facebook</span>
+            <span className="text-xs font-medium text-gray-700">Facebook</span>
           </button>
         </div>
 
         {/* Divider */}
-        <div className="flex items-center gap-4 mb-6">
+        <div className="flex items-center gap-3 mb-5">
           <div className="flex-1 h-px bg-gray-200" />
-          <span className="text-gray-400 text-sm">or</span>
+          <span className="text-gray-400 text-xs">or</span>
           <div className="flex-1 h-px bg-gray-200" />
         </div>
 
         {/* Error Message */}
         {error && (
-          <div className="bg-red-50 text-red-600 px-4 py-3 rounded-xl mb-4 text-sm">
+          <div className="bg-red-50 text-red-600 px-3 py-2.5 mb-4 text-xs border border-red-200">
             {error}
           </div>
         )}
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-3">
           <div className="relative">
             <input
               type="text"
@@ -174,9 +172,9 @@ export default function SignUp() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:border-teal-500 transition-colors"
+              className="w-full pl-11 pr-3 py-2.5 text-sm border border-gray-300 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 transition-all"
             />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
               <UserIcon />
             </div>
           </div>
@@ -188,9 +186,9 @@ export default function SignUp() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:border-teal-500 transition-colors"
+              className="w-full pl-11 pr-3 py-2.5 text-sm border border-gray-300 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 transition-all"
             />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
               <MailIcon />
             </div>
           </div>
@@ -202,9 +200,9 @@ export default function SignUp() {
               value={contactNumber}
               onChange={(e) => setcontactNumber(e.target.value)}
               required
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:border-teal-500 transition-colors"
+              className="w-full pl-11 pr-3 py-2.5 text-sm border border-gray-300 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 transition-all"
             />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
               <PhoneIcon />
             </div>
           </div>
@@ -217,15 +215,15 @@ export default function SignUp() {
               onChange={(e) => setPassword(e.target.value)}
               required
               minLength={8}
-              className="w-full pl-12 pr-12 py-3 border border-gray-200 rounded-xl outline-none focus:border-teal-500 transition-colors"
+              className="w-full pl-11 pr-11 py-2.5 text-sm border border-gray-300 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 transition-all"
             />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
               <LockIcon />
             </div>
             <button 
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
             >
               {showPassword ? <EyeOffIcon /> : <EyeIcon />}
             </button>
@@ -238,23 +236,23 @@ export default function SignUp() {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
-              className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl outline-none focus:border-teal-500 transition-colors"
+              className="w-full pl-11 pr-3 py-2.5 text-sm border border-gray-300 outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500 transition-all"
             />
-            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400">
+            <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400">
               <LockIcon />
             </div>
           </div>
 
           {/* Terms Checkbox */}
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-2.5">
             <input
               type="checkbox"
               id="terms"
               checked={agreeTerms}
               onChange={(e) => setAgreeTerms(e.target.checked)}
-              className="mt-1 w-4 h-4 text-teal-500 border-gray-300 rounded focus:ring-teal-500"
+              className="mt-0.5 w-4 h-4 text-teal-500 border-gray-300 focus:ring-teal-500"
             />
-            <label htmlFor="terms" className="text-sm text-gray-500">
+            <label htmlFor="terms" className="text-xs text-gray-600">
               I agree to the{' '}
               <a href="#" className="text-teal-600 hover:underline">Terms of Service</a>
               {' '}and{' '}
@@ -265,15 +263,14 @@ export default function SignUp() {
           <button 
             type="submit"
             disabled={isLoading}
-            className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-teal-300 text-white py-3 rounded-xl font-semibold transition-all"
+            className="w-full bg-teal-500 hover:bg-teal-600 disabled:bg-teal-300 text-white py-2.5 font-semibold text-sm transition-colors"
           >
             {isLoading ? 'Creating Account...' : 'Create Account'}
-            
           </button>
         </form>
 
         {/* Toggle */}
-        <p className="text-center text-gray-500 mt-6">
+        <p className="text-center text-gray-600 text-xs mt-5">
           Already have an account?{' '}
           <button 
             className="text-teal-600 font-semibold hover:underline"

@@ -183,16 +183,16 @@ const saveEdit = async () => {
   if (error) return <div className="text-center mt-20 text-red-500">{error}</div>;
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Manage Listings</h1>
-            <p className="text-gray-500 mt-1">View, edit, and manage all your property listings</p>
+            <h1 className="text-2xl font-bold text-gray-900">Manage Listings</h1>
+            <p className="text-gray-600 text-sm mt-0.5">View, edit, and manage all your property listings</p>
           </div>
           <button
-            className="flex items-center gap-2 px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors font-semibold"
+            className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white transition-colors font-medium text-sm shadow-sm"
             onClick={() => window.location.href = '/createListnings'}
           >
             <PlusIcon />
@@ -202,27 +202,27 @@ const saveEdit = async () => {
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div className="text-3xl font-bold text-gray-900">{stats.total}</div>
-            <div className="text-gray-500 text-sm mt-1">Total Listings</div>
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-5">
+            <div className="text-2xl font-bold text-gray-900">{stats.total}</div>
+            <div className="text-gray-500 text-xs mt-1">Total Listings</div>
           </div>
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div className="text-3xl font-bold text-green-600">{stats.active}</div>
-            <div className="text-gray-500 text-sm mt-1">Active</div>
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-5">
+            <div className="text-2xl font-bold text-green-600">{stats.active}</div>
+            <div className="text-gray-500 text-xs mt-1">Active</div>
           </div>
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div className="text-3xl font-bold text-gray-600">{stats.inactive}</div>
-            <div className="text-gray-500 text-sm mt-1">Inactive</div>
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-5">
+            <div className="text-2xl font-bold text-gray-600">{stats.inactive}</div>
+            <div className="text-gray-500 text-xs mt-1">Inactive</div>
           </div>
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
-            <div className="text-3xl font-bold text-blue-600">{stats.totalViews}</div>
-            <div className="text-gray-500 text-sm mt-1">Total Views</div>
+          <div className="bg-white shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 p-5">
+            <div className="text-2xl font-bold text-blue-600">{stats.totalViews}</div>
+            <div className="text-gray-500 text-xs mt-1">Total Views</div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-xl shadow-md border border-gray-100 p-4">
-          <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
+        <div className="bg-white shadow-sm border border-gray-100 p-4">
+          <div className="flex flex-col md:flex-row gap-3 items-center justify-between">
             <div className="relative flex-1 w-full md:w-auto">
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                 <SearchIcon />
@@ -232,13 +232,13 @@ const saveEdit = async () => {
                 placeholder="Search listings..."
                 value={searchTerm}
                 onChange={e => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+                className="w-full pl-10 pr-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               />
             </div>
             <select
               value={filterType}
               onChange={e => setFilterType(e.target.value)}
-              className="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-teal-500 focus:border-transparent"
+              className="px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
             >
               <option value="all">All Types</option>
               <option value="House">House</option>
@@ -247,16 +247,16 @@ const saveEdit = async () => {
               <option value="Condo">Condo</option>
             </select>
 
-            <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
+            <div className="flex gap-1 bg-gray-100 p-1">
               <button
                 onClick={() => setViewMode('grid')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${viewMode === 'grid' ? 'bg-white text-teal-600 shadow-sm' : 'text-gray-600'}`}
+                className={`px-4 py-1.5 font-medium transition-colors text-sm ${viewMode === 'grid' ? 'bg-white text-teal-600 shadow-sm' : 'text-gray-600'}`}
               >
                 Grid
               </button>
               <button
                 onClick={() => setViewMode('list')}
-                className={`px-4 py-2 rounded-lg font-medium transition-colors ${viewMode === 'list' ? 'bg-white text-teal-600 shadow-sm' : 'text-gray-600'}`}
+                className={`px-4 py-1.5 font-medium transition-colors text-sm ${viewMode === 'list' ? 'bg-white text-teal-600 shadow-sm' : 'text-gray-600'}`}
               >
                 List
               </button>
@@ -264,60 +264,60 @@ const saveEdit = async () => {
           </div>
         </div>
 
-        <div className="text-gray-600">
+        <div className="text-gray-600 text-sm">
           <span className="font-semibold text-gray-900">{filteredListings.length}</span> listings found
         </div>
 
-        {/* Listings */}
+        {/* Listings - Grid View */}
         {viewMode === 'grid' ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredListings.map(listing => (
-              <div key={listing.id} className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden hover:shadow-lg transition-shadow">
-                <div className="relative h-48">
+              <div key={listing.id} className="bg-white shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow duration-300">
+                <div className="relative h-44">
                   <img src={listing.images?.[0]} alt={listing.title} className="w-full h-full object-cover" />
-                  <div className="absolute top-3 right-3 flex gap-2">
-                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                  <div className="absolute top-2 right-2 flex gap-2">
+                    <span className={`px-2.5 py-0.5 text-xs font-medium ${listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                       {listing.status === 'active' ? 'Active' : 'Inactive'}
                     </span>
                   </div>
-                  <div className="absolute top-3 left-3">
-                    <span className="bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-medium">{listing.propertyType}</span>
+                  <div className="absolute top-2 left-2">
+                    <span className="bg-teal-500 text-white px-2.5 py-0.5 text-xs font-medium">{listing.propertyType}</span>
                   </div>
                 </div>
 
-                <div className="p-5">
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                <div className="p-4">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                     <MapPinIcon />
                     {listing.location?.address || 'No address'}
                   </div>
-                  <h3 className="font-bold text-gray-900 text-base mb-2">{listing.title}</h3>
-                  <p className="text-teal-600 font-bold text-lg mb-3">LKR {listing.price.toLocaleString()}</p>
-                  <div className="flex items-center gap-4 text-gray-500 text-sm mb-4 pb-4 border-b border-gray-100">
+                  <h3 className="font-bold text-gray-900 text-sm mb-2 line-clamp-1">{listing.title}</h3>
+                  <p className="text-teal-600 font-bold text-base mb-3">LKR {listing.price.toLocaleString()}</p>
+                  <div className="flex items-center gap-4 text-gray-500 text-xs mb-3 pb-3 border-b border-gray-100">
                     <span className="flex items-center gap-1"><BedIcon /> {listing.bedrooms}</span>
                     <span className="flex items-center gap-1"><BathIcon /> {listing.bathrooms}</span>
-                    <span className="flex items-center gap-1"><SquareIcon /> {listing.size} sqft</span>
+                    <span className="flex items-center gap-1"><SquareIcon /> {listing.size}</span>
                   </div>
-                  <div className="flex items-center justify-between text-xs text-gray-500 mb-4">
+                  <div className="flex items-center justify-between text-xs text-gray-500 mb-3">
                     <span className="flex items-center gap-1"><EyeIcon /> {listing.views || 0} views</span>
                     <span>{listing.inquiries || 0} inquiries</span>
                   </div>
                   <div className="flex gap-2">
                     <button
                       onClick={() => toggleStatus(listing.id)}
-                      className={`flex-1 flex items-center justify-center gap-2 px-3 py-2 rounded-lg transition-colors text-sm font-medium ${listing.status === 'active' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-green-100 hover:bg-green-200 text-green-700'}`}
+                      className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 transition-colors text-xs font-medium ${listing.status === 'active' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-green-100 hover:bg-green-200 text-green-700'}`}
                     >
                       {listing.status === 'active' ? <ToggleLeftIcon /> : <ToggleRightIcon />}
                       {listing.status === 'active' ? 'Deactivate' : 'Activate'}
                     </button>
                     <button
                       onClick={() => handleEdit(listing)}
-                      className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
+                      className="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
                     >
                       <EditIcon />
                     </button>
                     <button
                       onClick={() => handleDelete(listing.id)}
-                      className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
+                      className="px-2 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
                     >
                       <TrashIcon />
                     </button>
@@ -328,33 +328,33 @@ const saveEdit = async () => {
           </div>
         ) : (
           // LIST VIEW
-          <div className="space-y-4">
+          <div className="space-y-3">
             {filteredListings.map(listing => (
-              <div key={listing.id} className="bg-white rounded-xl shadow-md border border-gray-100 p-6 hover:shadow-lg transition-shadow">
-                <div className="flex gap-6">
-                  <div className="w-48 h-32 rounded-lg overflow-hidden flex-shrink-0">
+              <div key={listing.id} className="bg-white shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow duration-300">
+                <div className="flex gap-5">
+                  <div className="w-44 h-28 overflow-hidden flex-shrink-0">
                     <img src={listing.images?.[0]} alt={listing.title} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          <h3 className="text-xl font-bold text-gray-900">{listing.title}</h3>
-                          <span className={`px-3 py-1 rounded-full text-xs font-medium ${listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
+                          <h3 className="text-base font-bold text-gray-900">{listing.title}</h3>
+                          <span className={`px-2.5 py-0.5 text-xs font-medium ${listing.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'}`}>
                             {listing.status === 'active' ? 'Active' : 'Inactive'}
                           </span>
-                          <span className="bg-teal-100 text-teal-700 px-3 py-1 rounded-full text-xs font-medium">{listing.propertyType}</span>
+                          <span className="bg-teal-100 text-teal-700 px-2.5 py-0.5 text-xs font-medium">{listing.propertyType}</span>
                         </div>
-                        <div className="flex items-center gap-1 text-sm text-gray-500">
+                        <div className="flex items-center gap-1 text-xs text-gray-500">
                           <MapPinIcon />
                           {listing.location?.address || 'No address'}
                         </div>
                       </div>
-                      <div className="text-right text-2xl font-bold text-teal-600">LKR {listing.price.toLocaleString()}</div>
+                      <div className="text-right text-lg font-bold text-teal-600">LKR {listing.price.toLocaleString()}</div>
                     </div>
-                    <p className="text-gray-600 text-sm mb-3 line-clamp-2">{listing.description}</p>
+                    <p className="text-gray-600 text-xs mb-3 line-clamp-2">{listing.description}</p>
                     <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-6 text-gray-500 text-sm">
+                      <div className="flex items-center gap-5 text-gray-500 text-xs">
                         <span className="flex items-center gap-1"><BedIcon /> {listing.bedrooms}</span>
                         <span className="flex items-center gap-1"><BathIcon /> {listing.bathrooms}</span>
                         <span className="flex items-center gap-1"><SquareIcon /> {listing.size} sqft</span>
@@ -364,20 +364,20 @@ const saveEdit = async () => {
                       <div className="flex gap-2">
                         <button
                           onClick={() => toggleStatus(listing.id)}
-                          className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors text-sm font-medium ${listing.status === 'active' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-green-100 hover:bg-green-200 text-green-700'}`}
+                          className={`flex items-center gap-1.5 px-3 py-1.5 transition-colors text-xs font-medium ${listing.status === 'active' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-green-100 hover:bg-green-200 text-green-700'}`}
                         >
                           {listing.status === 'active' ? <ToggleLeftIcon /> : <ToggleRightIcon />}
                           {listing.status === 'active' ? 'Deactivate' : 'Activate'}
                         </button>
                         <button
                           onClick={() => handleEdit(listing)}
-                          className="px-3 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 rounded-lg transition-colors"
+                          className="px-2 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 transition-colors"
                         >
                           <EditIcon />
                         </button>
                         <button
                           onClick={() => handleDelete(listing.id)}
-                          className="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-colors"
+                          className="px-2 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
                         >
                           <TrashIcon />
                         </button>
@@ -393,17 +393,17 @@ const saveEdit = async () => {
         {/* DELETE MODAL */}
         {deleteId && (
           <Modal onClose={() => setDeleteId(null)} title="Confirm Delete">
-            <p>Are you sure you want to delete this listing?</p>
-            <div className="flex justify-end gap-2 mt-4">
+            <p className="text-sm text-gray-700 mb-4">Are you sure you want to delete this listing?</p>
+            <div className="flex justify-end gap-2">
               <button
                 onClick={() => setDeleteId(null)}
-                className="px-4 py-2 bg-gray-200 rounded-lg"
+                className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium transition-colors"
               >
                 Cancel
               </button>
               <button
                 onClick={confirmDelete}
-                className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-colors"
               >
                 Delete
               </button>
@@ -417,29 +417,49 @@ const saveEdit = async () => {
             <div className="space-y-4">
               {/* Title */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Title</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Title</label>
                 <input
                   type="text"
                   value={editData.title}
                   onChange={e => setEditData({ ...editData, title: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2"
+                  className="w-full border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
                 />
               </div>
 
               {/* Images */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Images</label>
-                
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Images</label>
+
+                {/* File input for uploading new images */}
+                <input
+                  type="file"
+                  multiple
+                  accept="image/*"
+                  onChange={(e) => {
+                    const files = e.target.files;
+                    if (files) {
+                      const newImages = [...(editData.images || []), ...Array.from(files).map(f => URL.createObjectURL(f))];
+                      setEditData({ ...editData, images: newImages });
+                    }
+                  }}
+                  className="text-sm"
+                />
+
+                {/* Preview of uploaded images */}
                 <div className="flex gap-2 mt-2 overflow-x-auto">
                   {editData.images?.map((img, i) => (
                     <div key={i} className="relative">
-                      <img src={img} alt={`preview-${i}`} className="w-24 h-24 object-cover rounded-lg" />
+                      <img
+                        src={img}
+                        alt={`preview-${i}`}
+                        className="w-20 h-20 object-cover border border-gray-200"
+                      />
                       <button
                         onClick={() => {
                           const newImages = editData.images!.filter((_, idx) => idx !== i);
                           setEditData({ ...editData, images: newImages });
                         }}
-                        className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 text-xs"
+                        className="absolute top-0.5 right-0.5 bg-red-500 text-white p-1 text-xs"
                       >
                         <TrashIcon />
                       </button>
@@ -450,18 +470,18 @@ const saveEdit = async () => {
 
               {/* Price */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Price</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Price</label>
                 <input
                   type="number"
                   value={editData.price}
                   onChange={e => setEditData({ ...editData, price: Number(e.target.value) })}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2"
+                  className="w-full border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
                 />
               </div>
 
               {/* Location with Map */}
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">Location</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Location</label>
 
                 {/* Address Input */}
                 <input
@@ -474,11 +494,11 @@ const saveEdit = async () => {
                       location: { ...editData.location, address: e.target.value },
                     })
                   }
-                  className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
+                  className="w-full border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
                 />
 
                 {/* Map Container */}
-                <div className="relative w-full h-64 rounded-lg overflow-hidden border border-gray-300 shadow-sm mt-2">
+                <div className="relative w-full h-56 overflow-hidden border border-gray-300 shadow-sm">
                   {editData.location && (
                     <EditMap
                       location={{
@@ -492,9 +512,9 @@ const saveEdit = async () => {
                   )}
 
                   {/* Lat/Lng & Address Overlay */}
-                  <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm p-2 rounded-md shadow text-xs text-gray-700 flex flex-col gap-1">
+                  <div className="absolute bottom-2 left-2 bg-white/90 backdrop-blur-sm p-2 shadow text-xs text-gray-700 flex flex-col gap-0.5">
                     <div className="font-medium text-gray-800">{editData.location?.address || 'No Address'}</div>
-                    <div className="flex gap-4">
+                    <div className="flex gap-3">
                       <div>
                         <span className="font-semibold">Lat:</span>{' '}
                         {editData.location?.lat?.toFixed(6) ?? 'N/A'}
@@ -508,61 +528,60 @@ const saveEdit = async () => {
                 </div>
               </div>
 
-
-
               {/* Bedrooms, Bathrooms, Size */}
-              <div className="flex gap-2">
+              <div className="flex gap-3">
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Bedrooms</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Bedrooms</label>
                   <input
                     type="number"
                     value={editData.bedrooms}
                     onChange={e => setEditData({ ...editData, bedrooms: Number(e.target.value) })}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2"
+                    className="w-full border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Bathrooms</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Bathrooms</label>
                   <input
                     type="number"
                     value={editData.bathrooms}
                     onChange={e => setEditData({ ...editData, bathrooms: Number(e.target.value) })}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2"
+                    className="w-full border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
                   />
                 </div>
                 <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700">Size (sqft)</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1.5">Size (sqft)</label>
                   <input
                     type="number"
                     value={editData.size}
                     onChange={e => setEditData({ ...editData, size: Number(e.target.value) })}
-                    className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2"
+                    className="w-full border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
                   />
                 </div>
               </div>
 
               {/* Description */}
               <div>
-                <label className="block text-sm font-medium text-gray-700">Description</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1.5">Description</label>
                 <textarea
                   value={editData.description}
                   onChange={e => setEditData({ ...editData, description: e.target.value })}
-                  className="mt-1 block w-full border border-gray-300 rounded-lg px-3 py-2"
+                  className="w-full border border-gray-300 px-3 py-2 text-sm focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all resize-none"
+                  rows={4}
                 />
               </div>
 
               {/* Buttons */}
-              <div className="flex justify-end gap-2 mt-4">
+              <div className="flex justify-end gap-2 pt-3 border-t border-gray-100">
                 <button
                   onClick={() => setEditData(null)}
-                  className="px-4 py-2 bg-gray-200 rounded-lg"
+                  className="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 text-sm font-medium transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={saveEdit}
                   disabled={saving}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium transition-colors"
                 >
                   {saving ? 'Saving...' : 'Save'}
                 </button>

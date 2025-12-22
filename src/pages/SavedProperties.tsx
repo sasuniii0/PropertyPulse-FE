@@ -72,18 +72,18 @@ export default function SavedProperties() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-8 py-8 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900">Saved Properties</h1>
-            <p className="text-gray-500 mt-1">Your favorite properties all in one place</p>
+            <h1 className="text-2xl font-bold text-gray-900">Saved Properties</h1>
+            <p className="text-gray-600 text-sm mt-0.5">Your favorite properties all in one place</p>
           </div>
           {savedProperties.length > 0 && (
             <button
               onClick={handleClearAll}
-              className="px-4 py-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors text-sm font-medium border border-red-200"
+              className="px-4 py-2 text-red-600 hover:bg-red-50 transition-colors text-xs font-medium border border-red-200"
             >
               Clear All
             </button>
@@ -92,15 +92,15 @@ export default function SavedProperties() {
 
         {/* Stats Card */}
         {savedProperties.length > 0 && (
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 overflow-hidden">
-              <div className="p-6 bg-gradient-to-br from-teal-50 to-teal-100">
+          <div className="bg-white shadow-sm border border-gray-100 overflow-hidden">
+              <div className="p-5 bg-gradient-to-br from-teal-50 to-teal-100">
                 <div className="flex items-center gap-3">
-                  <div className="bg-teal-500 p-3 rounded-lg">
+                  <div className="bg-teal-500 p-2.5">
                     <HeartIcon filled={true} />
                   </div>
                   <div>
-                    <div className="text-3xl font-bold text-teal-900">{savedProperties.length}</div>
-                    <div className="text-teal-600 text-sm font-medium">Saved Properties</div>
+                    <div className="text-2xl font-bold text-teal-900">{savedProperties.length}</div>
+                    <div className="text-teal-600 text-xs font-medium">Saved Properties</div>
                   </div>
                 </div>
               </div>
@@ -109,63 +109,63 @@ export default function SavedProperties() {
 
         {/* Properties Grid or Empty State */}
         {savedProperties.length === 0 ? (
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-12">
+          <div className="bg-white shadow-sm border border-gray-100 p-12">
             <div className="text-center">
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-red-100 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-red-100 mb-3">
                 <HeartIcon filled={false} />
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">No Saved Properties</h3>
-              <p className="text-gray-500 mb-6 max-w-md mx-auto">
+              <h3 className="text-lg font-bold text-gray-900 mb-2">No Saved Properties</h3>
+              <p className="text-gray-500 text-sm mb-5 max-w-md mx-auto">
                 Start exploring properties and save your favorites by clicking the heart icon on any property card.
               </p>
-              <button className="px-6 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-lg transition-colors font-medium">
+              <button className="px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white transition-colors font-medium text-sm">
                 Browse Properties
               </button>
             </div>
           </div>
         ) : (
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {savedProperties.map((p) => (
-              <div key={p.id} className="bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all hover:-translate-y-2 group border border-gray-100">
-                <div className="relative h-48 overflow-hidden">
-                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <div className="absolute top-3 right-3 bg-teal-500 text-white px-3 py-1 rounded-full text-xs font-medium capitalize">
+              <div key={p.id} className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 group border border-gray-100">
+                <div className="relative h-44 overflow-hidden">
+                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <div className="absolute top-2 right-2 bg-teal-500 text-white px-2.5 py-0.5 text-xs font-medium capitalize">
                     {p.type}
                   </div>
-                  <div className="absolute top-3 left-3 bg-red-500 text-white p-2 rounded-full">
+                  <div className="absolute top-2 left-2 bg-red-500 text-white p-1.5">
                     <HeartIcon filled={true} />
                   </div>
                 </div>
-                <div className="p-5">
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-2">
+                <div className="p-4">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                     <MapPinIcon />
                     {p.address}
                   </div>
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-bold text-gray-900 text-base">{p.name}</h3>
-                      <p className="text-teal-600 font-bold text-lg mt-1">LKR {p.price}</p>
+                      <h3 className="font-bold text-gray-900 text-sm">{p.name}</h3>
+                      <p className="text-teal-600 font-bold text-base mt-1">LKR {p.price}</p>
                     </div>
-                    <div className="flex gap-3 text-gray-500 text-sm">
+                    <div className="flex gap-3 text-gray-500 text-xs">
                       <span className="flex items-center gap-1"><BedIcon /> {p.beds}</span>
                       <span className="flex items-center gap-1"><BathIcon /> {p.baths}</span>
                     </div>
                   </div>
                   
                   {/* Saved Date */}
-                  <div className="flex items-center gap-1 text-xs text-gray-400 mb-3 bg-gray-50 px-2 py-1 rounded">
+                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-3 bg-gray-50 px-2 py-1 border border-gray-200">
                     <ClockIcon />
                     <span>Saved {p.savedDate}</span>
                   </div>
 
                   {/* Action Buttons */}
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-2 rounded-lg transition-all text-sm font-medium">
+                    <button className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium">
                       View Details
                     </button>
                     <button
                       onClick={() => handleRemove(p.id)}
-                      className="px-3 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg transition-all"
+                      className="px-2.5 bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
                       title="Remove from saved"
                     >
                       <TrashIcon />
@@ -179,9 +179,12 @@ export default function SavedProperties() {
 
         {/* Tips Section */}
         {savedProperties.length > 0 && (
-          <div className="bg-blue-50 rounded-xl border border-blue-200 p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-2">💡 Quick Tip</h3>
-            <p className="text-gray-600 text-sm">
+          <div className="bg-blue-50 border border-blue-200 p-5">
+            <h3 className="text-base font-semibold text-gray-900 mb-2 flex items-center gap-2">
+              <span>💡</span>
+              Quick Tip
+            </h3>
+            <p className="text-gray-600 text-xs leading-relaxed">
               Saved properties are stored in your account. You can compare them, schedule viewings, or share them with family and friends anytime!
             </p>
           </div>
