@@ -2,6 +2,8 @@ import { useState } from 'react';
 import {ImageIcon,UploadIcon,HomeIcon,MapPinIcon,DollarIcon,XIcon,SparklesIcon} from "../components/Icons"
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import LocationPickerMap from '../components/LocationPickerMap';
+
 
 export default function CreateNewListing() {
   const navigate = useNavigate();
@@ -271,7 +273,6 @@ export default function CreateNewListing() {
             </div>
           </div>
 
-          {/* Location */}
           <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
             <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center gap-2">
               <MapPinIcon />
@@ -327,7 +328,21 @@ export default function CreateNewListing() {
                 </div>
               </div>
             </div>
+
+            {/* Map Location Picker */}
+            <div className="mt-4">
+              <LocationPickerMap
+                lat={formData.lat}
+                lng={formData.lng}
+                setFormData={setFormData}
+              />
+              <p className="text-sm text-gray-500 mt-2">
+                Click on the map to select the property location
+              </p>
+            </div>
           </div>
+
+          
 
           {/* Images */}
           <div className="bg-white rounded-xl shadow-md border border-gray-100 p-6">
