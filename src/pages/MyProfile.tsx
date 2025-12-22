@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { getMyDetails,updateMyDetails,deleteMyAccount } from "../services/User";
-import axios from "axios";
 import toast, { Toaster } from "react-hot-toast";
 
 // Define user type based on your schema
@@ -17,6 +16,7 @@ interface UserProfile {
   isActive?: boolean;
 }
 
+
 export default function MyProfile() {
   const { user, setUser } = useAuth();
   const [profile, setProfile] = useState<UserProfile | null>(null);
@@ -24,15 +24,17 @@ export default function MyProfile() {
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  // Fetch profile on load
+  console.log(user);
+  
   useEffect(() => {
-    if (!user) return;
+    if (!user?.token) return; // wait for token
 
     const fetchProfile = async () => {
+      setLoading(true);
       try {
-        const data = await getMyDetails(user.token); // res = { message, data }
-        setProfile(data); // <-- fix
-        setEditForm(data);
+        const res = await getMyDetails(user.token);
+        setProfile(res);
+        setEditForm(res);
       } catch (err) {
         console.error(err);
         toast.error("Failed to load profile");
@@ -41,9 +43,9 @@ export default function MyProfile() {
       }
     };
 
-
     fetchProfile();
-  }, [user]);
+  }, [user?.token]); // <-- depend on token, not user
+
 
     /// Save profile changes
   const handleSave = async () => {
