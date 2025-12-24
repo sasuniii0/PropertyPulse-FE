@@ -12,6 +12,25 @@ export interface ListingData {
   status: string;
 }
 
+export interface EdiitListningData{
+  _id: string;
+  title?: string;
+  propertyType?: string;
+  images?: string[];
+  // New location field
+  location?: {
+    address?: string;  // formatted address from Google Maps
+    lat?: number;      // latitude
+    lng?: number;      // longitude
+  };
+  price?: number;
+  bedrooms?: number;
+  bathrooms?: number;
+  size?: number;
+  description?: string;
+  newImages?: File[]; // if you want to handle newly uploaded images
+}
+
 const API = "http://localhost:5000/api/v1/admin";
 
 // Get pending listings
@@ -64,4 +83,40 @@ export const deactivateAgentAPI = (id: string, token: string) => {
 export const getAllAgentsAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
   return axios.get(`${API}/agents`, { headers: { Authorization: `Bearer ${token}` } });
+};
+
+// Get ALL listings (Admin)
+export const getAllListingsAdminAPI = (token: string) => {
+  if (!token) throw new Error("No token provided");
+  return axios.get<{ data: ListingData[] }>(`${API}/listnings`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Get SINGLE listing (View)
+export const getListingByIdAdminAPI = (id: string, token: string) => {
+  if (!token) throw new Error("No token provided");
+  return axios.get(`${API}/single-listning/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Update listing
+export const updateListingAdminAPI = (
+  id: string,
+  data: Partial<EdiitListningData>,
+  token: string
+) => {
+  if (!token) throw new Error("No token provided");
+  return axios.put(`${API}/update-listning/${id}`, data, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Delete listing
+export const deleteListingAdminAPI = (id: string, token: string) => {
+  if (!token) throw new Error("No token provided");
+  return axios.delete(`${API}/delete-listning/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
 };

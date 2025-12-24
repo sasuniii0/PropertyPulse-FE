@@ -52,6 +52,30 @@ export const ManageListingIcon = () => (
   </svg>
 );
 
+// ManagePropertiesIcon.tsx
+export const ManagePropertiesIcon = () => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="20"
+    height="20"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    viewBox="0 0 24 24"
+  >
+    {/* Building */}
+    <rect x="3" y="3" width="18" height="18" rx="2" />
+    
+    {/* Windows / property units */}
+    <path d="M7 7h3M14 7h3" />
+    <path d="M7 11h3M14 11h3" />
+    <path d="M7 15h3M14 15h3" />
+  </svg>
+);
+
+
 
 export default function Header () {
     const navigate = useNavigate()
@@ -198,6 +222,12 @@ export default function Header () {
                         onClick={() => navigate("/listning/")}
                         >
                         <HomeIcon /> Property Approvals
+                    </button>
+                    <button 
+                        className="flex items-center gap-2 hover:text-blue-600 font-medium transition-colors"
+                        onClick={() => navigate("/admin-listning")}
+                        >
+                        <ManagePropertiesIcon /> Manage Properties
                     </button>
                     <button
                         className="flex items-center gap-2 hover:text-blue-600 font-medium transition-colors"
