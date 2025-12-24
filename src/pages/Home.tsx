@@ -12,6 +12,9 @@ import toast from "react-hot-toast";
 import { getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
 import SavedPropertiesMap from "../components/SavedPropertiesMap"; 
 import type { Property } from "../components/SavedPropertiesMap";
+import type {UserData} from '../services/User'
+import {getRecentUsers} from '../services/Admin'
+
 export default function Home() {
   const { user, loading } = useAuth();
   const [pendingListings, setPendingListings] = useState<ListingData[]>([]);
@@ -21,6 +24,8 @@ export default function Home() {
 
 
   const [preview, setPreview] = useState<string | null>(null);
+  const [recentUsers, setRecentUsers] = useState<UserData[]>([]);
+
 
   const [location, setLocation] = useState<Property[]>([]);
 
@@ -41,6 +46,20 @@ export default function Home() {
   getLocations();
 }, []);
 
+useEffect(() => {
+  const fetchRecentUsers = async () => {
+    if (!user) return;
+
+    try {
+      const users = await getRecentUsers(user.token);
+      setRecentUsers(users);
+    } catch (error) {
+      console.error("Failed to fetch recent users:", error);
+    }
+  };
+
+  fetchRecentUsers();
+}, [user]);
 
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -55,8 +74,6 @@ export default function Home() {
     const fetchListings = async () => {
       try {
         const res = await getPendingListings(user.token);
-        console.log("Pending listings response:", res);
-        console.log("User token used:", user.token);
         if (!user.token) {
           throw new Error("No access token");
         }
@@ -130,29 +147,6 @@ export default function Home() {
     );
   }
   const navigate = useNavigate()
-
-  const recentUsers = [
-    {
-      id: 1,
-      name: "Kamal Silva",
-      role: "Client",
-      date: "2 days ago",
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Anusha Jayawardena",
-      role: "Agent",
-      date: "3 days ago",
-      status: "pending",
-    },
-    {      id: 3,
-      name: "Ravi Kumar",
-      role: "Client", 
-      date: "5 days ago",
-      status: "active",
-    },
-  ];
 
   useEffect(() => {
   if (!user) return;
@@ -476,23 +470,27 @@ export default function Home() {
             <h2 className="text-base font-semibold text-gray-900 mb-4">Recent User Registrations</h2>
             <div className="space-y-2">
               {recentUsers.map((user) => (
-                <div key={user.id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200">
+                <div key={user._id} className="flex items-center justify-between p-3 bg-gray-50 border border-gray-200">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 bg-gradient-to-br from-teal-400 to-teal-600 flex items-center justify-center text-white font-bold text-sm">
                       {user.name.charAt(0)}
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-900 text-xs">{user.name}</h3>
-                      <p className="text-xs text-gray-500">{user.role} • {user.date}</p>
+                    </div>-
+                    <div>
+                      <h5 className="font-semibold text-gray-900 text-xs">{user.role}</h5>
                     </div>
                   </div>
-                  <span className={`px-2 py-0.5 text-xs font-medium ${
-                    user.status === 'active' 
-                      ? 'bg-green-100 text-green-700' 
-                      : 'bg-yellow-100 text-yellow-700'
-                  }`}>
-                    {user.status}
-                  </span>
+                  <span
+                  className={`text-xs px-2 py-1 rounded ${
+                    user.isActive
+                      ? "bg-green-100 text-green-700"
+                      : "bg-yellow-100 text-yellow-700"
+                  }`}
+                >
+                  {user.isActive ? "active" : "pending"}
+                </span>
                 </div>
               ))}
             </div>

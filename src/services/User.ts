@@ -1,7 +1,7 @@
 import axios from "axios";
 import api from "./Api";
 
-type UserData = {
+export type UserData = {
   _id: string;
   name: string;
   email: string;
@@ -12,6 +12,7 @@ type UserData = {
   savedListings?: string[];
   listings?: string[];
   ratings?: number;
+  status?: "active" | "pending";
 };
 
 const API = "http://localhost:5000/api/v1/user";
@@ -57,3 +58,4 @@ export const deleteMyAccount = async (token: string) => {
 
   return res.data;
 };
+

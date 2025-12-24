@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Property } from "../components/SavedPropertiesMap";
+import type { UserData } from "./User";
 
 export interface ListingData {
   _id: string;
@@ -140,4 +141,18 @@ export const fetchLocationApi = async (token: string): Promise<Property[]> => {
     console.error("Failed to fetch property locations:", err);
     return [];
   }
+};
+
+// Fetch recent users (Admin)
+export const getRecentUsers = async (token: string): Promise<UserData[]> => {
+  if (!token) throw new Error("No access token");
+
+  const res = await axios.get<{ data: UserData[] }>(
+    `${API}/recent-users`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    }
+  );
+
+  return res.data.data;
 };
