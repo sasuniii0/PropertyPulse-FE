@@ -30,7 +30,6 @@ export default function UserManage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterStatus, setFilterStatus] = useState<"all" | "active" | "inactive">("all");
-  const [selectedAgent, setSelectedAgent] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"agents" | "users">("agents");
   const [viewModalOpen, setViewModalOpen] = useState(false);
   const [selectedViewItem, setSelectedViewItem] = useState<Agent | User | null>(null);

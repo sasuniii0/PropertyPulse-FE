@@ -30,13 +30,7 @@ export default function ManageListings() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [editData, setEditData] = useState<EdiitListningData | null>(null);
   const [saving, setSaving] = useState(false);
-  const [mapLocation, setMapLocation] = useState({
-    lat: editData?.location?.lat || 6.9271, 
-    lng: editData?.location?.lng || 79.8612,
-  });
-
-
-
+  
   // Fetch listings
 useEffect(() => {
   const fetchListings = async () => {

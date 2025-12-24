@@ -4,7 +4,7 @@ import ActionCard from "../components/ActionCard";
 import StatCard from "../components/StatCard";
 import InquiryCard from "../components/InquiryCard";
 import ActivityCard from "../components/ActivityCard";
-import { useState , useEffect, use } from "react";
+import { useState , useEffect } from "react";
 import { approveListingAPI, rejectListingAPI , getPendingListings, fetchLocationApi} from "../services/Admin";
 import type { ListingData} from "../services/Admin";
 import { SettingsIcon , HomeIcon,PulseIcon,SearchIcon,HeartIcon,PlusIcon,HomeIconSmall,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
@@ -14,30 +14,35 @@ import SavedPropertiesMap from "../components/SavedPropertiesMap";
 import type { Property } from "../components/SavedPropertiesMap";
 import type {UserData} from '../services/User'
 import {getRecentUsers} from '../services/Admin'
+import {fetchLocationApiClient} from '../services/Listning'
 
 export default function Home() {
   const { user, loading } = useAuth();
   const [pendingListings, setPendingListings] = useState<ListingData[]>([]);
   const [myListings, setMyListings] = useState<EdiitListningData[]>([]);
-  const [properties, setProperties] = useState<EdiitListningData[]>([]);
+  const [, setProperties] = useState<EdiitListningData[]>([]);
   const [approvedListings, setApprovedListings] = useState<EdiitListningData[]>([]);
 
 
-  const [preview, setPreview] = useState<string | null>(null);
+  const [preview, ] = useState<string | null>(null);
   const [recentUsers, setRecentUsers] = useState<UserData[]>([]);
 
 
   const [location, setLocation] = useState<Property[]>([]);
+  const [clientLocations, setClientLocations] = useState<Property[]>([]);
+
 
   useEffect(() => {
   const getLocations = async () => {
     try {
-      const token = localStorage.getItem("accessToken"); // or wherever you store it
+      const token = localStorage.getItem("accessToken"); 
       if (!token) throw new Error("No token found");
 
       const data = await fetchLocationApi(token);
-      console.log("Fetched property locations:", data);
       setLocation(data);
+
+      const clientData = await fetchLocationApiClient(token);
+      setClientLocations(clientData);
     } catch (err) {
       console.error("Failed to fetch locations in component:", err);
     }
@@ -62,11 +67,11 @@ useEffect(() => {
 }, [user]);
 
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
-    setPreview(URL.createObjectURL(file)); // only for preview in browser
-  };
+  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (!e.target.files) return;
+  //   const file = e.target.files[0];
+  //   setPreview(URL.createObjectURL(file)); // only for preview in browser
+  // };
 
    useEffect(() => {
     if (!user) return;
@@ -230,14 +235,11 @@ useEffect(() => {
             <p className="text-gray-600 text-sm mt-0.5">Find your dream property today</p>
           </div>
 
-          <div className="w-full h-[300px] shadow-sm border border-gray-200">
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d126745.75055197858!2d79.786164!3d6.927079!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ae2593d15db80b1%3A0x6d3ef1d3dbed1e72!2sColombo!5e0!3m2!1sen!2slk!4v1700000000000"
-              className="w-full h-full border-0"
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-            ></iframe>
-          </div>
+          {/* Map Section */}
+          <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
+            <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
+            <SavedPropertiesMap properties={clientLocations} />
+          </section>
 
           {/* Quick Actions */}
           <div className="grid md:grid-cols-4 gap-4">

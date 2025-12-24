@@ -7,7 +7,6 @@ import {
   deleteListingAdminAPI
 } from "../services/Admin";
 import type { ListingData, EdiitListningData } from "../services/Admin";
-import InfoCard from "../components/InfoCard";
 
 export default function AdminListings() {
   const { user } = useAuth();

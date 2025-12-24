@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { Property } from "../components/SavedPropertiesMap";
 
 export interface ListingData {
   _id: string;
@@ -73,4 +74,18 @@ export const getApprovedListingsAPI = async (token: string) => {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data.data;
+};
+// Fetch property locations
+export const fetchLocationApiClient = async (token: string): Promise<Property[]> => {
+  if (!token) throw new Error("No token provided");
+
+  try {
+    const res = await axios.get<Property[]>(`${API}/get-locations`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch property locations:", err);
+    return [];
+  }
 };
