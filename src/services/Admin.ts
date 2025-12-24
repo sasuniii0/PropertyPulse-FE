@@ -1,4 +1,5 @@
 import axios from "axios";
+import type { Property } from "../components/SavedPropertiesMap";
 
 export interface ListingData {
   _id: string;
@@ -30,12 +31,10 @@ export interface EdiitListningData{
   description?: string;
   newImages?: File[]; // if you want to handle newly uploaded images
 }
-
 const API = "http://localhost:5000/api/v1/admin";
 
 // Get pending listings
 export const getPendingListings = (token: string) => {
-  console.log("Fetching pending listings with token:", token);
   if (!token) throw new Error("No token provided");
   return axios.get<{ data: ListingData[] }>(`${API}/pending-listnings`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -85,6 +84,12 @@ export const getAllAgentsAPI = (token: string) => {
   return axios.get(`${API}/agents`, { headers: { Authorization: `Bearer ${token}` } });
 };
 
+// Get all agents
+export const getAllUsersAPI = (token: string) => {
+  if (!token) throw new Error("No token provided");
+  return axios.get(`${API}/users`, { headers: { Authorization: `Bearer ${token}` } });
+};
+
 // Get ALL listings (Admin)
 export const getAllListingsAdminAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
@@ -119,4 +124,20 @@ export const deleteListingAdminAPI = (id: string, token: string) => {
   return axios.delete(`${API}/delete-listning/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
+};
+
+// fetching location
+export const fetchLocationApi = async (token: string): Promise<Property[]> => {
+  try {
+    if (!token) throw new Error("No token provided for fetching locations");
+
+    const res = await axios.get(`${API}/get-locations`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    return res.data;
+  } catch (err) {
+    console.error("Failed to fetch property locations:", err);
+    return [];
+  }
 };

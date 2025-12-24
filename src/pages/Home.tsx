@@ -5,13 +5,13 @@ import StatCard from "../components/StatCard";
 import InquiryCard from "../components/InquiryCard";
 import ActivityCard from "../components/ActivityCard";
 import { useState , useEffect, use } from "react";
-import { approveListingAPI, rejectListingAPI , getPendingListings} from "../services/Admin";
+import { approveListingAPI, rejectListingAPI , getPendingListings, fetchLocationApi} from "../services/Admin";
 import type { ListingData} from "../services/Admin";
 import { SettingsIcon , HomeIcon,PulseIcon,SearchIcon,HeartIcon,PlusIcon,HomeIconSmall,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
 import toast from "react-hot-toast";
 import { getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
-
-
+import SavedPropertiesMap from "../components/SavedPropertiesMap"; 
+import type { Property } from "../components/SavedPropertiesMap";
 export default function Home() {
   const { user, loading } = useAuth();
   const [pendingListings, setPendingListings] = useState<ListingData[]>([]);
@@ -21,6 +21,27 @@ export default function Home() {
 
 
   const [preview, setPreview] = useState<string | null>(null);
+
+  const [location, setLocation] = useState<Property[]>([]);
+
+  useEffect(() => {
+  const getLocations = async () => {
+    try {
+      const token = localStorage.getItem("accessToken"); // or wherever you store it
+      if (!token) throw new Error("No token found");
+
+      const data = await fetchLocationApi(token);
+      console.log("Fetched property locations:", data);
+      setLocation(data);
+    } catch (err) {
+      console.error("Failed to fetch locations in component:", err);
+    }
+  };
+
+  getLocations();
+}, []);
+
+
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -356,6 +377,12 @@ export default function Home() {
             <div className="text-xs text-green-200 mt-2">↑ 18% vs last month</div>
           </div>
         </div>
+
+        {/* Map Section */}
+        <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
+          <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
+          <SavedPropertiesMap properties={location} />
+        </section>
 
         {/* Quick Actions */}
         <div className="grid md:grid-cols-4 gap-4">
