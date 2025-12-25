@@ -15,6 +15,8 @@ import type { Property } from "../components/SavedPropertiesMap";
 import type {UserData} from '../services/User'
 import {getRecentUsers} from '../services/Admin'
 import {fetchLocationApiClient} from '../services/Listning'
+import type {AgentPaymentData } from '../components/PaymentPopup'
+import { PaymentPopup } from "../components/PaymentPopup";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -26,6 +28,44 @@ export default function Home() {
   const [recentUsers, setRecentUsers] = useState<UserData[]>([]);
   const [location, setLocation] = useState<Property[]>([]);
   const [clientLocations, setClientLocations] = useState<Property[]>([]);
+
+  // Payment related states
+  const [showPaymentPopup, setShowPaymentPopup] = useState(false);
+  const [agentPaymentData, setAgentPaymentData] = useState<AgentPaymentData | null>(null);
+
+  const navigate = useNavigate();
+
+  // Check payment status for agents
+  useEffect(() => {
+    if (!user || user.role !== "AGENT") return;
+
+    const checkPaymentStatus = async () => {
+      try {
+        // Replace with your actual API endpoint
+        const response = await fetch('/api/agent/payment-status', {
+          headers: {
+            'Authorization': `Bearer ${user.token}`
+          }
+        });
+        
+        const data = await response.json();
+        
+        setAgentPaymentData(data);
+        
+        // Check if should show popup (not dismissed this session)
+        const popupDismissed = sessionStorage.getItem('paymentPopupDismissed');
+        
+        if ((data.paymentStatus === 'expired' || data.paymentStatus === 'due_soon') && !popupDismissed) {
+          setShowPaymentPopup(true);
+        }
+        
+      } catch (error) {
+        console.error('Error checking payment status:', error);
+      }
+    };
+
+    checkPaymentStatus();
+  }, [user]);
 
   useEffect(() => {
   const getLocations = async () => {
@@ -123,6 +163,88 @@ useEffect(() => {
     }
   };
 
+    useEffect(() => {
+    if (!user) return;
+
+    const loadAvailableProperties = async () => {
+        try {
+          const res = await getAllListingsAPI(user.token);
+          if (res.data && Array.isArray(res.data.data)) {
+            setProperties(res.data.data); // <- set all listings for client
+          } else {
+            console.warn("Unexpected response from getAllListingsAPI:", res.data);
+          }
+        } catch (err) {
+          console.error("Failed to load available properties:", err);
+        }
+      };
+
+      loadAvailableProperties();
+    }, [user]);
+
+    useEffect(() => {
+      if (!user) return;
+
+      const loadAgentListings = async () => {
+        if (user.role === "AGENT") {
+          try {
+            const res = await getMyListningsAPI(user.token);
+            if (res.data && Array.isArray(res.data.data)) {
+              setMyListings(res.data.data); // <- only agent listings
+            }
+          } catch (err) {
+            console.error("Failed to load agent listings:", err);
+          }
+        }
+      };
+
+      loadAgentListings();
+    }, [user]);
+
+    useEffect(() => {
+      if (!user) return;
+      const loadApprovedListings = async () => {
+        try {
+          const data = await getApprovedListingsAPI(user.token);
+          setApprovedListings(data);
+        } catch (err) {
+          console.error("Failed to fetch approved listings:", err);
+        }
+      };
+      loadApprovedListings();
+    }, [user]);
+
+    const topAgents = [
+      {
+        rank: 1,
+        name: "Nimal Perera",
+        sales: 34,
+        value: "150M",
+        badge: "🥇",
+      },
+    ];
+
+    useEffect(() => {
+    return () => {
+      if (preview) {
+        URL.revokeObjectURL(preview);
+      }
+    };
+  }, [preview]);
+
+  const handlePayNow = () => {
+    // Navigate to payment page
+    navigate('/payment', { state: { agentData: agentPaymentData } });
+  };
+
+  const handleClosePaymentPopup = () => {
+    // Only allow closing if not expired
+    if (agentPaymentData && agentPaymentData.paymentDaysRemaining > 0) {
+      setShowPaymentPopup(false);
+      // Set flag to not show again this session
+      sessionStorage.setItem('paymentPopupDismissed', 'true');
+    }
+  };
 
   if (loading) {
     return (
@@ -139,80 +261,7 @@ useEffect(() => {
       </div>
     );
   }
-  const navigate = useNavigate()
-
-  useEffect(() => {
-  if (!user) return;
-
-  const loadAvailableProperties = async () => {
-      try {
-        const res = await getAllListingsAPI(user.token);
-        if (res.data && Array.isArray(res.data.data)) {
-          setProperties(res.data.data); // <- set all listings for client
-        } else {
-          console.warn("Unexpected response from getAllListingsAPI:", res.data);
-        }
-      } catch (err) {
-        console.error("Failed to load available properties:", err);
-      }
-    };
-
-    loadAvailableProperties();
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    const loadAgentListings = async () => {
-      if (user.role === "AGENT") {
-        try {
-          const res = await getMyListningsAPI(user.token);
-          if (res.data && Array.isArray(res.data.data)) {
-            setMyListings(res.data.data); // <- only agent listings
-          }
-        } catch (err) {
-          console.error("Failed to load agent listings:", err);
-        }
-      }
-    };
-
-    loadAgentListings();
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-    const loadApprovedListings = async () => {
-      try {
-        const data = await getApprovedListingsAPI(user.token);
-        setApprovedListings(data);
-      } catch (err) {
-        console.error("Failed to fetch approved listings:", err);
-      }
-    };
-    loadApprovedListings();
-  }, [user]);
-
-  const topAgents = [
-    {
-      rank: 1,
-      name: "Nimal Perera",
-      sales: 34,
-      value: "150M",
-      badge: "🥇",
-    },
-  ];
-
-  useEffect(() => {
-  return () => {
-    if (preview) {
-      URL.revokeObjectURL(preview);
-    }
-  };
-}, [preview]);
-
-console.log(approvedListings);
-
-
+  
 
   // CLIENT DASHBOARD
   if (user.role === "CLIENT") {
@@ -566,6 +615,15 @@ console.log(approvedListings);
   // AGENT DASHBOARD
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+
+      {/* Payment Popup */}
+      <PaymentPopup
+        isOpen={showPaymentPopup}
+        onClose={handleClosePaymentPopup}
+        agentData={agentPaymentData}
+        onPayNow={handlePayNow}
+      />
+
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Welcome Section */}
@@ -573,6 +631,27 @@ console.log(approvedListings);
           <h1 className="text-2xl font-bold text-gray-900">Agent Dashboard</h1>
           <p className="text-gray-600 text-sm mt-0.5">Manage your property listings and track performance</p>
         </div>
+
+        {/* Payment Status Banner (if expiring soon) */}
+        {agentPaymentData && agentPaymentData.paymentDaysRemaining <= 7 && agentPaymentData.paymentDaysRemaining > 0 && (
+          <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">⚠️</span>
+              <div>
+                <p className="font-semibold text-gray-900">Payment Due Soon</p>
+                <p className="text-sm text-gray-600">
+                  {agentPaymentData.paymentDaysRemaining} day{agentPaymentData.paymentDaysRemaining !== 1 ? 's' : ''} remaining
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={() => setShowPaymentPopup(true)}
+              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+            >
+              Pay Now
+            </button>
+          </div>
+        )}
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">

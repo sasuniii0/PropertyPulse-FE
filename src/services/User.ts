@@ -68,3 +68,15 @@ export const getUserByIdAPI = (id: string, token: string) => {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
+
+export const checkPaymentStatusAPI = async (token: string) => {
+  if (!token) throw new Error("No token provided");
+
+  const res = await axios.get(`${API}/payment-status`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+
+  return res.data;
+};
