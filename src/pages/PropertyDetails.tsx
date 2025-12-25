@@ -538,7 +538,9 @@ export default function PropertyDetails() {
                           </span>
                         </div>
                       </div>
-                      <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium">
+                      <button
+                          className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
+                          onClick={()=> navigate(`/property/${listing._id}`)}>
                         View Details
                       </button>
                     </div>

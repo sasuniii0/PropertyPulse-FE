@@ -22,12 +22,8 @@ export default function Home() {
   const [myListings, setMyListings] = useState<EdiitListningData[]>([]);
   const [, setProperties] = useState<EdiitListningData[]>([]);
   const [approvedListings, setApprovedListings] = useState<EdiitListningData[]>([]);
-
-
   const [preview, ] = useState<string | null>(null);
   const [recentUsers, setRecentUsers] = useState<UserData[]>([]);
-
-
   const [location, setLocation] = useState<Property[]>([]);
   const [clientLocations, setClientLocations] = useState<Property[]>([]);
 
@@ -64,13 +60,6 @@ useEffect(() => {
 
   fetchRecentUsers();
 }, [user]);
-
-
-  // const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   if (!e.target.files) return;
-  //   const file = e.target.files[0];
-  //   setPreview(URL.createObjectURL(file)); // only for preview in browser
-  // };
 
    useEffect(() => {
     if (!user) return;
@@ -220,6 +209,9 @@ useEffect(() => {
     }
   };
 }, [preview]);
+
+console.log(approvedListings);
+
 
 
   // CLIENT DASHBOARD

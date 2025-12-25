@@ -1,6 +1,5 @@
 import axios from "axios";
 import type { Property } from "../components/SavedPropertiesMap";
-import { ToyBrick } from "lucide-react";
 
 export interface ListingData {
   _id: string;
