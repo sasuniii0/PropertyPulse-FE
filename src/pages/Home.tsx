@@ -31,7 +31,6 @@ export default function Home() {
   const [location, setLocation] = useState<Property[]>([]);
   const [clientLocations, setClientLocations] = useState<Property[]>([]);
 
-
   useEffect(() => {
   const getLocations = async () => {
     try {
@@ -300,7 +299,10 @@ useEffect(() => {
                         <span className="flex items-center gap-1"><BathIcon /> {p.bathrooms || 0}</span>
                       </div>
                     </div>
-                    <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium">
+                    <button 
+                      onClick={() => navigate(`/property/${p._id}`)}
+                      className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
+                    >
                       View Details
                     </button>
                   </div>

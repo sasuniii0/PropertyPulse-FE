@@ -59,3 +59,12 @@ export const deleteMyAccount = async (token: string) => {
   return res.data;
 };
 
+// Get single user by ID
+export const getUserByIdAPI = (id: string, token: string) => {
+  if (!token) throw new Error("No token provided");
+  if (!id) throw new Error("No user ID provided");
+
+  return axios.get(`${API}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};

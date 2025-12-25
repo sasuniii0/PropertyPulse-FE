@@ -1,5 +1,6 @@
 import axios from "axios";
 import type { Property } from "../components/SavedPropertiesMap";
+import { ToyBrick } from "lucide-react";
 
 export interface ListingData {
   _id: string;
@@ -63,6 +64,29 @@ export const getAllListingsAPI = (token: string) => {
   });
 };
 
+// Get all listings by agent
+export const getListingsByAgentAPI = (agentId: string, token: string) => {
+  if (!token) throw new Error("No token provided");
+  if (!agentId) throw new Error("No agent ID provided");
+
+  console.log("hikedjew");
+  
+
+  return axios.get(`${API}/agent/${agentId}/listings`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
+// Get single listing by ID
+export const getListingByIdAPI = (id: string, token: string) => {
+  if (!token) throw new Error("No token provided");
+  if (!id) throw new Error("No listing ID provided");
+
+  return axios.get(`${API}/${id}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
 export const getMyListningsAPI = async (token: string) => {
   return axios.get<{ data: ListingData[] }>(`${API}/my-listings`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -75,6 +99,7 @@ export const getApprovedListingsAPI = async (token: string) => {
   });
   return res.data.data;
 };
+
 // Fetch property locations
 export const fetchLocationApiClient = async (token: string): Promise<Property[]> => {
   if (!token) throw new Error("No token provided");
