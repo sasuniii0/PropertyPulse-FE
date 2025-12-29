@@ -14,6 +14,7 @@ import PropertyApproval from "../pages/PropertyApproval";
 import AdminListings from '../pages/AdminListnings'
 import PropertyDetails from "../pages/PropertyDetails";
 import AvailableProperties from "../pages/AvailableProperties";
+import PaymentSuccess from "../pages/PaymentSuccess";
 
 
 const Welcome = lazy(() => import("../pages/Welcome"))
@@ -79,6 +80,7 @@ export default function Router() {
                         <Route path="/admin-listning" element={ <AdminListings/>} />
                         <Route path="/property/:id" element={<PropertyDetails />} />
                         <Route path="/properties" element={<AvailableProperties />} />
+                        <Route path="/payment-status" element={<PaymentSuccess />} />
 
                     </Route>
                 </Routes>

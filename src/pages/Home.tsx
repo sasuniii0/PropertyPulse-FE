@@ -17,6 +17,7 @@ import {fetchLocationApiClient} from '../services/Listning'
 import MyRecentInquiries from '../components/MyRecentInquiries'
 import { PaymentPopup } from "../components/PaymentPopup";
 import axios from "axios";
+import { startAgentPayment } from "../services/Payment";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -58,8 +59,6 @@ export default function Home() {
   checkPayment();
 }, [user]);
 
-
-
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -80,6 +79,17 @@ export default function Home() {
 
   getLocations();
 }, []);
+
+const handlePayNow = async () => {
+  if (!user?.token) return;
+
+  try {
+    const data = await startAgentPayment(user.token);
+    window.location.href = data.url; // Stripe checkout
+  } catch (err) {
+    console.error("Payment failed", err);
+  }
+};
 
 useEffect(() => {
   const fetchRecentUsers = async () => {
@@ -595,10 +605,7 @@ useEffect(() => {
         <PaymentPopup
           isOpen={showPaymentPopup}
           onClose={() => setShowPaymentPopup(false)}
-          onPayNow={() => {
-            console.log("Redirect to payment page");
-            setShowPaymentPopup(false);
-          }}
+          onPayNow={handlePayNow}
         />
 
         {/* Welcome Section */}
