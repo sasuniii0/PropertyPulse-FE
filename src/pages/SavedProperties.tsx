@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { BedIcon,BathIcon,MapPinIcon,HeartIcon,TrashIcon,ClockIcon } from '../components/Icons';
 
-export default function SavedProperties() {
+export default function SavedProperty() {
   // Mock saved properties data
   const [savedProperties, setSavedProperties] = useState([
     {

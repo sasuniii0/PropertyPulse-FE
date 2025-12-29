@@ -3,6 +3,10 @@ import { useParams, useNavigate } from "react-router-dom";
 import { getListingByIdAPI, getListingsByAgentAPI } from "../services/Listning";
 import { getUserByIdAPI } from "../services/User";
 import toast, { Toaster } from "react-hot-toast";
+import { createInquiryAPI } from '../services/Inquiry';
+import { useAuth } from "../context/AuthContext";
+import SaveButton from '../components/SaveButton';
+
 
 interface Location {
   address: string;
@@ -46,6 +50,10 @@ export default function PropertyDetails() {
   const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState(0);
   const [showContactModal, setShowContactModal] = useState(false);
+
+  const { user } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [inquiryMessage, setInquiryMessage] = useState('');
 
   useEffect(() => {
     if (!id) return;
@@ -97,8 +105,78 @@ export default function PropertyDetails() {
     fetchPropertyDetails();
   }, [id]);
 
+  const handleSendInquiry = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Check if user is logged in
+    if (!user || !user.token) {
+      toast.error("Please log in to send an inquiry");
+      return;
+    }
+
+    // Check if user is a client
+    if (user.role !== 'CLIENT') {
+      toast.error("Only clients can send inquiries");
+      return;
+    }
+
+    // Validate message
+    if (!inquiryMessage.trim()) {
+      toast.error("Please enter a message");
+      return;
+    }
+
+    // Validate property exists
+    if (!property?._id) {
+      toast.error("Property information is missing");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+
+      // Call the API
+      await createInquiryAPI(
+        user.token,
+        property._id, // The listing ID
+        inquiryMessage
+      );
+
+      toast.success("Inquiry sent successfully! The agent will respond soon.");
+      setShowContactModal(false);
+      setInquiryMessage(''); // Reset form
+    } catch (error: any) {
+      console.error("Failed to send inquiry:", error);
+      
+      if (error.response?.status === 401) {
+        toast.error("Please log in again");
+      } else if (error.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Failed to send inquiry. Please try again.");
+      }
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   const handleContactAgent = () => {
+    // Check if user is logged in
+    if (!user) {
+      toast.error("Please log in to send an inquiry");
+      return;
+    }
+
+    // Check if user is a client
+    if (user.role !== 'CLIENT') {
+      toast.error("Only clients can send inquiries");
+      return;
+    }
+
+    // Initialize the message with property title
+    if (property) {
+      setInquiryMessage(`I'm interested in ${property.title} and would like more information.`);
+    }
     setShowContactModal(true);
   };
 
@@ -232,6 +310,7 @@ export default function PropertyDetails() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h1 className="text-3xl font-bold text-gray-900 mb-2">{property.title}</h1>
+
                   <div className="flex items-center gap-2 text-gray-600">
                     <svg className="w-5 h-5 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
@@ -239,6 +318,17 @@ export default function PropertyDetails() {
                     </svg>
                     <span className="text-sm">{property.location?.address || "Location not specified"}</span>
                   </div>
+
+                  <div className="property-header justify-between items-center p-3">
+                      {/* Save to Favorites button */}
+                      <SaveButton 
+                        listingId={property._id} 
+                        size="md"
+                        showLabel={true}
+                        onToggle={(isSaved) => console.log('Saved status:', isSaved)}
+                      />
+                    </div>
+
                 </div>
                 <div className="text-right">
                   <div className="text-3xl font-bold text-teal-600">
@@ -424,17 +514,8 @@ export default function PropertyDetails() {
                   onClick={handleContactAgent}
                   className="w-full bg-teal-600 hover:bg-teal-700 text-white py-3 font-medium transition-colors mb-2"
                 >
-                  Send Message
+                  Send Inquiry
                 </button>
-                
-                {/* {agent.contactNumber && (
-                  
-                    href={`tel:${agent.contactNumber}`}
-                    className="w-full block text-center border-2 border-teal-600 text-teal-600 hover:bg-teal-50 py-3 font-medium transition-colors"
-                  >
-                    Call Now
-                  </a>
-                )} */}
               </div>
             )}
 
@@ -553,7 +634,7 @@ export default function PropertyDetails() {
       </div>
 
       {/* Contact Modal */}
-      {showContactModal && agent && (
+      {showContactModal && agent && property && (
         <div 
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm"
           onClick={() => setShowContactModal(false)}
@@ -567,6 +648,7 @@ export default function PropertyDetails() {
               <button
                 onClick={() => setShowContactModal(false)}
                 className="w-8 h-8 flex items-center justify-center hover:bg-teal-700 transition-colors"
+                disabled={isSubmitting}
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -574,13 +656,16 @@ export default function PropertyDetails() {
               </button>
             </div>
 
-            <form className="p-6 space-y-4">
+            <form onSubmit={handleSendInquiry} className="p-6 space-y-4">
+              {/* User Info - Auto-populated and read-only */}
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
                 <input
                   type="text"
-                  className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  placeholder="Enter your name"
+                  className="w-full px-3 py-2 border border-gray-300 bg-gray-50 text-gray-600"
+                  value={user?.name || ''}
+                  disabled
+                  readOnly
                 />
               </div>
 
@@ -588,48 +673,69 @@ export default function PropertyDetails() {
                 <label className="block text-sm font-medium text-gray-700 mb-1">Your Email</label>
                 <input
                   type="email"
-                  className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  placeholder="Enter your email"
+                  className="w-full px-3 py-2 border border-gray-300 bg-gray-50 text-gray-600"
+                  value={user?.email || ''}
+                  disabled
+                  readOnly
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Your Phone</label>
-                <input
-                  type="tel"
-                  className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"
-                  placeholder="Enter your phone number"
-                />
-              </div>
+              {user?.phone && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Your Phone</label>
+                  <input
+                    type="tel"
+                    className="w-full px-3 py-2 border border-gray-300 bg-gray-50 text-gray-600"
+                    value={user.phone}
+                    disabled
+                    readOnly
+                  />
+                </div>
+              )}
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Message</label>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Message <span className="text-red-500">*</span>
+                </label>
                 <textarea
                   rows={4}
                   className="w-full px-3 py-2 border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 resize-none"
                   placeholder={`I'm interested in ${property.title}`}
-                  defaultValue={`I'm interested in ${property.title} and would like more information.`}
+                  value={inquiryMessage}
+                  onChange={(e) => setInquiryMessage(e.target.value)}
+                  required
+                  disabled={isSubmitting}
                 />
+                <p className="text-xs text-gray-500 mt-1">
+                  {inquiryMessage.length} characters
+                </p>
               </div>
 
               <div className="flex gap-3 pt-2">
                 <button
                   type="button"
                   onClick={() => setShowContactModal(false)}
-                  className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium transition-colors"
+                  className="flex-1 px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                  disabled={isSubmitting}
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="flex-1 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium transition-colors"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    toast.success("Message sent successfully!");
-                    setShowContactModal(false);
-                  }}
+                  className="flex-1 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  disabled={isSubmitting}
                 >
-                  Send Message
+                  {isSubmitting ? (
+                    <>
+                      <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                      </svg>
+                      Sending...
+                    </>
+                  ) : (
+                    'Send Inquiry'
+                  )}
                 </button>
               </div>
             </form>
