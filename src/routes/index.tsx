@@ -3,7 +3,7 @@ import { Suspense ,lazy, type ReactNode} from "react";
 import { useAuth } from "../context/AuthContext";
 import Layout from "../components/Layout";
 import SearchProperties from "../pages/SearchProperties";
-import SavedProperties from "../pages/savedPropertiesDet";
+import SavedProperties from "../pages/SavedPropertiesDet";
 import MyProfile from "../pages/MyProfile";
 import MyInquaries from "../pages/MyInquaries";
 import CreateNewListning from "../pages/CreateNewListning";
@@ -80,7 +80,7 @@ export default function Router() {
                         <Route path="/admin-listning" element={ <AdminListings/>} />
                         <Route path="/property/:id" element={<PropertyDetails />} />
                         <Route path="/properties" element={<AvailableProperties />} />
-                        <Route path="/payment-status" element={<PaymentSuccess />} />
+                        <Route path="/payment-success" element={<PaymentSuccess />} />
 
                     </Route>
                 </Routes>
