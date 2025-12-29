@@ -89,3 +89,10 @@ export const closeInquiryAPI = (token: string, inquiryId: string) => {
     }
   );
 };
+
+export const getMyInquiriesAPI = async (token: string) => {
+  const res = await axios.get<{ data: any[] }>(`${API}/inquiries/my`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.data;
+};

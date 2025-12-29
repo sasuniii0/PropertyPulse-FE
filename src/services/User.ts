@@ -15,6 +15,15 @@ export type UserData = {
   status?: "active" | "pending";
 };
 
+// user.ts or types.ts
+export type PaymentStatus = "PENDING" | "PAID" | "OVERDUE";
+
+export interface AgentPaymentData {
+  success: boolean;
+  paymentStatus: PaymentStatus;
+}
+
+
 const API = "http://localhost:5000/api/v1/user";
 
 // Fetch logged-in user details
@@ -69,14 +78,18 @@ export const getUserByIdAPI = (id: string, token: string) => {
   });
 };
 
-export const checkPaymentStatusAPI = async (token: string) => {
-  if (!token) throw new Error("No token provided");
-
-  const res = await axios.get(`${API}/payment-status`, {
+export const getAgentPaymentStatus = async (token: string): Promise<AgentPaymentData> => {
+  const res = await axios.get("http://localhost:5000/api/v1/user/payment-status", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  return res.data;
+  const data = res.data;
+
+  // Ensure it matches AgentPaymentData
+  return {
+    success: data.success,
+    paymentStatus: data.paymentStatus,
+  };
 };

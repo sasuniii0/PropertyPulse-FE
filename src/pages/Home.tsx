@@ -2,7 +2,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import ActionCard from "../components/ActionCard";
 import StatCard from "../components/StatCard";
-import InquiryCard from "../components/InquiryCard";
 import ActivityCard from "../components/ActivityCard";
 import { useState , useEffect } from "react";
 import { approveListingAPI, rejectListingAPI , getPendingListings, fetchLocationApi} from "../services/Admin";
@@ -15,8 +14,9 @@ import type { Property } from "../components/SavedPropertiesMap";
 import type {UserData} from '../services/User'
 import {getRecentUsers} from '../services/Admin'
 import {fetchLocationApiClient} from '../services/Listning'
-import type {AgentPaymentData } from '../components/PaymentPopup'
+import MyRecentInquiries from '../components/MyRecentInquiries'
 import { PaymentPopup } from "../components/PaymentPopup";
+import axios from "axios";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -29,43 +29,38 @@ export default function Home() {
   const [location, setLocation] = useState<Property[]>([]);
   const [clientLocations, setClientLocations] = useState<Property[]>([]);
 
-  // Payment related states
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
-  const [agentPaymentData, setAgentPaymentData] = useState<AgentPaymentData | null>(null);
+  const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
+
+  useEffect(() => {
+  if (!user || user.role !== "AGENT") return;
+
+  const checkPayment = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/v1/user/payment-status', {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      });
+
+      const status = response.data.paymentStatus;
+      setPaymentStatus(status);
+
+      // Show popup if PENDING
+      if (status === "PENDING") {
+        setShowPaymentPopup(true);
+      }
+    } catch (err) {
+      console.error("Payment check failed:", err);
+    }
+  };
+
+  checkPayment();
+}, [user]);
+
+
 
   const navigate = useNavigate();
-
-  // Check payment status for agents
-  useEffect(() => {
-    if (!user || user.role !== "AGENT") return;
-
-    const checkPaymentStatus = async () => {
-      try {
-        // Replace with your actual API endpoint
-        const response = await fetch('/api/agent/payment-status', {
-          headers: {
-            'Authorization': `Bearer ${user.token}`
-          }
-        });
-        
-        const data = await response.json();
-        
-        setAgentPaymentData(data);
-        
-        // Check if should show popup (not dismissed this session)
-        const popupDismissed = sessionStorage.getItem('paymentPopupDismissed');
-        
-        if ((data.paymentStatus === 'expired' || data.paymentStatus === 'due_soon') && !popupDismissed) {
-          setShowPaymentPopup(true);
-        }
-        
-      } catch (error) {
-        console.error('Error checking payment status:', error);
-      }
-    };
-
-    checkPaymentStatus();
-  }, [user]);
 
   useEffect(() => {
   const getLocations = async () => {
@@ -232,20 +227,6 @@ useEffect(() => {
     };
   }, [preview]);
 
-  const handlePayNow = () => {
-    // Navigate to payment page
-    navigate('/payment', { state: { agentData: agentPaymentData } });
-  };
-
-  const handleClosePaymentPopup = () => {
-    // Only allow closing if not expired
-    if (agentPaymentData && agentPaymentData.paymentDaysRemaining > 0) {
-      setShowPaymentPopup(false);
-      // Set flag to not show again this session
-      sessionStorage.setItem('paymentPopupDismissed', 'true');
-    }
-  };
-
   if (loading) {
     return (
       <div className="w-full h-screen flex justify-center items-center text-gray-700 text-xl font-semibold">
@@ -365,14 +346,7 @@ useEffect(() => {
           </div>
 
           {/* Recent Inquiries */}
-          <div className="bg-white shadow-sm border border-gray-100 p-5">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">Your Recent Inquiries</h2>
-            <div className="space-y-3">
-              <InquiryCard name="Oceanview Apartment" date="2 days ago" />
-              <InquiryCard name="Lakeside Villa" date="5 days ago" />
-              <InquiryCard name="City Center Studio" date="1 week ago" />
-            </div>
-          </div>
+          <MyRecentInquiries />
         </main>
       </div>
     );
@@ -616,42 +590,22 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
 
-      {/* Payment Popup */}
-      <PaymentPopup
-        isOpen={showPaymentPopup}
-        onClose={handleClosePaymentPopup}
-        agentData={agentPaymentData}
-        onPayNow={handlePayNow}
-      />
-
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
+        <PaymentPopup
+          isOpen={showPaymentPopup}
+          onClose={() => setShowPaymentPopup(false)}
+          onPayNow={() => {
+            console.log("Redirect to payment page");
+            setShowPaymentPopup(false);
+          }}
+        />
+
         {/* Welcome Section */}
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Agent Dashboard</h1>
           <p className="text-gray-600 text-sm mt-0.5">Manage your property listings and track performance</p>
         </div>
-
-        {/* Payment Status Banner (if expiring soon) */}
-        {agentPaymentData && agentPaymentData.paymentDaysRemaining <= 7 && agentPaymentData.paymentDaysRemaining > 0 && (
-          <div className="bg-orange-50 border border-orange-200 p-4 rounded-lg flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-2xl">⚠️</span>
-              <div>
-                <p className="font-semibold text-gray-900">Payment Due Soon</p>
-                <p className="text-sm text-gray-600">
-                  {agentPaymentData.paymentDaysRemaining} day{agentPaymentData.paymentDaysRemaining !== 1 ? 's' : ''} remaining
-                </p>
-              </div>
-            </div>
-            <button
-              onClick={() => setShowPaymentPopup(true)}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
-            >
-              Pay Now
-            </button>
-          </div>
-        )}
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">
@@ -750,8 +704,6 @@ useEffect(() => {
     </div>
   );
 }
-
-// REUSABLE COMPONENTS
 
 
 
