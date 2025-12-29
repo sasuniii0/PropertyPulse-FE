@@ -188,23 +188,25 @@ useEffect(() => {
     }, [user]);
 
     useEffect(() => {
-      if (!user) return;
+  if (!user) return;
 
-      const loadAgentListings = async () => {
-        if (user.role === "AGENT") {
-          try {
-            const res = await getMyListningsAPI(user.token);
-            if (res.data && Array.isArray(res.data.data)) {
-              setMyListings(res.data.data); // <- only agent listings
-            }
-          } catch (err) {
-            console.error("Failed to load agent listings:", err);
-          }
+  const loadAgentListings = async () => {
+    if (user.role === "AGENT") {
+      try {
+        const res = await getMyListningsAPI(user.token);
+
+        if (res.data?.success) {
+          setMyListings(res.data.listings); // ✅ FIX HERE
         }
-      };
+      } catch (err) {
+        console.error("Failed to load agent listings:", err);
+      }
+    }
+  };
 
-      loadAgentListings();
-    }, [user]);
+  loadAgentListings();
+}, [user]);
+
 
     useEffect(() => {
       if (!user) return;
@@ -276,7 +278,7 @@ useEffect(() => {
           <div className="grid md:grid-cols-4 gap-4">
             <ActionCard icon={<SearchIcon />} title="Search Properties" desc="Browse all listings" color="bg-teal-100" onClick={() => navigate("/search")} />
             <ActionCard icon={<HeartIcon />} title="Saved Properties" desc="View your favorites" color="bg-red-100" onClick={() => navigate("/favourites")}/>
-            <ActionCard icon={<UserIcon />} title="My Profile" desc="Update your details" color="bg-blue-100" onClick={() => navigate("/editme")}/>
+            <ActionCard icon={<UserIcon />} title="My Profile" desc="Update your details" color="bg-teal-100" onClick={() => navigate("/editme")}/>
             <ActionCard icon={<HomeIconSmall />} title="My Inquiries" desc="Track your requests" color="bg-purple-100" onClick={() => navigate("/inquaries")}/>
           </div>
 
@@ -374,10 +376,10 @@ useEffect(() => {
 
         {/* Key Metrics */}
         <div className="grid md:grid-cols-5 gap-4">
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-5 shadow-sm text-white">
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
             <div className="text-2xl font-bold">1,248</div>
-            <div className="text-blue-100 text-xs mt-1">Total Users</div>
-            <div className="text-xs text-blue-200 mt-2">↑ 12% this month</div>
+            <div className="text-teal-100 text-xs mt-1">Total Users</div>
+            <div className="text-xs text-teal-200 mt-2">↑ 12% this month</div>
           </div>
           <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
             <div className="text-2xl font-bold">452</div>
@@ -413,7 +415,7 @@ useEffect(() => {
             icon={<UserIcon />} 
             title="Manage Users" 
             desc="View all users & roles" 
-            color="bg-blue-100"
+            color="bg-teal-100"
             onClick={() => navigate("/admin/manage-users")} 
           />
           <ActionCard 
@@ -616,13 +618,13 @@ useEffect(() => {
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">
-          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
+          <div className="bg-gradient-to-br from-yellow-500 to-yellow-600 p-5 shadow-sm text-white">
             <div className="text-2xl font-bold">12</div>
             <div className="text-teal-100 text-xs mt-1">Active Listings</div>
           </div>
-          <div className="bg-gradient-to-br from-blue-500 to-blue-600 p-5 shadow-sm text-white">
+          <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
             <div className="text-2xl font-bold">328</div>
-            <div className="text-blue-100 text-xs mt-1">Total Views</div>
+            <div className="text-teal-100 text-xs mt-1">Total Views</div>
           </div>
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-5 shadow-sm text-white">
             <div className="text-2xl font-bold">15</div>
@@ -637,7 +639,7 @@ useEffect(() => {
         {/* Quick Actions */}
         <div className="grid md:grid-cols-3 gap-4">
           <ActionCard icon={<PlusIcon />} title="Create New Listing" desc="Add a new property" color="bg-green-100" onClick={() => navigate("/createListnings")}/>
-          <ActionCard icon={<EditIcon />} title="Manage Listings" desc="Edit or remove properties" color="bg-blue-100" onClick={() => navigate("/manageListnings")}/>
+          <ActionCard icon={<EditIcon />} title="Manage Listings" desc="Edit or remove properties" color="bg-teal-100" onClick={() => navigate("/manageListnings")}/>
           <ActionCard icon={<ChartIcon />} title="View Analytics" desc="Track performance" color="bg-orange-100" onClick={() => navigate("/viewAll")}/>
         </div>
 
@@ -685,12 +687,12 @@ useEffect(() => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-blue-500 hover:bg-blue-600 text-white py-1.5 transition-colors text-xs font-medium">
-                      Edit
+                    <button className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium">
+                      View Details
                     </button>
-                    <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-1.5 transition-colors text-xs font-medium">
+                    {/* <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-1.5 transition-colors text-xs font-medium">
                       Delete
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>

@@ -32,6 +32,12 @@ export interface EdiitListningData{
   newImages?: File[]; // if you want to handle newly uploaded images
 }
 
+export interface MyListingsResponse {
+  success: boolean;
+  count: number;
+  listings: ListingData[];
+}
+
 const API = "http://localhost:5000/api/v1/listning";
 
 // //getAll listnings
@@ -87,11 +93,10 @@ export const getListingByIdAPI = (id: string, token: string) => {
 };
 
 export const getMyListningsAPI = async (token: string) => {
-  return axios.get<{ data: ListingData[] }>(`${API}/my-listings`, {
+  return axios.get<MyListingsResponse>(`${API}/my-listings`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
-
 export const getApprovedListingsAPI = async (token: string) => {
   const res = await axios.get<{ data: EdiitListningData[] }>(`${API}/approved`, {
     headers: { Authorization: `Bearer ${token}` },
