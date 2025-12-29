@@ -13,6 +13,8 @@ import ManageUsers from "../pages/ManageUsers";
 import PropertyApproval from "../pages/PropertyApproval";
 import AdminListings from '../pages/AdminListnings'
 import PropertyDetails from "../pages/PropertyDetails";
+import AvailableProperties from "../pages/AvailableProperties";
+
 
 const Welcome = lazy(() => import("../pages/Welcome"))
 const Signin = lazy(() => import("../pages/Signin"))
@@ -76,6 +78,8 @@ export default function Router() {
                         <Route path="listning/" element={ <PropertyApproval/>} />
                         <Route path="/admin-listning" element={ <AdminListings/>} />
                         <Route path="/property/:id" element={<PropertyDetails />} />
+                        <Route path="/properties" element={<AvailableProperties />} />
+
                     </Route>
                 </Routes>
 

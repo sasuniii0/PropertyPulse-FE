@@ -164,7 +164,7 @@ export default function Signin() {
           Don't have an account?{' '}
           <button 
             className="text-teal-600 font-semibold hover:underline"
-            onClick={openSignUp}
+            onClick={() => navigate("/signup")}
           >
             Sign Up
           </button>

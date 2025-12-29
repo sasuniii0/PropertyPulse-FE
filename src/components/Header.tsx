@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import { HomeIcon } from "lucide-react";
+import toast from 'react-hot-toast';
 
 const LogoutIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -83,10 +84,19 @@ export default function Header () {
     const {user} = useAuth()
 
     const handleLogout = () => {
-        localStorage.removeItem("accessToken")
-        localStorage.removeItem("refreshToken")
-        navigate("/signin")
-    }
+    // Show confirmation
+    const confirmed = window.confirm("Are you sure you want to logout?");
+    
+    if (!confirmed) return;
+
+    // Perform logout logic
+    localStorage.removeItem("accessToken"); // Example: remove token
+    toast.success("Logged out successfully!");
+
+    // Redirect to login page
+    navigate("/signin");
+    };
+
 
     if (user.role === "CLIENT"){
         return (

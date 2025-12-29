@@ -4,13 +4,19 @@ import { useAuth } from '../context/AuthContext';
 import { getSavedPropertiesAPI, unsavePropertyAPI, type SavedPropertyData } from '../services/SavedProperty';
 import toast from 'react-hot-toast';
 
+// For the propertyType field of a property
+export type PropertyType = 'HOUSE' | 'APARTMENT' | 'VILLA' | 'LAND';
+
+// Optional: Include 'all' for filtering
+export type PropertyFilter = PropertyType | 'all';
+
 export default function SavedProperties() {
   const { user } = useAuth();
   const navigate = useNavigate();
   
   const [savedProperties, setSavedProperties] = useState<SavedPropertyData[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState<'all' | 'House' | 'Apartment' | 'Villa' | 'Land'>('all');
+  const [filter, setFilter] = useState<PropertyFilter>('all');
 
   useEffect(() => {
     if (!user?.token) {
@@ -108,9 +114,9 @@ export default function SavedProperties() {
                 All ({savedProperties.length})
               </button>
               <button
-                onClick={() => setFilter('House')}
+                onClick={() => setFilter('HOUSE')}
                 className={`px-4 py-2 font-medium transition-colors text-sm whitespace-nowrap ${
-                  filter === 'House'
+                  filter === 'HOUSE'
                     ? 'bg-teal-500 text-white shadow-sm'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
@@ -118,9 +124,9 @@ export default function SavedProperties() {
                 Houses ({savedProperties.filter(sp => sp.listing.propertyType === 'House').length})
               </button>
               <button
-                onClick={() => setFilter('Apartment')}
+                onClick={() => setFilter('APARTMENT')}
                 className={`px-4 py-2 font-medium transition-colors text-sm whitespace-nowrap ${
-                  filter === 'Apartment'
+                  filter === 'APARTMENT'
                     ? 'bg-teal-500 text-white shadow-sm'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
@@ -128,9 +134,9 @@ export default function SavedProperties() {
                 Apartments ({savedProperties.filter(sp => sp.listing.propertyType === 'Apartment').length})
               </button>
               <button
-                onClick={() => setFilter('Villa')}
+                onClick={() => setFilter('VILLA')}
                 className={`px-4 py-2 font-medium transition-colors text-sm whitespace-nowrap ${
-                  filter === 'Villa'
+                  filter === 'VILLA'
                     ? 'bg-teal-500 text-white shadow-sm'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
@@ -138,9 +144,9 @@ export default function SavedProperties() {
                 Villas ({savedProperties.filter(sp => sp.listing.propertyType === 'Villa').length})
               </button>
               <button
-                onClick={() => setFilter('Land')}
+                onClick={() => setFilter('LAND')}
                 className={`px-4 py-2 font-medium transition-colors text-sm whitespace-nowrap ${
-                  filter === 'Land'
+                  filter === 'LAND'
                     ? 'bg-teal-500 text-white shadow-sm'
                     : 'text-gray-600 hover:bg-gray-100'
                 }`}
