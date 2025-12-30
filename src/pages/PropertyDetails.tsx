@@ -452,8 +452,7 @@ export default function PropertyDetails() {
               </div>
             </div>
 
-            {/* Location Map Placeholder */}
-            {property.location && (property.location.lat || property.location.lng) && (
+            {property.location && property.location.lat && property.location.lng && (
               <div className="bg-white shadow-sm border border-gray-100 p-6">
                 <h2 className="text-xl font-bold text-gray-900 mb-4 flex items-center gap-2">
                   <svg className="w-6 h-6 text-teal-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -461,14 +460,24 @@ export default function PropertyDetails() {
                   </svg>
                   Location
                 </h2>
+
                 <div className="bg-gray-100 h-64 flex items-center justify-center border border-gray-200">
                   <div className="text-center text-gray-600">
                     <svg className="w-12 h-12 mx-auto mb-2 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
-                    <p className="text-sm">Map Integration Coming Soon</p>
-                    <p className="text-xs mt-1">Lat: {property.location.lat}, Lng: {property.location.lng}</p>
+
+                    <p className="text-sm mb-1">Lat: {property.location.lat}, Lng: {property.location.lng}</p>
+
+                    <a
+                      href={`https://www.google.com/maps/search/?api=1&query=${property.location.lat},${property.location.lng}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-teal-600 hover:underline text-sm font-medium"
+                    >
+                      View on Google Maps
+                    </a>
                   </div>
                 </div>
               </div>

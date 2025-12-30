@@ -81,20 +81,14 @@ export const ManagePropertiesIcon = () => (
 export default function Header () {
     const navigate = useNavigate()
 
-    const {user} = useAuth()
+    const { user , logout } = useAuth();
 
     const handleLogout = () => {
-    // Show confirmation
-    const confirmed = window.confirm("Are you sure you want to logout?");
-    
-    if (!confirmed) return;
+      const confirmed = window.confirm("Are you sure you want to logout?");
+      if (!confirmed) return;
 
-    // Perform logout logic
-    localStorage.removeItem("accessToken"); // Example: remove token
-    toast.success("Logged out successfully!");
-
-    // Redirect to login page
-    navigate("/signin");
+      logout(); // updates AuthProvider, user becomes null
+      navigate("/signin");
     };
 
 

@@ -37,6 +37,7 @@ export default function Home() {
   if (!user || user.role !== "AGENT") return;
 
   const checkPayment = async () => {
+    if (!user || loading) return; // Wait until auth is fully loaded
     try {
       const response = await axios.get('http://localhost:5000/api/v1/user/payment-status', {
         headers: {
@@ -62,6 +63,7 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!user || loading) return; // Wait until auth is fully loaded
   const getLocations = async () => {
     try {
       const token = localStorage.getItem("accessToken"); 
@@ -92,7 +94,9 @@ const handlePayNow = async () => {
 };
 
 useEffect(() => {
+  
   const fetchRecentUsers = async () => {
+    if (!user || loading) return; // Wait until auth is fully loaded
     if (!user) return;
 
     try {
@@ -107,9 +111,11 @@ useEffect(() => {
 }, [user]);
 
    useEffect(() => {
+    if (!user || loading) return; // Wait until auth is fully loaded
     if (!user) return;
 
     const fetchListings = async () => {
+      if (!user || loading) return; // Wait until auth is fully loaded
       try {
         const res = await getPendingListings(user.token);
         if (!user.token) {
@@ -172,6 +178,7 @@ useEffect(() => {
     if (!user) return;
 
     const loadAvailableProperties = async () => {
+        if (!user || loading) return; // Wait until auth is fully loaded
         try {
           const res = await getAllListingsAPI(user.token);
           if (res.data && Array.isArray(res.data.data)) {
@@ -191,6 +198,7 @@ useEffect(() => {
   if (!user) return;
 
   const loadAgentListings = async () => {
+    if (!user || loading) return; // Wait until auth is fully loaded
     if (user.role === "AGENT") {
       try {
         const res = await getMyListningsAPI(user.token);
@@ -211,6 +219,7 @@ useEffect(() => {
     useEffect(() => {
       if (!user) return;
       const loadApprovedListings = async () => {
+        if (!user || loading) return; // Wait until auth is fully loaded
         try {
           const data = await getApprovedListingsAPI(user.token);
           setApprovedListings(data);
@@ -334,11 +343,14 @@ useEffect(() => {
                       </div>
                     </div>
                     <button 
-                      onClick={() => navigate(`/property/${p._id}`)}
-                      className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
-                    >
-                      View Details
-                    </button>
+                        onClick={() => {
+                          navigate(`/property/${p._id}`);
+                          window.scrollTo(0, 0); // scroll to top immediately
+                        }}
+                        className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
+                      >
+                        View Details
+                      </button>
                   </div>
                 </div>
               ))}

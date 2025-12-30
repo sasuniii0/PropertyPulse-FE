@@ -3,7 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { getMyDetails, updateMyDetails, deleteMyAccount } from "../services/User";
 import { getPaymentDetails } from "../services/Payment";
 import { startAgentPayment } from "../services/Payment";
-import type { AgentPaymentData, PaymentDetails } from "../services/Payment";
+import type { PaymentDetails } from "../services/Payment";
 import toast, { Toaster } from "react-hot-toast";
 
 // Define user type based on your schema
@@ -17,6 +17,7 @@ interface UserProfile {
   listings?: string[];
   ratings?: number;
   isActive?: boolean;
+  role?: string; // Add role to user profile
 }
 
 type TabType = "profile" | "payment" | "settings";
@@ -40,6 +41,9 @@ export default function MyProfile() {
     twoFactorAuth: false,
   });
 
+  // Check if user is an agent
+  const isAgent = profile?.role === "AGENT" || user?.role === "AGENT";
+
   console.log(paymentData);
 
   useEffect(() => {
@@ -52,8 +56,11 @@ export default function MyProfile() {
         setProfile(res);
         setEditForm(res);
 
-        const resp = await getPaymentDetails(user.token);
-        setPaymentData(resp)
+        // Only fetch payment details if user is an agent
+        if (res.role === "AGENT") {
+          const resp = await getPaymentDetails(user.token);
+          setPaymentData(resp);
+        }
         
       } catch (err) {
         console.error(err);
@@ -90,6 +97,7 @@ export default function MyProfile() {
       await deleteMyAccount(user.token);
       toast.success("Account deleted");
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
       window.location.href = "/";
     } catch (err) {
       console.error(err);
@@ -161,16 +169,21 @@ export default function MyProfile() {
             >
               Profile
             </button>
-            <button
-              onClick={() => setActiveTab("payment")}
-              className={`px-6 py-3 text-sm font-medium transition-colors duration-200 border-b-2 ${
-                activeTab === "payment"
-                  ? "border-teal-500 text-teal-600"
-                  : "border-transparent text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Payment
-            </button>
+            
+            {/* Only show Payment tab for AGENT users */}
+            {isAgent && (
+              <button
+                onClick={() => setActiveTab("payment")}
+                className={`px-6 py-3 text-sm font-medium transition-colors duration-200 border-b-2 ${
+                  activeTab === "payment"
+                    ? "border-teal-500 text-teal-600"
+                    : "border-transparent text-gray-500 hover:text-gray-700"
+                }`}
+              >
+                Payment
+              </button>
+            )}
+            
             <button
               onClick={() => setActiveTab("settings")}
               className={`px-6 py-3 text-sm font-medium transition-colors duration-200 border-b-2 ${
@@ -194,6 +207,12 @@ export default function MyProfile() {
                   <div className="w-24 h-24 bg-white border-4 border-white shadow-lg flex items-center justify-center text-3xl font-bold text-teal-600">
                     {profile.name ? profile.name.split(" ").map(n => n[0]).join("") : "U"}
                   </div>
+                  {/* Role Badge */}
+                  {isAgent && (
+                    <div className="absolute -bottom-1 -right-1 bg-teal-500 text-white text-xs font-bold px-2 py-1 shadow-md">
+                      AGENT
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -205,6 +224,7 @@ export default function MyProfile() {
                   <h2 className="text-xl font-bold text-gray-900">{profile.name}</h2>
                   <p className="text-gray-500 text-xs mt-0.5">
                     {profile.isActive ? "Active User" : "Inactive User"} | Ratings: {profile.ratings || 0}
+                    {isAgent && " | Agent Account"}
                   </p>
                 </div>
                 {!isEditing && (
@@ -287,7 +307,10 @@ export default function MyProfile() {
                     Save Changes
                   </button>
                   <button
-                    onClick={() => setIsEditing(false)}
+                    onClick={() => {
+                      setEditForm(profile);
+                      setIsEditing(false);
+                    }}
                     className="flex-1 px-5 py-2.5 bg-white hover:bg-gray-50 text-gray-700 font-medium text-sm border border-gray-300 hover:border-gray-400 transition-all duration-200"
                   >
                     Cancel
@@ -308,8 +331,8 @@ export default function MyProfile() {
           </div>
         )}
 
-        {/* Payment Tab */}
-        {activeTab === "payment" && (
+        {/* Payment Tab - Only visible for AGENT users */}
+        {activeTab === "payment" && isAgent && (
           <div className="bg-white shadow-sm p-6 space-y-6">
             <div>
               <h2 className="text-xl font-bold text-gray-900 mb-2">Payment Details</h2>
@@ -322,7 +345,7 @@ export default function MyProfile() {
                 <h3 className="text-base font-semibold text-gray-900">Agent Payment Status</h3>
                 {paymentData && (
                   <span className={`px-3 py-1 text-xs font-medium ${getPaymentStatusColor(paymentData.paymentStatus)}`}>
-                    
+                    {paymentData.paymentStatus}
                   </span>
                 )}
               </div>
@@ -338,6 +361,11 @@ export default function MyProfile() {
                       Your payment is overdue. Please complete the payment to continue using agent features.
                     </div>
                   )}
+                  {paymentData.paymentStatus === "PAID" && (
+                    <div className="bg-green-50 border border-green-200 p-3 text-sm text-green-800">
+                      Your agent subscription is active. Thank you for your payment!
+                    </div>
+                  )}
                 </div>
               ) : (
                 <p className="text-sm text-gray-600">No payment information available</p>
@@ -348,14 +376,20 @@ export default function MyProfile() {
             <div className="border border-gray-200 p-5">
               <h3 className="text-base font-semibold text-gray-900 mb-3">Agent Subscription</h3>
               <p className="text-sm text-gray-600 mb-4">
-                Subscribe to become an agent and list properties on our platform.
+                {paymentData?.paymentStatus === "PAID" 
+                  ? "Your subscription is active. You can list properties on our platform."
+                  : "Subscribe to become an agent and list properties on our platform."}
               </p>
               <button
                 onClick={handlePayment}
-                disabled={paymentLoading}
+                disabled={paymentLoading || paymentData?.paymentStatus === "PAID"}
                 className="w-full px-5 py-2.5 bg-teal-500 hover:bg-teal-600 disabled:bg-gray-300 disabled:cursor-not-allowed text-white font-medium text-sm transition-colors duration-200 shadow-sm"
               >
-                {paymentLoading ? "Processing..." : "Start Payment"}
+                {paymentLoading 
+                  ? "Processing..." 
+                  : paymentData?.paymentStatus === "PAID" 
+                  ? "Subscription Active" 
+                  : "Start Payment"}
               </button>
             </div>
 
@@ -467,7 +501,10 @@ export default function MyProfile() {
                   </label>
                 </div>
 
-                <button className="w-full px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition-colors duration-200 border border-gray-300">
+                <button 
+                  type="button"
+                  className="w-full px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium text-sm transition-colors duration-200 border border-gray-300"
+                >
                   Change Password
                 </button>
               </div>
@@ -476,6 +513,7 @@ export default function MyProfile() {
             {/* Save Settings Button */}
             <div className="pt-4">
               <button
+                type="button"
                 onClick={handleSaveSettings}
                 className="w-full px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white font-medium text-sm transition-colors duration-200 shadow-sm"
               >

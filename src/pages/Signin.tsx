@@ -13,49 +13,30 @@ export default function Signin() {
 
   const { openSignUp, closeModal } = useAuthModal();
   const navigate = useNavigate()
-  const {setUser} = useAuth()
+  const { login } = useAuth();
+
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  const res = await signin(email, password);
+
+  if (!res.data.accessToken) return alert("Login failed");
+
+  // Send login email via backend
+    await fetch(`http://localhost:5000/email/send-login-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: res.data.email,
+        name: res.data.name,
+        loginTime: new Date().toLocaleString(),
+      }),
+    });
+
+  login(res.data.accessToken, res.data.refreshToken); // update AuthProvider
+  navigate("/home");
+};
 
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-
-    // Simulate API call
-    setTimeout(() => {
-      console.log('Sign In:', { email, password });
-      setIsLoading(false);
-      // Handle successful login here
-    }, 1500);
-
-    if(!email || !password) {
-      alert("Please fill in all fields")
-      return;
-    }
-
-    try{
-      const res = await signin(email,password)
-      console.log(res.data.accessToken)
-
-      if(!res.data.accessToken) {
-        alert("Login failed. please try again")
-        return
-      }
-
-      await localStorage.setItem("accessToken" , res.data.accessToken)
-      await localStorage.setItem("refreshToken" , res.data.refreshToken)
-
-      const details = await getMyDetails(res.data.accessToken)
-      setUser(details.data)
-
-      alert("Login successfull!")
-      navigate("/home")
-    }catch(error) {
-      console.error("Login failed: " ,error)
-      alert("Login failed. please try again.")
-      return
-    }
-
-  };
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
