@@ -51,6 +51,9 @@ export default function PropertyDetails() {
   const [selectedImage, setSelectedImage] = useState(0);
   const [showContactModal, setShowContactModal] = useState(false);
 
+  console.log(property);
+  
+
   const { user } = useAuth();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [inquiryMessage, setInquiryMessage] = useState('');
@@ -141,6 +144,31 @@ export default function PropertyDetails() {
         property._id, // The listing ID
         inquiryMessage
       );
+      
+ // 2️⃣ Fetch agent info
+      const agentRes = await fetch(`/api/agents/${property.agentId}`);
+      const agentData = await agentRes.json();
+      const agentEmail = agentData.email;
+
+      if (agentEmail) {
+        // 3️⃣ Send email to agent
+        await fetch('/email/send-inquiry', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            to: agentEmail,
+            subject: `New Inquiry for ${property.title}`,
+            html: `
+              <p>Hi ${agentData.name},</p>
+              <p>You have received a new inquiry from ${user.name} (${user.email}) for your property <strong>${property.title}</strong>.</p>
+              <p><strong>Message:</strong> ${inquiryMessage}</p>
+              <p>Regards, <br/> PropertyPulse Team</p>
+            `,
+          }),
+        });
+      }
 
       toast.success("Inquiry sent successfully! The agent will respond soon.");
       setShowContactModal(false);
