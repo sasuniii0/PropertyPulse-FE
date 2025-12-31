@@ -47,7 +47,7 @@ export default function Home() {
       });
 
       if (paymentStatus){
-        
+
       }
       const status = response.data.paymentStatus;
       setPaymentStatus(status);
@@ -447,6 +447,7 @@ useEffect(() => {
             title="Platform Analytics" 
             desc="View detailed reports" 
             color="bg-purple-100" 
+            onClick={() => navigate("/analytics")}
           />
           <ActionCard 
             icon={<SettingsIcon />} 
