@@ -46,6 +46,7 @@ export interface RecentListing {
   images: string[];
   propertyType: string;
   location: { address: string };
+  createdAt: string; // ISO date string from backend
 }
 const API = "http://localhost:5000/api/v1/listning";
 

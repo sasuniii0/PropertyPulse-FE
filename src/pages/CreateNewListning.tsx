@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {ImageIcon,UploadIcon,HomeIcon,MapPinIcon,DollarIcon,XIcon,SparklesIcon} from "../components/Icons"
+import {ImageIcon,UploadIcon,HomeIcon,MapPinIcon,DollarIcon,XIcon} from "../components/Icons"
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import LocationPickerMap from '../components/LocationPickerMap';
@@ -22,14 +22,13 @@ export default function CreateNewListing() {
   });
 
   const [images, setImages] = useState<File[]>([]);
-  const [isGeneratingAI, setIsGeneratingAI] = useState(false);
-  const [aiSummary, setAiSummary] = useState('');
+  // const [isGeneratingAI, setIsGeneratingAI] = useState(false);
+  // const [aiSummary, setAiSummary] = useState('');
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -38,37 +37,9 @@ export default function CreateNewListing() {
     }
   };
 
-
   const removeImage = (index: number) => {
     setImages(prev => prev.filter((_, i) => i !== index));
   };
-
-      const generateAISummary = async () => {
-      setIsGeneratingAI(true);
-
-      try {
-        const response = await fetch("http://localhost:5000/api/v1/ai/generate-ai-summary", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            title: formData.title,
-            description: formData.description,
-            price: formData.price,
-            location: formData.address,
-            propertyType: formData.propertyType,
-            bedrooms: formData.bedrooms,
-          }),
-        });
-
-        const data = await response.json();
-        setAiSummary(data.summary);
-      } catch (err) {
-        console.log("AI summary error:", err);
-      } finally {
-        setIsGeneratingAI(false);
-      }
-    };
-
 
   const handleSubmit = async () => {
     const token = localStorage.getItem("accessToken");
@@ -102,6 +73,7 @@ export default function CreateNewListing() {
       );
       alert("Listing submitted!");
       navigate("/manageListnings");
+      console.log(res.data.data);
     } catch (err: any) {
       console.error(err.response?.data || err);
       alert(err.response?.data?.message || "Server error");
@@ -160,7 +132,7 @@ export default function CreateNewListing() {
                 />
               </div>
 
-              {/* AI Summary */}
+              {/* AI Summary
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label className="block text-xs font-semibold text-gray-700">
@@ -183,7 +155,7 @@ export default function CreateNewListing() {
                   rows={2}
                   className="w-full px-3 py-2 text-sm border border-purple-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none bg-purple-50"
                 />
-              </div>
+              </div> */}
 
               {/* Property Type and Listing Type */}
               <div className="grid md:grid-cols-2 gap-4">

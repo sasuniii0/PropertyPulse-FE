@@ -46,6 +46,9 @@ export default function Home() {
         },
       });
 
+      if (paymentStatus){
+        
+      }
       const status = response.data.paymentStatus;
       setPaymentStatus(status);
 

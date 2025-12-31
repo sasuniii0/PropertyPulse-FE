@@ -29,7 +29,16 @@ export default function RecentPropertiesSlideshow() {
 
   if (listings.length === 0) return null;
 
-  const currentListing = listings[currentIndex];
+  const currentListing = listings[currentIndex];  
+
+  const formattedDate = new Date(currentListing.createdAt).toLocaleDateString(
+    "en-GB",
+    {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+    }
+  );
 
   return (
     <div className="relative w-full h-96 overflow-hidden shadow-sm">
@@ -41,11 +50,21 @@ export default function RecentPropertiesSlideshow() {
     />
 
     {/* Overlay */}
-    <div className="absolute bottom-0 left-0 w-full bg-teal-500 bg-opacity-70 p-4 text-white">
+    <div className="absolute bottom-0 left-0 w-full bg-teal-500/80 p-4 text-white">
         <h3 className="text-lg font-bold">{currentListing.title}</h3>
-        <p className="text-sm">{currentListing.location.address}</p>
-        <p className="font-semibold mt-1">LKR {currentListing.price.toLocaleString()}</p>
+        <p className="text-sm opacity-90">{currentListing.location.address}</p>
+
+        <div className="flex justify-between items-center mt-2">
+            <p className="font-semibold">
+            LKR {currentListing.price.toLocaleString()}
+            </p>
+
+            <p className="text-xs opacity-90">
+                {formattedDate}
+            </p>
+        </div>
     </div>
+
 
     {/* Navigation Dots */}
     <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex gap-2">

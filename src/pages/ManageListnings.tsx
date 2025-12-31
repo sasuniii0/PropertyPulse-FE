@@ -235,10 +235,10 @@ const saveEdit = async () => {
               className="px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
             >
               <option value="all">All Types</option>
-              <option value="House">House</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Villa">Villa</option>
-              <option value="Condo">Condo</option>
+              <option value="HOUSE">House</option>
+              <option value="APARTMENT">Apartment</option>
+              <option value="VILLA">Villa</option>
+              <option value="LAND">Land</option>
             </select>
 
             <div className="flex gap-1 bg-gray-100 p-1">
@@ -297,7 +297,7 @@ const saveEdit = async () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      onClick={() => toggleStatus(listing.id)}
+                      onClick={() => toggleStatus(listing._id)}
                       className={`flex-1 flex items-center justify-center gap-1.5 px-2 py-1.5 transition-colors text-xs font-medium ${listing.status === 'active' ? 'bg-gray-100 hover:bg-gray-200 text-gray-700' : 'bg-green-100 hover:bg-green-200 text-green-700'}`}
                     >
                       {listing.status === 'active' ? <ToggleLeftIcon /> : <ToggleRightIcon />}
