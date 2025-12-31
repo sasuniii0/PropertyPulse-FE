@@ -38,6 +38,15 @@ export interface MyListingsResponse {
   listings: ListingData[];
 }
 
+// Interface for a listing
+export interface RecentListing {
+  _id: string;
+  title: string;
+  price: number;
+  images: string[];
+  propertyType: string;
+  location: { address: string };
+}
 const API = "http://localhost:5000/api/v1/listning";
 
 // //getAll listnings
@@ -115,6 +124,24 @@ export const fetchLocationApiClient = async (token: string): Promise<Property[]>
     return res.data;
   } catch (err) {
     console.error("Failed to fetch property locations:", err);
+    return [];
+  }
+};
+
+export const fetchRecentListings = async (token: string): Promise<RecentListing[]> => {
+  try {
+    const res = await axios.get("http://localhost:5000/api/v1/listning/recent", {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+
+    if (res.data.success) {
+      return res.data.listings;
+    } else {
+      console.error("Failed to fetch recent listings:", res.data.message);
+      return [];
+    }
+  } catch (err) {
+    console.error("Error fetching recent listings:", err);
     return [];
   }
 };

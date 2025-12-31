@@ -107,7 +107,7 @@ export default function Header () {
                 <nav className="hidden md:flex items-center gap-6 text-gray-700">
                     <button
                         className="flex items-center gap-2 hover:text-teal-600 font-medium transition-colors"
-                        onClick={() => navigate("/home")}
+                        onClick={() => navigate("/search")}
                         >
                         <ListingsIcon /> Listings
                     </button>

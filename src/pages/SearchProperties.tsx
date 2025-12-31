@@ -1,120 +1,54 @@
-import { useState } from 'react';
+import { useState , useEffect} from 'react';
 import { FilterIcon,SearchIcon,MapPinIcon,BathIcon,BedIcon } from '../components/Icons';
+import { getApprovedListingsAPI } from '../services/Listning';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 export default function SearchProperties() {
+  const {user} = useAuth();
   const [searchTerm, setSearchTerm] = useState('');
   const [priceRange, setPriceRange] = useState('all');
   const [propertyType, setPropertyType] = useState('all');
   const [bedrooms, setBedrooms] = useState('all');
+  const [loading, setLoading] = useState(true);
+  const [properties, setProperties] = useState<any[]>([]); 
+  
+  const navigate = useNavigate();
 
-  // Mock properties data (expanded)
-  const allProperties = [
-    {
-      id: 1,
-      name: 'Cinnamon Gardens Villa',
-      price: '85,000,000',
-      address: 'Colombo 7, Western Province',
-      beds: 4,
-      baths: 3,
-      type: 'villa',
-      img: 'https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=400&h=300&fit=crop'
-    },
-    {
-      id: 2,
-      name: 'Nuwara Eliya Hill Plot',
-      price: '18,500,000',
-      address: 'Nuwara Eliya, Central Province',
-      beds: 3,
-      baths: 2,
-      type: 'land',
-      img: 'https://images.unsplash.com/photo-1628624747186-a941c476b7ef?w=400&h=300&fit=crop'
-    },
-    {
-      id: 3,
-      name: 'Marine Drive Luxury Suite',
-      price: '95,000,000',
-      address: 'Colombo 4, Western Province',
-      beds: 4,
-      baths: 3,
-      type: 'apartment',
-      img: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=400&h=300&fit=crop'
-    },
-    {
-      id: 4,
-      name: 'Galle Fort Heritage Home',
-      price: '72,000,000',
-      address: 'Galle, Southern Province',
-      beds: 3,
-      baths: 2,
-      type: 'house',
-      img: 'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?w=400&h=300&fit=crop'
-    },
-    {
-      id: 5,
-      name: 'Kandy Lake View Apartment',
-      price: '45,000,000',
-      address: 'Kandy, Central Province',
-      beds: 2,
-      baths: 2,
-      type: 'apartment',
-      img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=300&fit=crop'
-    },
-    {
-      id: 6,
-      name: 'Mount Lavinia Beach Villa',
-      price: '120,000,000',
-      address: 'Mount Lavinia, Western Province',
-      beds: 5,
-      baths: 4,
-      type: 'villa',
-      img: 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=400&h=300&fit=crop'
-    },
-    {
-      id: 7,
-      name: 'Negombo Beachfront Plot',
-      price: '35,000,000',
-      address: 'Negombo, Western Province',
-      beds: 0,
-      baths: 0,
-      type: 'land',
-      img: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop'
-    },
-    {
-      id: 8,
-      name: 'Colombo 3 Modern Condo',
-      price: '68,000,000',
-      address: 'Colombo 3, Western Province',
-      beds: 3,
-      baths: 2,
-      type: 'apartment',
-      img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=300&fit=crop'
-    },
-    {
-      id: 9,
-      name: 'Hikkaduwa Beach House',
-      price: '55,000,000',
-      address: 'Hikkaduwa, Southern Province',
-      beds: 3,
-      baths: 2,
-      type: 'house',
-      img: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=300&fit=crop'
-    },
-  ];
+  // Fetch approved listings from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        setLoading(true);
+        const data = await getApprovedListingsAPI(user.token);
+        setProperties(data);
+      } catch (err) {
+        console.error('Failed to fetch properties:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProperties();
+  }, [user.token]);
 
   // Filter properties based on search criteria
-  const filteredProperties = allProperties.filter(property => {
-    const matchesSearch = property.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         property.address.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredProperties = properties.filter(property => {
+    const matchesSearch =
+      (property.title?.toLowerCase() ?? '').includes(searchTerm.toLowerCase()) ||
+      (property.location.address?.toLowerCase() ?? '').includes(searchTerm.toLowerCase());
     
-    const matchesType = propertyType === 'all' || property.type === propertyType;
+    const matchesType = propertyType === 'all' || property.propertyType === propertyType;
     
     const matchesBedrooms = bedrooms === 'all' || 
-                           (bedrooms === '1' && property.beds === 1) ||
-                           (bedrooms === '2' && property.beds === 2) ||
-                           (bedrooms === '3' && property.beds === 3) ||
-                           (bedrooms === '4+' && property.beds >= 4);
+                           (bedrooms === '1' && property.bedrooms === 1) ||
+                           (bedrooms === '2' && property.bedrooms === 2) ||
+                           (bedrooms === '3' && property.bedrooms === 3) ||
+                           (bedrooms === '4+' && property.bedrooms >= 4);
     
-    const priceNum = parseInt(property.price.replace(/,/g, ''));
+    const priceNum = typeof property.price === 'string'
+            ? parseInt(property.price.replace(/,/g, ''))
+            : Number(property.price);
     const matchesPrice = priceRange === 'all' ||
                         (priceRange === 'low' && priceNum < 50000000) ||
                         (priceRange === 'mid' && priceNum >= 50000000 && priceNum < 80000000) ||
@@ -161,10 +95,10 @@ export default function SearchProperties() {
                 className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="all">All Types</option>
-                <option value="house">House</option>
-                <option value="apartment">Apartment</option>
-                <option value="villa">Villa</option>
-                <option value="land">Land</option>
+                <option value="HOUSE">House</option>
+                <option value="APARTMENT">Apartment</option>
+                <option value="VILLA">Villa</option>
+                <option value="LAND">Land</option>
               </select>
             </div>
 
@@ -233,34 +167,44 @@ export default function SearchProperties() {
               </button>
             </div>
           ) : (
-            filteredProperties.map((p) => (
-              <div key={p.id} className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100">
+            filteredProperties.map((p,index) => (
+              <div key={p.id ?? index} className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100">
                 <div className="relative h-44 overflow-hidden">
-                  <img src={p.img} alt={p.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                  <img 
+                    src={p.images?.[0] ?? '/placeholder.jpg'} 
+                    alt={p.name} 
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
+                  />
                   <div className="absolute top-2 right-2 bg-teal-500 text-white px-2.5 py-0.5 text-xs font-medium capitalize">
-                    {p.type}
+                    {p.propertyType}
                   </div>
                 </div>
                 <div className="p-4">
                   <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
                     <MapPinIcon />
-                    {p.address}
+                    {p.location.address}
                   </div>
                   <div className="flex justify-between items-start mb-3">
                     <div>
-                      <h3 className="font-bold text-gray-900 text-sm">{p.name}</h3>
+                      <h3 className="font-bold text-gray-900 text-sm">{p.title}</h3>
                       <p className="text-teal-600 font-bold text-base mt-1">LKR {p.price}</p>
                     </div>
-                    {p.beds > 0 && (
+                    {p.bedrooms > 0 && (
                       <div className="flex gap-3 text-gray-500 text-xs">
-                        <span className="flex items-center gap-1"><BedIcon /> {p.beds}</span>
-                        <span className="flex items-center gap-1"><BathIcon /> {p.baths}</span>
+                        <span className="flex items-center gap-1"><BedIcon /> {p.bedrooms}</span>
+                        <span className="flex items-center gap-1"><BathIcon /> {p.bathrooms}</span>
                       </div>
                     )}
                   </div>
-                  <button className="w-full bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium">
-                    View Details
-                  </button>
+                  <button 
+                        onClick={() => {
+                          navigate(`/property/${p._id}`);
+                          window.scrollTo(0, 0); // scroll to top immediately
+                        }}
+                        className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
+                      >
+                        View Details
+                      </button>
                 </div>
               </div>
             ))

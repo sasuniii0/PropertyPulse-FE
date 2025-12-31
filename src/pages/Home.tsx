@@ -18,6 +18,7 @@ import MyRecentInquiries from '../components/MyRecentInquiries'
 import { PaymentPopup } from "../components/PaymentPopup";
 import axios from "axios";
 import { startAgentPayment } from "../services/Payment";
+import RecentPropertiesSlideshow from "../components/RecentPropertiesSlideShow";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -277,12 +278,8 @@ useEffect(() => {
             <p className="text-gray-600 text-sm mt-0.5">Find your dream property today</p>
           </div>
 
-          {/* Map Section */}
-          <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
-            <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
-            <SavedPropertiesMap properties={clientLocations} />
-          </section>
-
+          <RecentPropertiesSlideshow/>
+          
           {/* Quick Actions */}
           <div className="grid md:grid-cols-4 gap-4">
             <ActionCard icon={<SearchIcon />} title="Search Properties" desc="Browse all listings" color="bg-teal-100" onClick={() => navigate("/search")} />
@@ -290,6 +287,12 @@ useEffect(() => {
             <ActionCard icon={<UserIcon />} title="My Profile" desc="Update your details" color="bg-teal-100" onClick={() => navigate("/editme")}/>
             <ActionCard icon={<HomeIconSmall />} title="My Inquiries" desc="Track your requests" color="bg-purple-100" onClick={() => navigate("/inquaries")}/>
           </div>
+
+          {/* Map Section */}
+          <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
+            <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
+            <SavedPropertiesMap properties={clientLocations} />
+          </section>
 
           {/* Available Properties */}
           <div className="bg-white shadow-sm border border-gray-100 p-5">
