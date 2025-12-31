@@ -156,6 +156,14 @@ export default function SavedProperties() {
             </div>
           </div>
         )}
+        <div className='pt-4 pb-4'>
+          <button
+          onClick={() => navigate('/compare-properties')}
+          className="flex-1 px-4 py-2 bg-teal-600 hover:bg-teal-700 text-white font-medium transition-colors text-sm "
+        >
+          Compare Properties
+        </button>
+        </div>
 
         {/* Empty State */}
         {filteredProperties.length === 0 && (
