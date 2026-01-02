@@ -659,7 +659,7 @@ useEffect(() => {
         <div className="grid md:grid-cols-3 gap-4">
           <ActionCard icon={<PlusIcon />} title="Create New Listing" desc="Add a new property" color="bg-green-100" onClick={() => navigate("/createListnings")}/>
           <ActionCard icon={<EditIcon />} title="Manage Listings" desc="Edit or remove properties" color="bg-teal-100" onClick={() => navigate("/manageListnings")}/>
-          <ActionCard icon={<ChartIcon />} title="View Analytics" desc="Track performance" color="bg-orange-100" onClick={() => navigate("/viewAll")}/>
+          <ActionCard icon={<ChartIcon />} title="View Analytics" desc="Track performance" color="bg-orange-100" onClick={() => navigate("/agent-tracking")}/>
         </div>
 
         {/* My Active Listings */}

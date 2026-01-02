@@ -346,45 +346,34 @@ const loadHistoricalAnalytics = async () => {
   const inquiriesChange = ((analytics.totalInquiries - previousMonthInquiries) / previousMonthInquiries) * 100;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-teal-50 to-slate-100">
-      <div className="max-w-[1600px] mx-auto px-6 py-10">
-        {/* Header Section */}
-        <div className="mb-10">
-          <div className="flex items-start justify-between mb-6">
+    <div className="min-h-screen bg-white">
+      <div className="max-w-[1600px] mx-auto px-8 py-8">
+        {/* Header */}
+        <div className="border-b-2 border-slate-200 pb-8 mb-8">
+          <div className="flex items-start justify-between">
             <div>
-              <div className="flex items-center gap-4 mb-3">
-                <div className="w-14 h-14 bg-gradient-to-br from-teal-600 to-teal-700 rounded-2xl flex items-center justify-center shadow-lg">
-                  <svg
-                    className="w-7 h-7 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                    />
-                  </svg>
-                </div>
-                <div>
-                  <h1 className="text-4xl font-bold text-slate-900 tracking-tight">
-                    Market Analytics
-                  </h1>
-                  <p className="text-slate-600 mt-1 text-lg">
-                    Real-time insights from your property data
-                  </p>
-                </div>
-              </div>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Market Analytics Dashboard
+              </h1>
+              <p className="text-slate-600 text-sm">
+                Real-time property market insights and trends
+              </p>
             </div>
-
             <button
               onClick={generateMonthlyReport}
-              className="px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold rounded-xl border-2 border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 flex items-center gap-2"
+              className="px-6 py-3 bg-teal-600 hover:bg-teal-700 text-white text-sm font-semibold uppercase tracking-wider transition-colors"
             >
+              Generate Report
+            </button>
+          </div>
+        </div>
+
+        {/* AI Insight Banner */}
+        <div className="bg-teal-600 border-2 border-teal-700 p-6 mb-8">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 bg-teal-700 flex items-center justify-center flex-shrink-0">
               <svg
-                className="w-5 h-5"
+                className="w-5 h-5 text-white"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -393,60 +382,32 @@ const loadHistoricalAnalytics = async () => {
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   strokeWidth={2}
-                  d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  d="M13 10V3L4 14h7v7l9-11h-7z"
                 />
               </svg>
-              Generate Report
-            </button>
-          </div>
-
-          {/* AI Insight Banner */}
-          <div className="bg-gradient-to-r from-teal-600 via-teal-700 to-cyan-700 rounded-2xl shadow-xl p-8 relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -mr-32 -mt-32"></div>
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full -ml-24 -mb-24"></div>
-            <div className="relative z-10 flex items-start gap-5">
-              <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center flex-shrink-0 backdrop-blur-sm">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-xl font-bold text-white mb-3 flex items-center gap-2">
-                  <span>🎯</span> Market Intelligence
-                </h3>
-                <p className="text-teal-50 text-lg leading-relaxed">
-                  {analytics.marketInsight}
-                </p>
-              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider mb-2">
+                Market Intelligence
+              </h3>
+              <p className="text-teal-50 leading-relaxed">
+                {analytics.marketInsight}
+              </p>
             </div>
           </div>
         </div>
 
         {/* Filters */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 mb-8">
-          <div className="flex flex-wrap gap-6 items-center">
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-                City:
+        <div className="bg-slate-50 border border-slate-200 p-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                City
               </label>
               <select
                 value={selectedCity}
                 onChange={(e) => setSelectedCity(e.target.value)}
-                className="border-2 border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all bg-white hover:border-slate-300"
+                className="w-full border-2 border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-teal-600 transition-colors bg-white"
               >
                 <option value="all">All Cities</option>
                 <option value="colombo">Colombo</option>
@@ -458,17 +419,14 @@ const loadHistoricalAnalytics = async () => {
               </select>
             </div>
 
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                Property Type:
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Property Type
               </label>
               <select
                 value={selectedPropertyType}
                 onChange={(e) => setSelectedPropertyType(e.target.value)}
-                className="border-2 border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all bg-white hover:border-slate-300"
+                className="w-full border-2 border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-teal-600 transition-colors bg-white"
               >
                 <option value="all">All Types</option>
                 <option value="APARTMENT">Apartments</option>
@@ -479,17 +437,14 @@ const loadHistoricalAnalytics = async () => {
               </select>
             </div>
 
-            <div className="flex items-center gap-3">
-              <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                Time Range:
+            <div>
+              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-2">
+                Time Range
               </label>
               <select
                 value={timeRange}
                 onChange={(e) => setTimeRange(Number(e.target.value))}
-                className="border-2 border-slate-200 rounded-lg px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-200 transition-all bg-white hover:border-slate-300"
+                className="w-full border-2 border-slate-300 px-4 py-2.5 text-sm font-medium text-slate-700 focus:outline-none focus:border-teal-600 transition-colors bg-white"
               >
                 <option value={3}>Last 3 Months</option>
                 <option value={6}>Last 6 Months</option>
@@ -497,338 +452,399 @@ const loadHistoricalAnalytics = async () => {
               </select>
             </div>
 
-            <button
-              onClick={() => {
-                fetchAnalytics();
-                fetchHistoricalAnalytics();
-              }}
-              className="ml-auto px-6 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-semibold rounded-lg transition-all duration-200 flex items-center gap-2 shadow-md hover:shadow-lg"
-            >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-              </svg>
-              Refresh
-            </button>
+            <div className="flex items-end">
+              <button
+                onClick={() => {
+                  fetchAnalytics();
+                  fetchHistoricalAnalytics();
+                }}
+                className="w-full px-6 py-2.5 bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold uppercase tracking-wider transition-colors"
+              >
+                Refresh Data
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* KPI Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {/* Average Price */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-md">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  />
-                </svg>
-              </div>
-              <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                priceChange >= 0
-                  ? 'text-emerald-700 bg-emerald-50'
-                  : 'text-red-700 bg-red-50'
-              }`}>
-                {priceChange >= 0 ? '↑' : '↓'} {Math.abs(priceChange).toFixed(1)}%
-              </span>
-            </div>
-            <h3 className="text-slate-600 text-sm font-semibold mb-2 uppercase tracking-wide">
-              Average Price
-            </h3>
-            <p className="text-3xl font-bold text-slate-900 mb-1">
-              LKR {(analytics.avgPrice / 1000000).toFixed(2)}M
-            </p>
-            <p className="text-xs text-slate-500">vs previous month</p>
-          </div>
+        {/* KPI Metrics - Table Style */}
+        <div className="border-2 border-slate-200 mb-8 overflow-hidden">
+          <table className="w-full">
+            <thead>
+              <tr className="bg-slate-100 border-b-2 border-slate-200">
+                <th className="text-left px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Metric
+                </th>
+                <th className="text-right px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Current Value
+                </th>
+                <th className="text-right px-6 py-4 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Change
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
+                <td className="px-6 py-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-teal-600 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                        Average Price
+                      </p>
+                      <p className="text-xs text-slate-500">Market average property value</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <p className="text-2xl font-bold text-slate-900">
+                    LKR {(analytics.avgPrice / 1000000).toFixed(2)}M
+                  </p>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <span
+                    className={`inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+                      priceChange >= 0
+                        ? 'bg-emerald-100 text-emerald-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {priceChange >= 0 ? '↑' : '↓'} {Math.abs(priceChange).toFixed(1)}%
+                  </span>
+                </td>
+              </tr>
 
-          {/* Total Listings */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-md">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
-                  />
-                </svg>
-              </div>
-              <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                listingsChange >= 0
-                  ? 'text-blue-700 bg-blue-50'
-                  : 'text-red-700 bg-red-50'
-              }`}>
-                {listingsChange >= 0 ? '↑' : '↓'} {Math.abs(listingsChange).toFixed(1)}%
-              </span>
-            </div>
-            <h3 className="text-slate-600 text-sm font-semibold mb-2 uppercase tracking-wide">
-              Total Listings
-            </h3>
-            <p className="text-3xl font-bold text-slate-900 mb-1">
-              {analytics.totalListings.toLocaleString()}
-            </p>
-            <p className="text-xs text-slate-500">Active properties</p>
-          </div>
+              <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
+                <td className="px-6 py-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-blue-600 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                        Total Listings
+                      </p>
+                      <p className="text-xs text-slate-500">Active property listings</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <p className="text-2xl font-bold text-slate-900">
+                    {analytics.totalListings.toLocaleString()}
+                  </p>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <span
+                    className={`inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+                      listingsChange >= 0
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {listingsChange >= 0 ? '↑' : '↓'} {Math.abs(listingsChange).toFixed(1)}%
+                  </span>
+                </td>
+              </tr>
 
-          {/* Total Inquiries */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-purple-600 rounded-xl flex items-center justify-center shadow-md">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
-                  />
-                </svg>
-              </div>
-              <span className={`text-xs font-bold px-3 py-1 rounded-full ${
-                inquiriesChange >= 0
-                  ? 'text-purple-700 bg-purple-50'
-                  : 'text-red-700 bg-red-50'
-              }`}>
-                {inquiriesChange >= 0 ? '↑' : '↓'} {Math.abs(inquiriesChange).toFixed(1)}%
-              </span>
-            </div>
-            <h3 className="text-slate-600 text-sm font-semibold mb-2 uppercase tracking-wide">
-              Total Inquiries
-            </h3>
-            <p className="text-3xl font-bold text-slate-900 mb-1">
-              {analytics.totalInquiries.toLocaleString()}
-            </p>
-            <p className="text-xs text-slate-500">Buyer interest</p>
-          </div>
+              <tr className="border-b border-slate-200 hover:bg-slate-50 transition-colors">
+                <td className="px-6 py-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-purple-600 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                        Total Inquiries
+                      </p>
+                      <p className="text-xs text-slate-500">Buyer interest level</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <p className="text-2xl font-bold text-slate-900">
+                    {analytics.totalInquiries.toLocaleString()}
+                  </p>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <span
+                    className={`inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider ${
+                      inquiriesChange >= 0
+                        ? 'bg-purple-100 text-purple-700'
+                        : 'bg-red-100 text-red-700'
+                    }`}
+                  >
+                    {inquiriesChange >= 0 ? '↑' : '↓'} {Math.abs(inquiriesChange).toFixed(1)}%
+                  </span>
+                </td>
+              </tr>
 
-          {/* Hot Location */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-6 hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-md">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"
-                  />
-                </svg>
-              </div>
-              <span className="text-xs font-bold text-orange-700 bg-orange-50 px-3 py-1 rounded-full">
-                🔥 HOT
-              </span>
-            </div>
-            <h3 className="text-slate-600 text-sm font-semibold mb-2 uppercase tracking-wide">
-              Hot Location
-            </h3>
-            <p className="text-3xl font-bold text-slate-900 mb-1 truncate">
-              {analytics.hotLocation}
-            </p>
-            <p className="text-xs text-slate-500">Highest demand</p>
-          </div>
+              <tr className="hover:bg-slate-50 transition-colors">
+                <td className="px-6 py-5">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 bg-orange-600 flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 text-white"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                        />
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                        />
+                      </svg>
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                        Hot Location
+                      </p>
+                      <p className="text-xs text-slate-500">Highest demand area</p>
+                    </div>
+                  </div>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <p className="text-2xl font-bold text-slate-900">
+                    {analytics.hotLocation}
+                  </p>
+                </td>
+                <td className="px-6 py-5 text-right">
+                  <span className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider bg-orange-100 text-orange-700">
+                    TOP DEMAND
+                  </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
 
         {/* Charts Section */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Price Trends Chart */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-7 hover:shadow-xl transition-shadow duration-300">
-            <div className="flex items-center justify-between mb-6">
-              <h2 className="text-2xl font-bold text-slate-900">Price Trends</h2>
-              <span className="text-xs font-bold text-teal-700 bg-teal-50 px-4 py-2 rounded-full">
-                {timeRange} MONTHS
-              </span>
+          <div className="border-2 border-slate-200">
+            <div className="bg-slate-100 border-b-2 border-slate-200 px-6 py-4">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Price Trends Analysis
+              </h2>
+              <p className="text-xs text-slate-600 mt-1">
+                Last {timeRange} months average pricing
+              </p>
             </div>
-
-            <div className="h-80">
-              <Line data={priceChartData} options={chartOptions} />
-            </div>
-
-            <div className="mt-6 pt-5 border-t border-slate-200">
-              <div className="flex items-center gap-3">
-                <div className="w-4 h-4 bg-teal-500 rounded-sm"></div>
-                <span className="text-sm text-slate-600 font-medium">
-                  Average Property Price (LKR)
-                </span>
+            <div className="p-6">
+              <div className="h-80">
+                <Line data={priceChartData} options={chartOptions} />
               </div>
             </div>
           </div>
 
           {/* Property Type Distribution */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-7 hover:shadow-xl transition-shadow duration-300">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">
-              Property Type Distribution
-            </h2>
+          <div className="border-2 border-slate-200">
+            <div className="bg-slate-100 border-b-2 border-slate-200 px-6 py-4">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Property Type Distribution
+              </h2>
+              <p className="text-xs text-slate-600 mt-1">
+                Market composition by property type
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="space-y-6">
+                {analytics.propertyTypeDistribution
+                  .sort((a, b) => b.count - a.count)
+                  .map((item, index) => {
+                    const colors = [
+                      { bg: 'bg-teal-600', light: 'bg-teal-50', text: 'text-teal-700' },
+                      { bg: 'bg-blue-600', light: 'bg-blue-50', text: 'text-blue-700' },
+                      { bg: 'bg-purple-600', light: 'bg-purple-50', text: 'text-purple-700' },
+                      { bg: 'bg-orange-600', light: 'bg-orange-50', text: 'text-orange-700' },
+                      { bg: 'bg-rose-600', light: 'bg-rose-50', text: 'text-rose-700' },
+                    ];
+                    const color = colors[index % colors.length];
 
-            <div className="space-y-5">
-              {analytics.propertyTypeDistribution
-                .sort((a, b) => b.count - a.count)
-                .map((item, index) => {
-                  const colors = [
-                    { bg: 'bg-teal-500', light: 'bg-teal-50', text: 'text-teal-700' },
-                    { bg: 'bg-blue-500', light: 'bg-blue-50', text: 'text-blue-700' },
-                    { bg: 'bg-purple-500', light: 'bg-purple-50', text: 'text-purple-700' },
-                    { bg: 'bg-orange-500', light: 'bg-orange-50', text: 'text-orange-700' },
-                    { bg: 'bg-rose-500', light: 'bg-rose-50', text: 'text-rose-700' },
-                  ];
-                  const color = colors[index % colors.length];
-
-                  return (
-                    <div key={item.type}>
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="text-sm font-bold text-slate-900">
-                          {item.type}
-                        </span>
-                        <div className="flex items-center gap-4">
-                          <span className="text-sm text-slate-600 font-medium">
-                            {item.count} listings
+                    return (
+                      <div key={item.type}>
+                        <div className="flex items-center justify-between mb-2">
+                          <span className="text-xs font-bold text-slate-900 uppercase tracking-wider">
+                            {item.type}
                           </span>
-                          <span className={`text-sm font-bold px-3 py-1 rounded-full ${color.light} ${color.text}`}>
-                            {item.percentage}%
-                          </span>
+                          <div className="flex items-center gap-4">
+                            <span className="text-xs text-slate-600 font-medium">
+                              {item.count} listings
+                            </span>
+                            <span
+                              className={`text-xs font-bold px-3 py-1 ${color.light} ${color.text} uppercase tracking-wider`}
+                            >
+                              {item.percentage}%
+                            </span>
+                          </div>
+                        </div>
+                        <div className="h-3 bg-slate-100 relative">
+                          <div
+                            className={`h-full ${color.bg} transition-all duration-500`}
+                            style={{ width: `${item.percentage}%` }}
+                          ></div>
                         </div>
                       </div>
-                      <div className="h-4 bg-slate-100 rounded-full overflow-hidden">
-                        <div
-                          className={`h-full ${color.bg} rounded-full transition-all duration-700 ease-out`}
-                          style={{ width: `${item.percentage}%` }}
-                        ></div>
-                      </div>
-                    </div>
-                  );
-                })}
-            </div>
-
-            {analytics.propertyTypeDistribution.length > 0 && (
-              <div className="mt-6 p-5 bg-slate-50 rounded-xl border border-slate-200">
-                <p className="text-sm text-slate-700 leading-relaxed">
-                  <span className="font-bold text-slate-900">Market Leader:</span>{' '}
-                  {analytics.propertyTypeDistribution.sort((a, b) => b.count - a.count)[0].type}{' '}
-                  properties dominate with{' '}
-                  {analytics.propertyTypeDistribution.sort((a, b) => b.count - a.count)[0].percentage}%
-                  market share, indicating strong demand in this segment.
-                </p>
+                    );
+                  })}
               </div>
-            )}
+
+              {analytics.propertyTypeDistribution.length > 0 && (
+                <div className="mt-6 p-4 bg-slate-50 border border-slate-200">
+                  <p className="text-xs text-slate-700 leading-relaxed">
+                    <span className="font-bold text-slate-900">MARKET LEADER:</span>{' '}
+                    {analytics.propertyTypeDistribution.sort((a, b) => b.count - a.count)[0].type}{' '}
+                    properties dominate with{' '}
+                    {analytics.propertyTypeDistribution.sort((a, b) => b.count - a.count)[0].percentage}%
+                    market share.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Demand Heatmap */}
-        <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-7 mb-8 hover:shadow-xl transition-shadow duration-300">
-          <h2 className="text-2xl font-bold text-slate-900 mb-7">
-            Demand Heatmap by Location
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {analytics.demandHeatmap.slice(0, 9).map((item, index) => {
-              const demandConfig = {
-                HIGH: {
-                  color: 'bg-red-500',
-                  lightBg: 'bg-red-50',
-                  border: 'border-red-200',
-                  text: 'text-red-700',
-                  icon: '🔥',
-                },
-                MEDIUM: {
-                  color: 'bg-yellow-500',
-                  lightBg: 'bg-yellow-50',
-                  border: 'border-yellow-200',
-                  text: 'text-yellow-700',
-                  icon: '⚡',
-                },
-                LOW: {
-                  color: 'bg-blue-500',
-                  lightBg: 'bg-blue-50',
-                  border: 'border-blue-200',
-                  text: 'text-blue-700',
-                  icon: '📊',
-                },
-              };
-
-              const config = demandConfig[item.demandLevel];
-
-              return (
-                <div
-                  key={index}
-                  className={`border-2 ${config.border} rounded-xl p-5 hover:shadow-lg transition-all duration-200 bg-white`}
-                >
-                  <div className="flex items-center justify-between mb-4">
-                    <h3 className="font-bold text-slate-900 text-lg truncate pr-2">
-                      {item.city}
-                    </h3>
-                    <div className={`w-8 h-8 ${config.color} rounded-lg flex items-center justify-center flex-shrink-0 shadow-sm`}>
-                      <span className="text-white text-sm font-bold">
-                        {index + 1}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3 mb-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600 font-medium">Inquiries:</span>
-                      <span className="font-bold text-slate-900 text-lg">
-                        {item.totalInquiries}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600 font-medium">Listings:</span>
-                      <span className="font-bold text-slate-900 text-lg">
-                        {item.totalListings}
-                      </span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <span className="text-sm text-slate-600 font-medium">Ratio:</span>
-                      <span className="font-bold text-slate-900 text-lg">
-                        {(item.totalInquiries / item.totalListings).toFixed(1)}:1
-                      </span>
-                    </div>
-                  </div>
-
-                  <div
-                    className={`text-center text-xs font-bold py-2 rounded-lg ${config.lightBg} ${config.text} flex items-center justify-center gap-2`}
-                  >
-                    <span>{config.icon}</span>
-                    {item.demandLevel} DEMAND
-                  </div>
-                </div>
-              );
-            })}
+        <div className="border-2 border-slate-200 mb-8">
+          <div className="bg-slate-100 border-b-2 border-slate-200 px-6 py-4">
+            <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+              Demand Heatmap by Location
+            </h2>
+            <p className="text-xs text-slate-600 mt-1">
+              Geographic distribution of buyer demand
+            </p>
           </div>
+          <div className="p-6">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="text-left px-4 py-3 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Rank
+                    </th>
+                    <th className="text-left px-4 py-3 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Location
+                    </th>
+                    <th className="text-right px-4 py-3 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Inquiries
+                    </th>
+                    <th className="text-right px-4 py-3 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Listings
+                    </th>
+                    <th className="text-right px-4 py-3 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Ratio
+                    </th>
+                    <th className="text-center px-4 py-3 text-xs font-bold text-slate-700 uppercase tracking-wider">
+                      Demand Level
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {analytics.demandHeatmap.slice(0, 12).map((item, index) => {
+                    const demandConfig = {
+                      HIGH: {
+                        bg: 'bg-red-100',
+                        text: 'text-red-700',
+                        label: 'HIGH',
+                      },
+                      MEDIUM: {
+                        bg: 'bg-yellow-100',
+                        text: 'text-yellow-700',
+                        label: 'MEDIUM',
+                      },
+                      LOW: {
+                        bg: 'bg-blue-100',
+                        text: 'text-blue-700',
+                        label: 'LOW',
+                      },
+                    };
 
-          <div className="mt-8 flex items-center gap-8 justify-center flex-wrap">
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-red-500 rounded-md shadow-sm"></div>
-              <span className="text-sm text-slate-600 font-medium">High Demand (4:1+ ratio)</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-yellow-500 rounded-md shadow-sm"></div>
-              <span className="text-sm text-slate-600 font-medium">Medium Demand (2:1-4:1)</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="w-5 h-5 bg-blue-500 rounded-md shadow-sm"></div>
-              <span className="text-sm text-slate-600 font-medium">Low Demand (&lt;2:1)</span>
+                    const config = demandConfig[item.demandLevel];
+
+                    return (
+                      <tr
+                        key={index}
+                        className="border-b border-slate-100 hover:bg-slate-50 transition-colors"
+                      >
+                        <td className="px-4 py-4">
+                          <span className="inline-flex items-center justify-center w-8 h-8 bg-slate-200 text-slate-700 text-xs font-bold">
+                            {index + 1}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4">
+                          <span className="text-sm font-bold text-slate-900">{item.city}</span>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <span className="text-sm font-bold text-slate-900">
+                            {item.totalInquiries}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <span className="text-sm font-bold text-slate-900">
+                            {item.totalListings}
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-right">
+                          <span className="text-sm font-bold text-slate-900">
+                            {(item.totalInquiries / item.totalListings).toFixed(1)}:1
+                          </span>
+                        </td>
+                        <td className="px-4 py-4 text-center">
+                          <span
+                            className={`inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider ${config.bg} ${config.text}`}
+                          >
+                            {config.label}
+                          </span>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         </div>
@@ -836,153 +852,141 @@ const loadHistoricalAnalytics = async () => {
         {/* Historical Trends & Insights */}
         <div className="grid lg:grid-cols-2 gap-8 mb-8">
           {/* Historical Market Trends */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-7 hover:shadow-xl transition-shadow duration-300">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">Historical Trends</h2>
+          <div className="border-2 border-slate-200">
+            <div className="bg-slate-100 border-b-2 border-slate-200 px-6 py-4">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Historical Market Trends
+              </h2>
+              <p className="text-xs text-slate-600 mt-1">
+                Month-by-month market performance
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="space-y-4">
+                {historicalData.slice(0, 6).map((item, index) => {
+                  const trendConfig = {
+                    RISING: { label: 'RISING', bg: 'bg-emerald-100', text: 'text-emerald-700' },
+                    STABLE: { label: 'STABLE', bg: 'bg-slate-100', text: 'text-slate-700' },
+                    FALLING: { label: 'FALLING', bg: 'bg-red-100', text: 'text-red-700' },
+                  };
 
-            <div className="space-y-4">
-              {historicalData.slice(0, 6).map((item, index) => {
-                const trendConfig = {
-                  RISING: { icon: '📈', color: 'text-emerald-600', bg: 'bg-emerald-50' },
-                  STABLE: { icon: '➖', color: 'text-slate-600', bg: 'bg-slate-50' },
-                  FALLING: { icon: '📉', color: 'text-red-600', bg: 'bg-red-50' },
-                };
+                  const config = trendConfig[item.trend];
 
-                const config = trendConfig[item.trend];
-
-                return (
-                  <div
-                    key={index}
-                    className="border-2 border-slate-100 rounded-xl p-5 hover:border-slate-200 transition-colors"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-4">
-                        <span className="text-3xl">{config.icon}</span>
+                  return (
+                    <div
+                      key={index}
+                      className="border border-slate-200 p-4 hover:border-slate-300 transition-colors"
+                    >
+                      <div className="flex items-center justify-between mb-3">
                         <div>
-                          <h3 className="font-bold text-slate-900 text-lg">{item.month}</h3>
+                          <h3 className="text-sm font-bold text-slate-900 uppercase tracking-wide">
+                            {item.month}
+                          </h3>
                           <span
-                            className={`text-xs font-bold px-2 py-1 rounded-full ${config.bg} ${config.color}`}
+                            className={`inline-block mt-1 px-2 py-1 text-xs font-bold uppercase tracking-wider ${config.bg} ${config.text}`}
                           >
-                            {item.trend}
+                            {config.label}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <p className="text-xs text-slate-600 uppercase tracking-wider mb-1">
+                            Avg Price
+                          </p>
+                          <span className="text-lg font-bold text-slate-900">
+                            {(item.avgPrice / 1000000).toFixed(2)}M
                           </span>
                         </div>
                       </div>
-                      <div className="text-right">
-                        <p className="text-sm text-slate-600 font-medium">Avg Price</p>
-                        <span className="text-xl font-bold text-slate-900">
-                          {(item.avgPrice / 1000000).toFixed(2)}M
-                        </span>
-                      </div>
-                    </div>
 
-                    <div className="mt-4 pt-4 border-t border-slate-100 grid grid-cols-2 gap-4">
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Listings</p>
-                        <p className="text-lg font-bold text-slate-900">
-                          {item.totalListings}
-                        </p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-slate-500 mb-1">Inquiries</p>
-                        <p className="text-lg font-bold text-slate-900">
-                          {item.totalInquiries}
-                        </p>
+                      <div className="grid grid-cols-2 gap-4 pt-3 border-t border-slate-100">
+                        <div>
+                          <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">
+                            Listings
+                          </p>
+                          <p className="text-sm font-bold text-slate-900">{item.totalListings}</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500 uppercase tracking-wider mb-1">
+                            Inquiries
+                          </p>
+                          <p className="text-sm font-bold text-slate-900">{item.totalInquiries}</p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
           </div>
 
           {/* Smart Insights */}
-          <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-7 hover:shadow-xl transition-shadow duration-300">
-            <h2 className="text-2xl font-bold text-slate-900 mb-6">Smart Insights</h2>
-
-            <div className="space-y-5">
-              <div className="border-l-4 border-teal-600 bg-gradient-to-r from-teal-50 to-transparent p-5 rounded-r-xl">
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl">💰</span>
-                  <div>
-                    <h3 className="font-bold text-slate-900 mb-2 text-lg">
-                      Market Dynamics
-                    </h3>
-                    <p className="text-sm text-slate-700 leading-relaxed">
-                      Current inquiry-to-listing ratio of{' '}
-                      {(analytics.totalInquiries / analytics.totalListings).toFixed(1)}:1{' '}
-                      indicates a{' '}
-                      {analytics.totalInquiries / analytics.totalListings > 3
-                        ? "strong seller's market"
-                        : analytics.totalInquiries / analytics.totalListings > 1.5
-                        ? 'balanced market'
-                        : "buyer's market"}{' '}
-                      with {analytics.totalInquiries > analytics.totalListings * 2 ? 'high' : 'moderate'}{' '}
-                      competition among buyers.
-                    </p>
-                  </div>
+          <div className="border-2 border-slate-200">
+            <div className="bg-slate-100 border-b-2 border-slate-200 px-6 py-4">
+              <h2 className="text-sm font-bold text-slate-900 uppercase tracking-wider">
+                Market Intelligence Insights
+              </h2>
+              <p className="text-xs text-slate-600 mt-1">
+                Data-driven market analysis
+              </p>
+            </div>
+            <div className="p-6">
+              <div className="space-y-6">
+                <div className="border-l-4 border-teal-600 pl-4 py-2">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                    Market Dynamics
+                  </h3>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    Current inquiry-to-listing ratio of{' '}
+                    {(analytics.totalInquiries / analytics.totalListings).toFixed(1)}:1 indicates a{' '}
+                    {analytics.totalInquiries / analytics.totalListings > 3
+                      ? "strong seller's market"
+                      : analytics.totalInquiries / analytics.totalListings > 1.5
+                      ? 'balanced market'
+                      : "buyer's market"}
+                    .
+                  </p>
                 </div>
-              </div>
 
-              <div className="border-l-4 border-blue-600 bg-gradient-to-r from-blue-50 to-transparent p-5 rounded-r-xl">
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl">📅</span>
-                  <div>
-                    <h3 className="font-bold text-slate-900 mb-2 text-lg">
-                      Trend Analysis
-                    </h3>
-                    <p className="text-sm text-slate-700 leading-relaxed">
-                      {historicalData.length > 0 && (
-                        <>
-                          Over the past {timeRange} months, the market has shown{' '}
-                          {historicalData.filter((d) => d.trend === 'RISING').length >
-                          historicalData.length / 2
-                            ? 'predominantly upward'
-                            : historicalData.filter((d) => d.trend === 'FALLING').length >
-                              historicalData.length / 2
-                            ? 'declining'
-                            : 'stable'}{' '}
-                          price momentum with{' '}
-                          {historicalData[historicalData.length - 1]?.demandLevel.toLowerCase()}{' '}
-                          buyer demand.
-                        </>
-                      )}
-                    </p>
-                  </div>
+                <div className="border-l-4 border-blue-600 pl-4 py-2">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                    Trend Analysis
+                  </h3>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    {historicalData.length > 0 && (
+                      <>
+                        Over the past {timeRange} months, the market has shown{' '}
+                        {historicalData.filter((d) => d.trend === 'RISING').length >
+                        historicalData.length / 2
+                          ? 'predominantly upward'
+                          : historicalData.filter((d) => d.trend === 'FALLING').length >
+                            historicalData.length / 2
+                          ? 'declining'
+                          : 'stable'}{' '}
+                        price momentum.
+                      </>
+                    )}
+                  </p>
                 </div>
-              </div>
 
-              <div className="border-l-4 border-purple-600 bg-gradient-to-r from-purple-50 to-transparent p-5 rounded-r-xl">
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl">💵</span>
-                  <div>
-                    <h3 className="font-bold text-slate-900 mb-2 text-lg">
-                      Price Performance
-                    </h3>
-                    <p className="text-sm text-slate-700 leading-relaxed">
-                      Average property prices have{' '}
-                      {priceChange > 0 ? 'increased' : 'decreased'} by{' '}
-                      {Math.abs(priceChange).toFixed(1)}% compared to the previous period,
-                      indicating {priceChange > 5 ? 'strong' : 'moderate'} market appreciation.
-                    </p>
-                  </div>
+                <div className="border-l-4 border-purple-600 pl-4 py-2">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                    Price Performance
+                  </h3>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    Average property prices have {priceChange > 0 ? 'increased' : 'decreased'} by{' '}
+                    {Math.abs(priceChange).toFixed(1)}% compared to the previous period.
+                  </p>
                 </div>
-              </div>
 
-              <div className="border-l-4 border-orange-600 bg-gradient-to-r from-orange-50 to-transparent p-5 rounded-r-xl">
-                <div className="flex items-start gap-4">
-                  <span className="text-3xl">🏠</span>
-                  <div>
-                    <h3 className="font-bold text-slate-900 mb-2 text-lg">
-                      Supply Analysis
-                    </h3>
-                    <p className="text-sm text-slate-700 leading-relaxed">
-                      With {analytics.totalListings} active listings receiving{' '}
-                      {analytics.totalInquiries} inquiries, the market shows{' '}
-                      {analytics.totalListings > previousMonthListings ? 'increasing' : 'stable'}{' '}
-                      property supply and{' '}
-                      {analytics.totalInquiries > previousMonthInquiries ? 'growing' : 'steady'}{' '}
-                      buyer interest.
-                    </p>
-                  </div>
+                <div className="border-l-4 border-orange-600 pl-4 py-2">
+                  <h3 className="text-xs font-bold text-slate-900 uppercase tracking-wider mb-2">
+                    Supply Analysis
+                  </h3>
+                  <p className="text-sm text-slate-700 leading-relaxed">
+                    With {analytics.totalListings} active listings receiving{' '}
+                    {analytics.totalInquiries} inquiries, market activity remains{' '}
+                    {analytics.totalInquiries > analytics.totalListings * 2 ? 'strong' : 'moderate'}.
+                  </p>
                 </div>
               </div>
             </div>
@@ -990,17 +994,10 @@ const loadHistoricalAnalytics = async () => {
         </div>
 
         {/* Market Status Summary */}
-        <div className="bg-gradient-to-br from-white to-teal-50 border-2 border-teal-600 rounded-2xl shadow-xl p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-teal-100 rounded-full -mr-32 -mt-32 opacity-30"></div>
-          <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-100 rounded-full -ml-24 -mb-24 opacity-30"></div>
-          
-          <div className="relative z-10 flex items-start gap-6">
-            <div className="w-16 h-16 bg-teal-600 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-lg">
-              <svg
-                className="w-8 h-8 text-white"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
+        <div className="bg-slate-900 border-2 border-slate-800 p-8">
+          <div className="flex items-start gap-6">
+            <div className="w-16 h-16 bg-teal-600 flex items-center justify-center flex-shrink-0">
+              <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 20 20">
                 <path
                   fillRule="evenodd"
                   d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
@@ -1009,33 +1006,39 @@ const loadHistoricalAnalytics = async () => {
               </svg>
             </div>
             <div className="flex-1">
-              <h3 className="text-2xl font-bold text-slate-900 mb-3">
+              <h3 className="text-xl font-bold text-white mb-3 uppercase tracking-wide">
                 Market Status:{' '}
-                {priceChange > 5 ? 'Strong Growth Phase' : 
-                 priceChange > 0 ? 'Steady Growth' : 
-                 'Market Correction'}
+                {priceChange > 5
+                  ? 'Strong Growth Phase'
+                  : priceChange > 0
+                  ? 'Steady Growth'
+                  : 'Market Correction'}
               </h3>
-              <p className="text-slate-700 text-lg leading-relaxed mb-5">
+              <p className="text-slate-300 leading-relaxed mb-4">
                 The real estate market is currently experiencing{' '}
                 {priceChange > 5
-                  ? 'robust growth with strong buyer demand across all segments. Luxury properties and urban apartments are leading the momentum.'
+                  ? 'robust growth with strong buyer demand across all segments.'
                   : priceChange > 0
-                  ? 'steady growth with balanced buyer and seller activity. Market conditions remain favorable for transactions.'
-                  : 'a price correction phase, presenting opportunities for value-conscious buyers. Market fundamentals remain sound.'}
+                  ? 'steady growth with balanced buyer and seller activity.'
+                  : 'a price correction phase with opportunities for value-conscious buyers.'}
               </p>
               <div className="flex flex-wrap gap-3">
-                <span className="px-4 py-2 bg-white text-emerald-700 text-xs font-bold border-2 border-emerald-200 rounded-lg shadow-sm">
+                <span className="px-4 py-2 bg-white text-slate-900 text-xs font-bold uppercase tracking-wider">
                   {analytics.totalInquiries > analytics.totalListings * 2
-                    ? '🔥 HIGH BUYER ACTIVITY'
-                    : '✓ ACTIVE BUYERS'}
+                    ? 'HIGH BUYER ACTIVITY'
+                    : 'ACTIVE BUYERS'}
                 </span>
-                <span className="px-4 py-2 bg-white text-blue-700 text-xs font-bold border-2 border-blue-200 rounded-lg shadow-sm">
-                  {Math.abs(priceChange) < 3 ? '✓ PRICE STABLE' : priceChange > 0 ? '↑ PRICE RISING' : '↓ PRICE ADJUSTING'}
+                <span className="px-4 py-2 bg-white text-slate-900 text-xs font-bold uppercase tracking-wider">
+                  {Math.abs(priceChange) < 3
+                    ? 'PRICE STABLE'
+                    : priceChange > 0
+                    ? 'PRICE RISING'
+                    : 'PRICE ADJUSTING'}
                 </span>
-                <span className="px-4 py-2 bg-white text-orange-700 text-xs font-bold border-2 border-orange-200 rounded-lg shadow-sm">
+                <span className="px-4 py-2 bg-white text-slate-900 text-xs font-bold uppercase tracking-wider">
                   {analytics.totalListings > previousMonthListings
-                    ? '📈 INCREASING SUPPLY'
-                    : '✓ BALANCED SUPPLY'}
+                    ? 'INCREASING SUPPLY'
+                    : 'BALANCED SUPPLY'}
                 </span>
               </div>
             </div>

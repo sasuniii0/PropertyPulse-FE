@@ -2,42 +2,64 @@ import { useState } from 'react';
 import { useAuthModal } from "../context/AuthModalContext";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { getMyDetails, signin } from '../services/Auth';
+import { signin } from '../services/Auth';
 import { PulseIcon,GoogleIcon,FacebookIcon,EyeIcon,EyeOffIcon,MailIcon,LockIcon } from '../components/Icons';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
 export default function Signin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
 
-  const { openSignUp, closeModal } = useAuthModal();
+  const { closeModal } = useAuthModal();
   const navigate = useNavigate()
   const { login } = useAuth();
 
+
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
-  const res = await signin(email, password);
 
-  if (!res.data.accessToken) return alert("Login failed");
+  try {
+    const res = await signin(email, password); // Axios call
 
+    // Check if response has the access token
+    if (!res.data.accessToken) {
+      return toast.error("Login failed. Please check your credentials.");
+    }
 
-  // Send login email via backend
-  await fetch(`http://localhost:5000/email/send-login-email`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      email: res.data.email,
-      name: res.data.name,
-      loginTime: new Date().toLocaleString(),
-    }),
-  });
+    // Successful login: store tokens
+    login(res.data.accessToken, res.data.refreshToken);
 
-  login(res.data.accessToken, res.data.refreshToken); // update AuthProvider
-  navigate("/home");
+    // Send login email notification
+    await fetch(`http://localhost:5000/email/send-login-email`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: res.data.email,
+        name: res.data.name,
+        loginTime: new Date().toLocaleString(),
+      }),
+    });
+
+    toast.success("Login successful!");
+    navigate("/home");
+
+  } catch (error: any) {
+    // Axios errors contain response object
+    if (axios.isAxiosError(error) && error.response) {
+      if (error.response.status === 401) {
+        toast.error(error.response.data.message || "Invalid credentials");
+      } else {
+        toast.error(error.response.data.message || "Something went wrong. Please try again.");
+      }
+    } else {
+      // Fallback for other errors
+      toast.error("Network error. Please try again.");
+    }
+  }
 };
-
-
 
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">

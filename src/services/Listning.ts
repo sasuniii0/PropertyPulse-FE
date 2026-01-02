@@ -79,13 +79,17 @@ export const getAllListingsAPI = (token: string) => {
   });
 };
 
+// GET All Listings for Agent
+export const getAllListingsADMINAPI = (token: string) => {
+  return axios.get(`${API}/agent`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+};
+
 // Get all listings by agent
 export const getListingsByAgentAPI = (agentId: string, token: string) => {
   if (!token) throw new Error("No token provided");
-  if (!agentId) throw new Error("No agent ID provided");
-
-  console.log("hikedjew");
-  
+  if (!agentId) throw new Error("No agent ID provided");  
 
   return axios.get(`${API}/agent/${agentId}/listings`, {
     headers: { Authorization: `Bearer ${token}` },
@@ -144,5 +148,37 @@ export const fetchRecentListings = async (token: string): Promise<RecentListing[
   } catch (err) {
     console.error("Error fetching recent listings:", err);
     return [];
+  }
+};
+
+// Fetch all listings for the logged-in agent
+export const getAgentListingsAPI = async (token: string) => {
+  try {
+    const response = await axios.get(`${API}/agent/listings`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data; // assuming backend returns { data: [...] }
+  } catch (err: any) {
+    console.error("Failed to fetch agent listings:", err);
+    throw err;
+  }
+};
+
+// Fetch all inquiries assigned to the logged-in agent
+export const getInquiriesByAgentAPI = async (token: string) => {
+  try {
+    const response = await axios.get(`${API}/agent/inquiries`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data.data; // assuming backend returns { data: [...] }
+  } catch (err: any) {
+    console.error("Failed to fetch agent inquiries:", err);
+    throw err;
   }
 };

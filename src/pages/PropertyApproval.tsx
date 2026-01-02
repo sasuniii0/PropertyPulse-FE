@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import { approveListingAPI, rejectListingAPI } from "../services/Admin";
-import { getAllListingsAPI } from "../services/Listning";
+import { approveListingAPI, getAllListingsAdminAPI, rejectListingAPI } from "../services/Admin";
 import { useAuth } from "../context/AuthContext";
 import type { ListingData } from "../services/Listning";
 
@@ -13,7 +12,9 @@ export default function PropertyApproval() {
     const fetchListings = async () => {
       if (!user) return;
       try {
-        const res = await getAllListingsAPI(user.token);
+        const res = await getAllListingsAdminAPI(user.token);
+        console.log(res);
+        
         setListings(res.data.data || []);
       } catch (err) {
         console.error(err);
@@ -54,7 +55,7 @@ export default function PropertyApproval() {
 
   const pendingListings = listings.filter(l => l.status === "PENDING");
   const approvedListings = listings.filter(l => l.status === "APPROVED");
-  const rejectedListings = listings.filter(l => l.status === "REJECTED");
+  const rejectedListings = listings.filter(l => l.status === "REJECTED");  
 
   return (
     <div className="min-h-screen p-6 bg-gradient-to-br from-gray-50 to-gray-100 space-y-6">
