@@ -27,7 +27,7 @@ export interface AgentPaymentData {
 const API = "http://localhost:5000/api/v1/user";
 
 // Fetch logged-in user details
-export const getUserDetailsAPI = (id: string, token: string) => {
+export const getUserDetailsAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
   return axios.get<{ data: UserData }>(`${API}/me`, {
     headers: { Authorization: `Bearer ${token}` },

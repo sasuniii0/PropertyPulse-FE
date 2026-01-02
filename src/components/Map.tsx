@@ -2,7 +2,7 @@
 import type { MapRef } from "react-map-gl/maplibre";
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { useRef, useEffect } from 'react';
-import Map, { Marker, NavigationControl } from "react-map-gl/maplibre";
+import Map, { Marker } from "react-map-gl/maplibre";
 
 
 interface MapProps {
