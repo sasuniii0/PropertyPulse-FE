@@ -21,16 +21,17 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   if (!res.data.accessToken) return alert("Login failed");
 
+
   // Send login email via backend
-    await fetch(`http://localhost:5000/email/send-login-email`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        email: res.data.email,
-        name: res.data.name,
-        loginTime: new Date().toLocaleString(),
-      }),
-    });
+  await fetch(`http://localhost:5000/email/send-login-email`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      email: res.data.email,
+      name: res.data.name,
+      loginTime: new Date().toLocaleString(),
+    }),
+  });
 
   login(res.data.accessToken, res.data.refreshToken); // update AuthProvider
   navigate("/home");

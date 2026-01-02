@@ -1,99 +1,149 @@
-import axios from 'axios';
+// API Service for Market Analytics
 
-const API_URL = 'http://localhost:5000/api/v1';
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1/analytics';
+
+export interface PropertyTypeDistribution {
+  type: string;
+  count: number;
+  percentage: number;
+}
+
+export interface DemandHeatmap {
+  city: string;
+  totalInquiries: number;
+  totalListings: number;
+  demandLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+}
+
+export interface SavedStats {
+  _id: string;
+  saves: number;
+}
+
+export interface PriceHistory {
+  _id: number;
+  avgPrice: number;
+}
 
 export interface MarketAnalytics {
   avgPrice: number;
   totalListings: number;
   totalInquiries: number;
   hotLocation: string;
+  propertyTypeDistribution: PropertyTypeDistribution[];
+  demandHeatmap: DemandHeatmap[];
+  savedStats: SavedStats[];
+  priceHistory: PriceHistory[];
   marketInsight: string;
-  priceHistory: Array<{
-    month: string;
-    avgPrice: number;
-    changePercent: number;
-  }>;
-  propertyTypeDistribution: Array<{
-    type: string;
-    count: number;
-    percentage: number;
-  }>;
-  demandHeatmap: Array<{
-    city: string;
-    demandLevel: 'HIGH' | 'MEDIUM' | 'LOW';
-    totalListings: number;
-    totalInquiries: number;
-  }>;
-  marketTrends: Array<{
-    propertyType: string;
-    trend: 'RISING' | 'STABLE' | 'FALLING';
-    changePercent: number;
-  }>;
 }
 
-export interface AnalyticsResponse {
-  success: boolean;
-  data: MarketAnalytics;
+export interface HistoricalAnalyticsData {
+  month: string;
+  avgPrice: number;
+  totalListings: number;
+  totalInquiries: number;
+  demandLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+  trend: 'RISING' | 'STABLE' | 'FALLING';
 }
 
-export const getMarketAnalyticsAPI = async (token: string): Promise<MarketAnalytics> => {
-  try {
-    const response = await axios.get<AnalyticsResponse>(
-      `${API_URL}/analytics/market`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+export interface MonthlyReportItem {
+  city: string;
+  propertyType: string;
+  avgPrice: number;
+  totalListings: number;
+  totalInquiries: number;
+  demandLevel: 'HIGH' | 'MEDIUM' | 'LOW';
+}
 
-    return response.data.data;
-  } catch (error: any) {
-    console.error('Get market analytics API error:', error);
-    throw error.response?.data?.message || 'Failed to fetch market analytics';
+export interface MonthlyReport {
+  month: string;
+  report: MonthlyReportItem[];
+}
+
+/**
+ * Fetch current market analytics
+ */
+export const getMarketAnalyticsAPI = async (
+  token: string,
+  city?: string,
+  propertyType?: string
+): Promise<MarketAnalytics> => {
+  const params = new URLSearchParams();
+  if (city && city !== 'all') params.append('city', city);
+  if (propertyType && propertyType !== 'all') params.append('propertyType', propertyType);
+
+  const response = await fetch(
+    `${API_BASE_URL}/market?${params.toString()}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to fetch market analytics');
   }
+
+  const result = await response.json();
+  return result.data;
 };
 
-export const getAnalyticsByCity = async (
+/**
+ * Fetch historical analytics data
+ */
+export const getHistoricalAnalyticsAPI = async (
   token: string,
-  city: string
-): Promise<MarketAnalytics> => {
-  try {
-    const response = await axios.get<AnalyticsResponse>(
-      `${API_URL}/analytics/market`,
-      {
-        params: { city },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+  months: number = 6
+): Promise<HistoricalAnalyticsData[]> => {
+  const response = await fetch(
+    `${API_BASE_URL}/historical?months=${months}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-    return response.data.data;
-  } catch (error: any) {
-    console.error('Get analytics by city API error:', error);
-    throw error.response?.data?.message || 'Failed to fetch analytics';
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to fetch historical analytics');
   }
+
+  const result = await response.json();
+  return result.data;
 };
 
-export const getAnalyticsByPropertyType = async (
-  token: string,
-  propertyType: string
-): Promise<MarketAnalytics> => {
-  try {
-    const response = await axios.get<AnalyticsResponse>(
-      `${API_URL}/analytics/market`,
-      {
-        params: { propertyType },
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+/**
+ * Generate monthly report
+ */
+export const generateMonthlyReportAPI = async (
+  token: string
+): Promise<MonthlyReport> => {
+  const response = await fetch(
+    `${API_BASE_URL}/generate-report`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
-    return response.data.data;
-  } catch (error: any) {
-    console.error('Get analytics by property type API error:', error);
-    throw error.response?.data?.message || 'Failed to fetch analytics';
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.message || 'Failed to generate monthly report');
   }
+
+  const result = await response.json();
+  return {
+    month: result.month,
+    report: result.report,
+  };
 };
