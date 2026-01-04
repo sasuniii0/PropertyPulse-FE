@@ -441,6 +441,7 @@ useEffect(() => {
             title="Property Approvals" 
             desc="Review pending listings" 
             color="bg-orange-100" 
+            onClick={() => navigate("/listning")}
           />
           <ActionCard 
             icon={<ChartIcon />} 

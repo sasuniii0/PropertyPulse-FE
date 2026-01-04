@@ -78,7 +78,7 @@ export default function Router() {
                         <Route path="/manageListnings" element= {<ManageListnings/>}/>
                         <Route path="/listning/:id" element= {<MyListings/>}/>
                         <Route path="/admin/manage-users" element={<ManageUsers />} />
-                        <Route path="listning/" element={ <PropertyApproval/>} />
+                        <Route path="/listning" element={ <PropertyApproval/>} />
                         <Route path="/admin-listning" element={ <AdminListings/>} />
                         <Route path="/property/:id" element={<PropertyDetails />} />
                         <Route path="/properties" element={<AvailableProperties />} />

@@ -14,7 +14,7 @@ export default function CreateNewListing() {
     address: '',
     lat: '',
     lng: '',
-    propertyType: 'House',
+    propertyType: 'HOUSE',
     listingType: 'SALE',
     bedrooms: '',
     bathrooms: '',
