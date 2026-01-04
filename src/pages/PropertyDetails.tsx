@@ -6,6 +6,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { createInquiryAPI } from '../services/Inquiry';
 import { useAuth } from "../context/AuthContext";
 import SaveButton from '../components/SaveButton';
+import api from "../services/Api";
 
 
 interface Location {
@@ -145,30 +146,33 @@ export default function PropertyDetails() {
         inquiryMessage
       );
       
- // 2️⃣ Fetch agent info
+      // 2️⃣ Fetch agent info
       const agentRes = await fetch(`/api/agents/${property.agentId}`);
       const agentData = await agentRes.json();
       const agentEmail = agentData.email;
 
-      if (agentEmail) {
-        // 3️⃣ Send email to agent
-        await fetch('/email/send-inquiry', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            to: agentEmail,
-            subject: `New Inquiry for ${property.title}`,
-            html: `
-              <p>Hi ${agentData.name},</p>
-              <p>You have received a new inquiry from ${user.name} (${user.email}) for your property <strong>${property.title}</strong>.</p>
-              <p><strong>Message:</strong> ${inquiryMessage}</p>
-              <p>Regards, <br/> PropertyPulse Team</p>
-            `,
-          }),
+
+    if (agentEmail) {
+      try {
+        await api.post('/email/send-inquiry', {
+          to: agentEmail,
+          subject: `New Inquiry for ${property.title}`,
+          html: `
+            <p>Hi ${agentData.name},</p>
+            <p>You have received a new inquiry from ${user.name} (${user.email}) for your property <strong>${property.title}</strong>.</p>
+            <p><strong>Message:</strong> ${inquiryMessage}</p>
+            <p>Regards, <br/> PropertyPulse Team</p>
+          `,
+        }, {
+          headers: { 'Content-Type': 'application/json' }
         });
+
+        console.log("Inquiry email sent successfully!");
+      } catch (err) {
+        console.error("Failed to send inquiry email:", err);
       }
+    }
+
 
       toast.success("Inquiry sent successfully! The agent will respond soon.");
       setShowContactModal(false);
