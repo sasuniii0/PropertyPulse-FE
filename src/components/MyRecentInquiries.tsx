@@ -19,7 +19,14 @@ export default function MyRecentInquiries() {
       if (!user.token) return;
       try {
         const data = await getMyInquiriesAPI(user.token);
-        setInquiries(data);
+        // Map backend response to frontend type
+        const mapped = data.map((inq) => ({
+          _id: inq._id,
+          propertyTitle: inq.listing?.title || "Property not available", // handle null
+          createdAt: inq.createdAt,
+        }));
+
+        setInquiries(mapped);
       } catch (error) {
         console.error("Failed to fetch inquiries:", error);
       } finally {
