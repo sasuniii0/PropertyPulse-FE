@@ -57,6 +57,8 @@ export default function CreateNewListing() {
     form.append("location[address]", formData.address);
     form.append("location[lat]", formData.lat);
     form.append("location[lng]", formData.lng);
+    form.append("bedrooms", formData.bedrooms);
+    form.append("bathrooms", formData.bathrooms);
 
     images.forEach(file => form.append("images", file));
 

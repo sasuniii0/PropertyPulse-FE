@@ -706,7 +706,13 @@ useEffect(() => {
                     </div>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium">
+                    <button 
+                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium"
+                    onClick={() => {
+                          navigate(`/property/${p._id}`);
+                          window.scrollTo(0, 0); // scroll to top immediately
+                        }}
+                    >
                       View Details
                     </button>
                     {/* <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-1.5 transition-colors text-xs font-medium">
