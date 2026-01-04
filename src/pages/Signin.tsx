@@ -6,6 +6,7 @@ import { signin } from '../services/Auth';
 import { PulseIcon,GoogleIcon,FacebookIcon,EyeIcon,EyeOffIcon,MailIcon,LockIcon } from '../components/Icons';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import api from '../services/Api';
 
 export default function Signin() {
   const [email, setEmail] = useState('');
@@ -33,7 +34,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     login(res.data.accessToken, res.data.refreshToken);
 
     // Fire and forget using Axios
-    axios.post(`${import.meta.env.VITE_API_URL}/email/send-login-email`, {
+    api.post(`${import.meta.env.VITE_API_URL}/email/send-login-email`, {
       email: res.data.email,
       name: res.data.name,
       loginTime: new Date().toLocaleString(),
