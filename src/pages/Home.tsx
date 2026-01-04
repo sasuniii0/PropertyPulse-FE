@@ -674,7 +674,10 @@ useEffect(() => {
             {myListings.map((p) => (
               <div
                 key={p._id}
-                onClick={() => navigate(`/listning/${p._id}`)}
+                onClick={() => {
+                          navigate(`/property/${p._id}`);
+                          window.scrollTo(0, 0); // scroll to top immediately
+                        }}
                 className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100"
               >
                 <div className="relative h-44 overflow-hidden">
