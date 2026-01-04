@@ -96,3 +96,10 @@ export const getMyInquiriesAPI = async (token: string) => {
   });
   return res.data.data;
 };
+
+export const getRecentInquiriesAPI = async (token: string) => {
+  const res = await api.get<{ data: InquiryData[] }>(`${API}/recent`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  return res.data.data;
+};
