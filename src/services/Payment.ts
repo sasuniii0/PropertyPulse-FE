@@ -57,7 +57,7 @@ export const getPaymentDetails = async (
 ): Promise<PaymentDetails> => {
   if (!token) throw new Error("No access token");
 
-  const res = await api.get("/payment/details", {
+  const res = await api.get(import.meta.env.VITE_API_URL + "/api/v1/payment/details", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

@@ -66,7 +66,6 @@ export default function MyProfile() {
         
       } catch (err) {
         console.error(err);
-        toast.error("Failed to load profile");
       } finally {
         setLoading(false);
       }
