@@ -93,115 +93,90 @@ export default function AgentProperties() {
 
   if (loading) {
     return (
-      <div className="w-full h-screen flex justify-center items-center text-gray-900 text-xl font-bold uppercase tracking-wide">
-        Loading Agent Data...
+      <div className="w-full h-screen flex justify-center items-center text-gray-700 text-xl font-semibold">
+        Loading agent data...
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <main className="max-w-7xl mx-auto px-8 py-12 space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
         {/* Header */}
-        <div className="border-b-2 border-gray-900 pb-6">
-          <div className="flex justify-between items-start">
-            <div>
-              <h1 className="text-4xl font-bold text-gray-900 uppercase tracking-tight mb-2">
-                Property Management
-              </h1>
-              <p className="text-gray-600 text-sm uppercase tracking-wide">
-                Track and Manage Your Listings
-              </p>
-            </div>
-            <button
-              onClick={() => navigate("/add-property")}
-              className="border-2 border-gray-900 bg-gray-900 text-white font-bold py-3 px-8 uppercase tracking-wide hover:bg-gray-800 transition-colors"
-            >
-              + Add Property
-            </button>
-          </div>
-        </div>
-
-        {/* Statistics Grid */}
-        <div className="grid grid-cols-5 gap-4">
-          <div className="bg-white border-2 border-gray-900 p-6">
-            <div className="text-gray-600 text-xs font-bold uppercase tracking-wider mb-2">
-              Total Properties
-            </div>
-            <div className="text-4xl font-bold text-gray-900">{stats.total}</div>
-          </div>
-          <div className="bg-white border-2 border-green-600 p-6">
-            <div className="text-green-600 text-xs font-bold uppercase tracking-wider mb-2">
-              Approved
-            </div>
-            <div className="text-4xl font-bold text-green-600">{stats.approved}</div>
-          </div>
-          <div className="bg-white border-2 border-yellow-600 p-6">
-            <div className="text-yellow-600 text-xs font-bold uppercase tracking-wider mb-2">
-              Pending
-            </div>
-            <div className="text-4xl font-bold text-yellow-600">{stats.pending}</div>
-          </div>
-          <div className="bg-white border-2 border-red-600 p-6">
-            <div className="text-red-600 text-xs font-bold uppercase tracking-wider mb-2">
-              Rejected
-            </div>
-            <div className="text-4xl font-bold text-red-600">{stats.rejected}</div>
-          </div>
-          <div className="bg-white border-2 border-blue-600 p-6">
-            <div className="text-blue-600 text-xs font-bold uppercase tracking-wider mb-2">
-              Inquiries
-            </div>
-            <div className="text-4xl font-bold text-blue-600">{stats.totalInquiries}</div>
-          </div>
-        </div>
-
-        {/* Filters Section */}
-        <div className="bg-white border-2 border-gray-900 p-6 space-y-6">
-          {/* Search Bar */}
+        <div className="flex justify-between items-center">
           <div>
-            <input
-              type="text"
-              placeholder="SEARCH PROPERTIES..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full border-2 border-gray-900 px-4 py-3 font-medium uppercase tracking-wide focus:outline-none focus:border-teal-600"
-            />
+            <h1 className="text-2xl font-bold text-gray-900">My Properties</h1>
+            <p className="text-gray-600 text-sm mt-0.5">Manage and track your property listings</p>
           </div>
+          <button
+            onClick={() => navigate("/add-property")}
+            className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2.5 font-semibold transition-colors text-sm"
+          >
+            + Add New Property
+          </button>
+        </div>
 
-          {/* Filter Controls */}
-          <div className="space-y-4">
-            {/* Status Filter */}
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-bold text-gray-900 uppercase tracking-wide min-w-[100px]">
-                Status:
-              </span>
-              <div className="flex gap-2">
-                {(["all", "APPROVED", "PENDING", "REJECTED"] as FilterType[]).map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setStatusFilter(status)}
-                    className={`px-6 py-2 text-xs font-bold uppercase tracking-wide transition-colors border-2 ${
-                      statusFilter === status
-                        ? "bg-gray-900 text-white border-gray-900"
-                        : "bg-white text-gray-900 border-gray-900 hover:bg-gray-100"
-                    }`}
-                  >
-                    {status === "all" ? "All" : status}
-                  </button>
-                ))}
-              </div>
+        {/* Statistics Cards */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <div className="text-gray-500 text-xs font-semibold mb-2">Total Properties</div>
+            <div className="text-3xl font-bold text-gray-900">{stats.total}</div>
+          </div>
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <div className="text-green-600 text-xs font-semibold mb-2">Approved</div>
+            <div className="text-3xl font-bold text-green-600">{stats.approved}</div>
+          </div>
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <div className="text-yellow-600 text-xs font-semibold mb-2">Pending</div>
+            <div className="text-3xl font-bold text-yellow-600">{stats.pending}</div>
+          </div>
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <div className="text-red-600 text-xs font-semibold mb-2">Rejected</div>
+            <div className="text-3xl font-bold text-red-600">{stats.rejected}</div>
+          </div>
+          <div className="bg-white shadow-sm border border-gray-100 p-5">
+            <div className="text-blue-600 text-xs font-semibold mb-2">Total Inquiries</div>
+            <div className="text-3xl font-bold text-blue-600">{stats.totalInquiries}</div>
+          </div>
+        </div>
+
+        {/* Search and Filters */}
+        <div className="bg-white shadow-sm border border-gray-100 p-5">
+          <div className="grid md:grid-cols-6 gap-4">
+            {/* Search Input */}
+            <div className="md:col-span-2">
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Search</label>
+              <input
+                type="text"
+                placeholder="Search by title or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+              />
             </div>
 
-            {/* Property Type & Listing Type */}
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-bold text-gray-900 uppercase tracking-wide min-w-[100px]">
-                Filters:
-              </span>
+            {/* Status Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Status</label>
+              <select
+                value={statusFilter}
+                onChange={(e) => setStatusFilter(e.target.value as FilterType)}
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
+              >
+                <option value="all">All Status</option>
+                <option value="APPROVED">Approved</option>
+                <option value="PENDING">Pending</option>
+                <option value="REJECTED">Rejected</option>
+              </select>
+            </div>
+
+            {/* Property Type Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Property Type</label>
               <select
                 value={propertyTypeFilter}
                 onChange={(e) => setPropertyTypeFilter(e.target.value as PropertyTypeFilter)}
-                className="border-2 border-gray-900 px-4 py-2 text-xs font-bold uppercase tracking-wide focus:outline-none focus:border-teal-600"
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="all">All Types</option>
                 <option value="HOUSE">House</option>
@@ -210,21 +185,29 @@ export default function AgentProperties() {
                 <option value="COMMERCIAL">Commercial</option>
                 <option value="VILLA">Villa</option>
               </select>
+            </div>
 
+            {/* Listing Type Filter */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Listing Type</label>
               <select
                 value={listingTypeFilter}
                 onChange={(e) => setListingTypeFilter(e.target.value as ListingTypeFilter)}
-                className="border-2 border-gray-900 px-4 py-2 text-xs font-bold uppercase tracking-wide focus:outline-none focus:border-teal-600"
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="all">All Listings</option>
                 <option value="SALE">For Sale</option>
                 <option value="RENT">For Rent</option>
               </select>
+            </div>
 
+            {/* Sort By */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-700 mb-1.5">Sort By</label>
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value as SortType)}
-                className="border-2 border-gray-900 px-4 py-2 text-xs font-bold uppercase tracking-wide focus:outline-none focus:border-teal-600 ml-auto"
+                className="w-full px-3 py-2 text-sm border border-gray-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all"
               >
                 <option value="newest">Newest First</option>
                 <option value="oldest">Oldest First</option>
@@ -234,168 +217,152 @@ export default function AgentProperties() {
               </select>
             </div>
           </div>
+        </div>
 
-          {/* Results Summary */}
-          <div className="flex justify-between items-center pt-4 border-t-2 border-gray-900">
-            <p className="text-sm font-bold text-gray-600 uppercase tracking-wide">
-              Showing {filteredListings.length} of {listings.length} Properties
-            </p>
-            {(statusFilter !== "all" || propertyTypeFilter !== "all" || listingTypeFilter !== "all" || searchTerm) && (
-              <button
-                onClick={() => {
-                  setStatusFilter("all");
-                  setPropertyTypeFilter("all");
-                  setListingTypeFilter("all");
-                  setSearchTerm("");
-                }}
-                className="text-sm text-gray-900 font-bold uppercase tracking-wide hover:underline"
-              >
-                Clear Filters
-              </button>
-            )}
-          </div>
+        {/* Results Summary */}
+        <div className="flex items-center justify-between">
+          <p className="text-gray-600 text-sm">
+            <span className="font-semibold text-gray-900">{filteredListings.length}</span> properties found
+          </p>
+          {(statusFilter !== "all" || propertyTypeFilter !== "all" || listingTypeFilter !== "all" || searchTerm) && (
+            <button
+              onClick={() => {
+                setStatusFilter("all");
+                setPropertyTypeFilter("all");
+                setListingTypeFilter("all");
+                setSearchTerm("");
+              }}
+              className="text-sm text-teal-600 hover:text-teal-700 font-semibold"
+            >
+              Clear All Filters
+            </button>
+          )}
         </div>
 
         {/* Listings Grid */}
         {filteredListings.length === 0 ? (
-          <div className="text-center py-20 bg-white border-2 border-gray-900">
-            <svg
-              className="w-20 h-20 text-gray-300 mx-auto mb-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="square"
-                strokeLinejoin="miter"
-                strokeWidth={2}
-                d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-              />
-            </svg>
-            <p className="text-gray-500 text-lg font-bold uppercase tracking-wide mb-2">
-              No Properties Found
-            </p>
-            <p className="text-gray-400 text-sm uppercase tracking-wide mb-8">
+          <div className="text-center py-16 bg-white shadow-sm border border-gray-100">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gray-100 mb-4">
+              <svg
+                className="w-10 h-10 text-gray-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={1.5}
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+            </div>
+            <p className="text-gray-500 text-base mb-2">No properties found</p>
+            <p className="text-gray-400 text-sm mb-6">
               {searchTerm || statusFilter !== "all" || propertyTypeFilter !== "all" || listingTypeFilter !== "all"
-                ? "Try Adjusting Your Filters"
-                : "Start By Adding Your First Property"}
+                ? "Try adjusting your filters"
+                : "Start by adding your first property"}
             </p>
             <button
               onClick={() => navigate("/add-property")}
-              className="border-2 border-gray-900 bg-gray-900 text-white font-bold py-3 px-8 uppercase tracking-wide hover:bg-gray-800 transition-colors"
+              className="bg-teal-500 hover:bg-teal-600 text-white px-6 py-2.5 font-semibold transition-colors text-sm"
             >
-              + Add Property
+              + Add Your First Property
             </button>
           </div>
         ) : (
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid md:grid-cols-3 gap-5">
             {filteredListings.map((listing) => {
               const listingInquiries = inquiries.filter((inq) => inq.listing === listing._id);
               const statusColors = {
-                APPROVED: "border-green-600 bg-green-600",
-                PENDING: "border-yellow-600 bg-yellow-600",
-                REJECTED: "border-red-600 bg-red-600",
+                APPROVED: "bg-green-500",
+                PENDING: "bg-yellow-500",
+                REJECTED: "bg-red-500",
               };
 
               return (
-                <div key={listing._id} className="bg-white border-2 border-gray-900 overflow-hidden">
-                  {/* Image Section */}
-                  <div className="relative h-56 overflow-hidden bg-gray-200">
+                <div
+                  key={listing._id}
+                  className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100"
+                >
+                  <div className="relative h-44 overflow-hidden">
                     <img
                       src={listing.images?.[0] ?? "/placeholder.jpg"}
                       alt={listing.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
                     {/* Status Badge */}
                     <div
-                      className={`absolute top-0 left-0 ${
+                      className={`absolute top-2 left-2 ${
                         statusColors[listing.status as keyof typeof statusColors]
-                      } text-white px-4 py-2 text-xs font-bold uppercase tracking-wider`}
+                      } text-white px-2.5 py-0.5 text-xs font-semibold`}
                     >
                       {listing.status}
                     </div>
                     {/* Property Type Badge */}
-                    <div className="absolute top-0 right-0 bg-white text-gray-900 border-2 border-gray-900 px-4 py-2 text-xs font-bold uppercase tracking-wider">
+                    <div className="absolute top-2 right-2 bg-teal-500 text-white px-2.5 py-0.5 text-xs font-medium capitalize">
                       {listing.propertyType}
                     </div>
                     {/* Listing Type Badge */}
-                    <div className="absolute bottom-0 left-0 bg-teal-600 text-white px-4 py-2 text-xs font-bold uppercase tracking-wider">
-                      For {listing.listingType}
-                    </div>
-                  </div>
-
-                  {/* Content Section */}
-                  <div className="p-6 space-y-4">
-                    {/* Location */}
-                    <div className="flex items-center gap-2 text-xs text-gray-600 uppercase tracking-wide">
-                      <MapPinIcon />
-                      <span className="truncate font-medium">{listing.location.address}</span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="font-bold text-gray-900 text-lg uppercase tracking-tight line-clamp-1">
-                      {listing.title}
-                    </h3>
-
-                    {/* Price */}
-                    <div className="border-t-2 border-b-2 border-gray-900 py-3">
-                      <p className="text-gray-900 font-bold text-2xl">
-                        LKR {listing.price.toLocaleString()}
-                        {listing.listingType === "RENT" && (
-                          <span className="text-sm font-normal text-gray-600">/month</span>
-                        )}
-                      </p>
-                    </div>
-
-                    {/* Property Details */}
-                    {(listing.bedrooms > 0 || listing.size) && (
-                      <div className="flex gap-4 text-gray-600 text-sm font-medium uppercase tracking-wide">
-                        {listing.bedrooms > 0 && (
-                          <>
-                            <span className="flex items-center gap-1.5">
-                              <BedIcon /> {listing.bedrooms}
-                            </span>
-                            <span className="flex items-center gap-1.5">
-                              <BathIcon /> {listing.bathrooms}
-                            </span>
-                          </>
-                        )}
-                        {listing.size && (
-                          <span className="flex items-center gap-1.5">
-                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path
-                                strokeLinecap="square"
-                                strokeLinejoin="miter"
-                                strokeWidth={2}
-                                d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                              />
-                            </svg>
-                            {listing.size} sqft
-                          </span>
-                        )}
+                    {listing.listingType && (
+                      <div className="absolute bottom-2 left-2 bg-white text-gray-900 px-2.5 py-0.5 text-xs font-semibold">
+                        For {listing.listingType}
                       </div>
                     )}
+                  </div>
 
-                    {/* Inquiries */}
-                    <div className="bg-gray-100 border-2 border-gray-900 p-4">
+                  <div className="p-4">
+                    {/* Location */}
+                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
+                      <MapPinIcon />
+                      <span className="truncate">{listing.location.address}</span>
+                    </div>
+
+                    {/* Title and Price */}
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h3 className="font-bold text-gray-900 text-sm line-clamp-1">
+                          {listing.title}
+                        </h3>
+                        <p className="text-teal-600 font-bold text-base mt-1">
+                          LKR {listing.price.toLocaleString()}
+                          {listing.listingType === "RENT" && (
+                            <span className="text-xs font-normal text-gray-500">/month</span>
+                          )}
+                        </p>
+                      </div>
+                      {listing.bedrooms > 0 && (
+                        <div className="flex gap-3 text-gray-500 text-xs">
+                          <span className="flex items-center gap-1">
+                            <BedIcon /> {listing.bedrooms}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <BathIcon /> {listing.bathrooms}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Inquiries Info */}
+                    <div className="bg-gray-50 border border-gray-200 p-3 mb-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-2">
-                          <svg className="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <svg className="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path
-                              strokeLinecap="square"
-                              strokeLinejoin="miter"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
                               strokeWidth={2}
                               d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
                             />
                           </svg>
-                          <span className="text-sm font-bold text-gray-900 uppercase tracking-wide">
+                          <span className="text-xs font-semibold text-gray-700">
                             {listingInquiries.length} {listingInquiries.length === 1 ? "Inquiry" : "Inquiries"}
                           </span>
                         </div>
                         {listingInquiries.length > 0 && (
                           <button
                             onClick={() => navigate(`/inquiries/${listing._id}`)}
-                            className="text-xs font-bold uppercase tracking-wide text-gray-900 hover:underline"
+                            className="text-xs font-semibold text-teal-600 hover:text-teal-700"
                           >
                             View →
                           </button>
@@ -404,16 +371,19 @@ export default function AgentProperties() {
                     </div>
 
                     {/* Action Buttons */}
-                    <div className="grid grid-cols-2 gap-3 pt-2">
+                    <div className="grid grid-cols-2 gap-2">
                       <button
-                        onClick={() => navigate(`/property/${listing._id}`)}
-                        className="border-2 border-gray-900 bg-white text-gray-900 font-bold py-3 uppercase tracking-wide text-xs hover:bg-gray-100 transition-colors"
+                        onClick={() => {
+                          navigate(`/property/${listing._id}`);
+                          window.scrollTo(0, 0);
+                        }}
+                        className="bg-white hover:bg-gray-50 text-gray-700 border border-gray-300 py-2 transition-colors text-xs font-medium"
                       >
-                        View
+                        View Details
                       </button>
                       <button
                         onClick={() => navigate(`/edit-property/${listing._id}`)}
-                        className="border-2 border-gray-900 bg-gray-900 text-white font-bold py-3 uppercase tracking-wide text-xs hover:bg-gray-800 transition-colors"
+                        className="bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
                       >
                         Edit
                       </button>
