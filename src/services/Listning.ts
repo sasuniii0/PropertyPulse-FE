@@ -48,7 +48,7 @@ export interface RecentListing {
   location: { address: string };
   createdAt: string; // ISO date string from backend
 }
-const API = "http://localhost:5000/api/v1/listning";
+const API = import.meta.env.VITE_API_URL + "/api/v1/listning";
 
 // //getAll listnings
 // export const getAllListingsAPI = (token: string) => {
@@ -135,7 +135,7 @@ export const fetchLocationApiClient = async (token: string): Promise<Property[]>
 
 export const fetchRecentListings = async (token: string): Promise<RecentListing[]> => {
   try {
-    const res = await axios.get("http://localhost:5000/api/v1/listning/recent", {
+    const res = await axios.get(`${API}/recent`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

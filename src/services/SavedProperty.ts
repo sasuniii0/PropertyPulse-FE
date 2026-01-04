@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:5000/api/v1/saved-properties";
+const API = import.meta.env.VITE_API_URL + "/api/v1/saved-properties";
 
 export interface SavedPropertyListing {
   _id: string;

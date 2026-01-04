@@ -21,7 +21,7 @@ export interface InquiryData {
   createdAt: string;
 }
 
-const API = "http://localhost:5000/api/v1/inquiries";
+const API = import.meta.env.VITE_API_URL + "/api/v1/inquiries";
 
 // Create Inquiry (CLIENT)
 export const createInquiryAPI = (

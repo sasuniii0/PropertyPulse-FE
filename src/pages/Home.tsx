@@ -40,7 +40,7 @@ export default function Home() {
   const checkPayment = async () => {
     if (!user || loading) return; // Wait until auth is fully loaded
     try {
-      const response = await axios.get('http://localhost:5000/api/v1/user/payment-status', {
+      const response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/user/payment-status", {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

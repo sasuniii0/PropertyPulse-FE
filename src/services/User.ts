@@ -24,7 +24,7 @@ export interface AgentPaymentData {
 }
 
 
-const API = "http://localhost:5000/api/v1/user";
+const API =import.meta.env.VITE_API_URL + "/api/v1/user";
 
 // Fetch logged-in user details
 export const getUserDetailsAPI = (token: string) => {
@@ -79,7 +79,7 @@ export const getUserByIdAPI = (id: string, token: string) => {
 };
 
 export const getAgentPaymentStatus = async (token: string): Promise<AgentPaymentData> => {
-  const res = await axios.get("http://localhost:5000/api/v1/user/payment-status", {
+  const res = await axios.get(`${API}/payment-status`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

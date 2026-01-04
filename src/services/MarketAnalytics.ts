@@ -1,6 +1,6 @@
 // API Service for Market Analytics
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/v1/analytics';
+const API_BASE_URL = import.meta.env.VITE_API_URL + "/api/v1/analytics";
 
 export interface PropertyTypeDistribution {
   type: string;

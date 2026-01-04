@@ -32,7 +32,8 @@ export interface EdiitListningData{
   description?: string;
   newImages?: File[]; // if you want to handle newly uploaded images
 }
-const API = "http://localhost:5000/api/v1/admin";
+//const API = "http://localhost:5000/api/v1/admin" || import.meta.env.BASE_URL;
+const API = import.meta.env.VITE_API_URL + "/api/v1/admin";
 
 // Get pending listings
 export const getPendingListings = (token: string) => {

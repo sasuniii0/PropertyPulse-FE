@@ -33,7 +33,7 @@ const handleSubmit = async (e: React.FormEvent) => {
     login(res.data.accessToken, res.data.refreshToken);
 
     // Send login email notification
-    await fetch(`http://localhost:5000/email/send-login-email`, {
+    await fetch(`${import.meta.env.VITE_API_URL}/email/send-login-email`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
