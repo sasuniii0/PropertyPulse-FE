@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import {ImageIcon,UploadIcon,HomeIcon,MapPinIcon,DollarIcon,XIcon} from "../components/Icons"
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import LocationPickerMap from '../components/LocationPickerMap';
+import api from '../services/Api';
 
 
 export default function CreateNewListing() {
@@ -61,7 +61,7 @@ export default function CreateNewListing() {
     images.forEach(file => form.append("images", file));
 
     try {
-      const res = await axios.post(
+      const res = await api.post(
         import.meta.env.VITE_API_URL + "/api/v1/listning/add",
         form,
         {

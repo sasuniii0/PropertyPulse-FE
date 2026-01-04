@@ -13,8 +13,6 @@ const PUBLIC_ENDPOINTS = ["/auth/signin" , "auth/signup"]
 
 api.interceptors.request.use((config) =>{
     const accessToken = localStorage.getItem("accessToken")
-
-    console.log(import.meta.env.VITE_API_URL);
     
     const isPublic = PUBLIC_ENDPOINTS.some((url) => config.url?.includes(url))
 

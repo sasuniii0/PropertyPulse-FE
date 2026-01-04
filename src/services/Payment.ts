@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./Api";
 
 // user.ts or types.ts
 export type PaymentStatus = "PENDING" | "PAID" | "OVERDUE";
@@ -17,7 +17,7 @@ export interface PaymentDetails {
 
 
 export const startAgentPayment = async (token: string) => {
-  const res = await axios.post(
+  const res = await api.post(
     import.meta.env.VITE_API_URL + "/api/v1/payment/chechout",
     {},
     {
@@ -33,7 +33,7 @@ export const startAgentPayment = async (token: string) => {
 // Update payment status to PAID
 export const updatePaymentStatus = async (token: string): Promise<AgentPaymentData> => {
   try {
-    const res = await axios.post(
+    const res = await api.post(
       import.meta.env.VITE_API_URL + "/api/v1/payment/update",
       {}, // you can include orderId or other data if needed
       {
@@ -55,7 +55,7 @@ export const updatePaymentStatus = async (token: string): Promise<AgentPaymentDa
 export const getPaymentDetails = async (token: string): Promise<PaymentDetails> => {
   if (!token) throw new Error("No access token");
 
-  const res = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/payment/details", {
+  const res = await api.get(import.meta.env.VITE_API_URL + "/api/v1/payment/details", {
     headers: {
       Authorization: `Bearer ${token}`,
     },

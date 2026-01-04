@@ -16,9 +16,9 @@ import {getRecentUsers} from '../services/Admin'
 import {fetchLocationApiClient} from '../services/Listning'
 import MyRecentInquiries from '../components/MyRecentInquiries'
 import { PaymentPopup } from "../components/PaymentPopup";
-import axios from "axios";
 import { startAgentPayment } from "../services/Payment";
 import RecentPropertiesSlideshow from "../components/RecentPropertiesSlideShow";
+import api from "../services/Api";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -40,7 +40,7 @@ export default function Home() {
   const checkPayment = async () => {
     if (!user || loading) return; // Wait until auth is fully loaded
     try {
-      const response = await axios.get(import.meta.env.VITE_API_URL + "/api/v1/user/payment-status", {
+      const response = await api.get(import.meta.env.VITE_API_URL + "/api/v1/user/payment-status", {
         headers: {
           Authorization: `Bearer ${user.token}`,
         },

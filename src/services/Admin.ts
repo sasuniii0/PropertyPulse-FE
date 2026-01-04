@@ -1,6 +1,6 @@
-import axios from "axios";
 import type { Property } from "../components/SavedPropertiesMap";
 import type { UserData } from "./User";
+import api from "./Api";
 
 export interface ListingData {
   _id: string;
@@ -38,7 +38,7 @@ const API = import.meta.env.VITE_API_URL + "/api/v1/admin";
 // Get pending listings
 export const getPendingListings = (token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.get<{ data: ListingData[] }>(`${API}/pending-listnings`, {
+  return api.get<{ data: ListingData[] }>(`${API}/pending-listnings`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -47,7 +47,7 @@ export const getPendingListings = (token: string) => {
 export const approveListingAPI = (id: string, token: string) => {
 
   if (!token) throw new Error("No token provided");
-  return axios.post(
+  return api.post(
     `${API}/approve`,
     { id },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -57,7 +57,7 @@ export const approveListingAPI = (id: string, token: string) => {
 // Reject listing
 export const rejectListingAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.post(
+  return api.post(
     `${API}/reject`,
     { id },
     { headers: { Authorization: `Bearer ${token}` } }
@@ -67,7 +67,7 @@ export const rejectListingAPI = (id: string, token: string) => {
 // Activate agent
 export const activateAgentAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.put(`${API}/agents/${id}/active`, {}, {
+  return api.put(`${API}/agents/${id}/active`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -75,7 +75,7 @@ export const activateAgentAPI = (id: string, token: string) => {
 // Deactivate agent
 export const deactivateAgentAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.put(`${API}/agents/${id}/deactivate`, {}, {
+  return api.put(`${API}/agents/${id}/deactivate`, {}, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -83,19 +83,19 @@ export const deactivateAgentAPI = (id: string, token: string) => {
 // Get all agents
 export const getAllAgentsAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.get(`${API}/agents`, { headers: { Authorization: `Bearer ${token}` } });
+  return api.get(`${API}/agents`, { headers: { Authorization: `Bearer ${token}` } });
 };
 
 // Get all agents
 export const getAllUsersAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.get(`${API}/users`, { headers: { Authorization: `Bearer ${token}` } });
+  return api.get(`${API}/users`, { headers: { Authorization: `Bearer ${token}` } });
 };
 
 // Get ALL listings (Admin)
 export const getAllListingsAdminAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.get<{ data: ListingData[] }>(`${API}/listnings`, {
+  return api.get<{ data: ListingData[] }>(`${API}/listnings`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -103,7 +103,7 @@ export const getAllListingsAdminAPI = (token: string) => {
 // Get SINGLE listing (View)
 export const getListingByIdAdminAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.get(`${API}/single-listning/${id}`, {
+  return api.get(`${API}/single-listning/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -115,7 +115,7 @@ export const updateListingAdminAPI = (
   token: string
 ) => {
   if (!token) throw new Error("No token provided");
-  return axios.put(`${API}/update-listning/${id}`, data, {
+  return api.put(`${API}/update-listning/${id}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -123,7 +123,7 @@ export const updateListingAdminAPI = (
 // Delete listing
 export const deleteListingAdminAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.delete(`${API}/delete-listning/${id}`, {
+  return api.delete(`${API}/delete-listning/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -133,7 +133,7 @@ export const fetchLocationApi = async (token: string): Promise<Property[]> => {
   try {
     if (!token) throw new Error("No token provided for fetching locations");
 
-    const res = await axios.get(`${API}/get-locations`, {
+    const res = await api.get(`${API}/get-locations`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -148,7 +148,7 @@ export const fetchLocationApi = async (token: string): Promise<Property[]> => {
 export const getRecentUsers = async (token: string): Promise<UserData[]> => {
   if (!token) throw new Error("No access token");
 
-  const res = await axios.get<{ data: UserData[] }>(
+  const res = await api.get<{ data: UserData[] }>(
     `${API}/recent-users`,
     {
       headers: { Authorization: `Bearer ${token}` },

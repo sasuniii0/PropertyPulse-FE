@@ -1,4 +1,3 @@
-import axios from "axios";
 import api from "./Api";
 
 export type UserData = {
@@ -29,7 +28,7 @@ const API =import.meta.env.VITE_API_URL + "/api/v1/user";
 // Fetch logged-in user details
 export const getUserDetailsAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
-  return axios.get<{ data: UserData }>(`${API}/me`, {
+  return api.get<{ data: UserData }>(`${API}/me`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -50,7 +49,7 @@ export const getMyDetails = async (token: string): Promise<UserData> => {
 export const updateMyDetails = async (token: string, data: Partial<UserData>) => {
   if (!token) throw new Error("No access token");
 
-  const res = await axios.put(`${API}/updateMe`, data, {
+  const res = await api.put(`${API}/updateMe`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -61,7 +60,7 @@ export const updateMyDetails = async (token: string, data: Partial<UserData>) =>
 export const deleteMyAccount = async (token: string) => {
   if (!token) throw new Error("No access token");
 
-  const res = await axios.delete(`${API}/deleteMe`, {
+  const res = await api.delete(`${API}/deleteMe`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 
@@ -73,13 +72,13 @@ export const getUserByIdAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
   if (!id) throw new Error("No user ID provided");
 
-  return axios.get(`${API}/${id}`, {
+  return api.get(`${API}/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
 export const getAgentPaymentStatus = async (token: string): Promise<AgentPaymentData> => {
-  const res = await axios.get(`${API}/payment-status`, {
+  const res = await api.get(`${API}/payment-status`, {
     headers: {
       Authorization: `Bearer ${token}`,
     },

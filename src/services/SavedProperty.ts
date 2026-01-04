@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./Api";
 
 const API = import.meta.env.VITE_API_URL + "/api/v1/saved-properties";
 
@@ -39,7 +39,7 @@ export const getSavedPropertiesAPI = async (token: string): Promise<SavedPropert
   if (!token) throw new Error("No token provided");
 
   try {
-    const res = await axios.get<{ success: boolean; count: number; data: SavedPropertyData[] }>(API, {
+    const res = await api.get<{ success: boolean; count: number; data: SavedPropertyData[] }>(API, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data.data;
@@ -54,7 +54,7 @@ export const savePropertyAPI = (token: string, listingId: string) => {
   if (!token) throw new Error("No token provided");
   if (!listingId) throw new Error("No listing ID provided");
 
-  return axios.post(API, { listingId }, {
+  return api.post(API, { listingId }, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -64,7 +64,7 @@ export const unsavePropertyAPI = (token: string, listingId: string) => {
   if (!token) throw new Error("No token provided");
   if (!listingId) throw new Error("No listing ID provided");
 
-  return axios.delete(`${API}/${listingId}`, {
+  return api.delete(`${API}/${listingId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -74,7 +74,7 @@ export const checkIfSavedAPI = (token: string, listingId: string) => {
   if (!token) throw new Error("No token provided");
   if (!listingId) throw new Error("No listing ID provided");
 
-  return axios.get<{ success: boolean; isSaved: boolean }>(`${API}/check/${listingId}`, {
+  return api.get<{ success: boolean; isSaved: boolean }>(`${API}/check/${listingId}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -84,7 +84,7 @@ export const toggleSavePropertyAPI = (token: string, listingId: string) => {
   if (!token) throw new Error("No token provided");
   if (!listingId) throw new Error("No listing ID provided");
 
-  return axios.post(`${API}/toggle`, { listingId }, {
+  return api.post(`${API}/toggle`, { listingId }, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };

@@ -1,4 +1,4 @@
-import axios from 'axios';
+import api from './Api';
 
 const API_URL = import.meta.env.VITE_API_URL + "/api";
 
@@ -23,7 +23,7 @@ export const comparePropertiesAPI = async (
   property2Id: string
 ): Promise<ComparisonResult> => {
   try {
-    const response = await axios.post<ComparisonResponse>(
+    const response = await api.post<ComparisonResponse>(
       `${API_URL}/properties/compare`,
       {
         property1Id,

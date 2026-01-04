@@ -1,5 +1,5 @@
-import axios from "axios";
 import type { Property } from "../components/SavedPropertiesMap";
+import api from "./Api";
 
 export interface ListingData {
   _id: string;
@@ -60,28 +60,28 @@ const API = import.meta.env.VITE_API_URL + "/api/v1/listning";
 
 // DELETE LISTING
 export const deleteListingAPI = (token: string, id: string) => {
-  return axios.delete(`${API}/delete/${id}`, {
+  return api.delete(`${API}/delete/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
 // UPDATE LISTING
 export const updateListingAPI = (token: string, id: string, data: Partial<EdiitListningData>) => {
-  return axios.put(`${API}/update/${id}`, data, {
+  return api.put(`${API}/update/${id}`, data, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
 // GET All Listings for Agent
 export const getAllListingsAPI = (token: string) => {
-  return axios.get(`${API}/agent`, {
+  return api.get(`${API}/agent`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
 // GET All Listings for Agent
 export const getAllListingsADMINAPI = (token: string) => {
-  return axios.get(`${API}/agent`, {
+  return api.get(`${API}/agent`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -91,7 +91,7 @@ export const getListingsByAgentAPI = (agentId: string, token: string) => {
   if (!token) throw new Error("No token provided");
   if (!agentId) throw new Error("No agent ID provided");  
 
-  return axios.get(`${API}/agent/${agentId}/listings`, {
+  return api.get(`${API}/agent/${agentId}/listings`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -101,18 +101,18 @@ export const getListingByIdAPI = (id: string, token: string) => {
   if (!token) throw new Error("No token provided");
   if (!id) throw new Error("No listing ID provided");
 
-  return axios.get(`${API}/${id}`, {
+  return api.get(`${API}/${id}`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 
 export const getMyListningsAPI = async (token: string) => {
-  return axios.get<MyListingsResponse>(`${API}/my-listings`, {
+  return api.get<MyListingsResponse>(`${API}/my-listings`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
 export const getApprovedListingsAPI = async (token: string) => {
-  const res = await axios.get<{ data: EdiitListningData[] }>(`${API}/approved`, {
+  const res = await api.get<{ data: EdiitListningData[] }>(`${API}/approved`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data.data;
@@ -123,7 +123,7 @@ export const fetchLocationApiClient = async (token: string): Promise<Property[]>
   if (!token) throw new Error("No token provided");
 
   try {
-    const res = await axios.get<Property[]>(`${API}/get-locations`, {
+    const res = await api.get<Property[]>(`${API}/get-locations`, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return res.data;
@@ -135,7 +135,7 @@ export const fetchLocationApiClient = async (token: string): Promise<Property[]>
 
 export const fetchRecentListings = async (token: string): Promise<RecentListing[]> => {
   try {
-    const res = await axios.get(`${API}/recent`, {
+    const res = await api.get(`${API}/recent`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
@@ -154,7 +154,7 @@ export const fetchRecentListings = async (token: string): Promise<RecentListing[
 // Fetch all listings for the logged-in agent
 export const getAgentListingsAPI = async (token: string) => {
   try {
-    const response = await axios.get(`${API}/agent/listings`, {
+    const response = await api.get(`${API}/agent/listings`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -170,7 +170,7 @@ export const getAgentListingsAPI = async (token: string) => {
 // Fetch all inquiries assigned to the logged-in agent
 export const getInquiriesByAgentAPI = async (token: string) => {
   try {
-    const response = await axios.get(`${API}/agent/inquiries`, {
+    const response = await api.get(`${API}/agent/inquiries`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

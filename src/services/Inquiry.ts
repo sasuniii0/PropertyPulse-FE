@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./Api";
 
 export interface InquiryData {
   _id: string;
@@ -31,7 +31,7 @@ export const createInquiryAPI = (
 ) => {
   if (!token) throw new Error("No token provided");
 
-  return axios.post(
+  return api.post(
     `${API}/create`,
     { listingId, message },
     {
@@ -44,7 +44,7 @@ export const createInquiryAPI = (
 export const getClientInquiriesAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
 
-  return axios.get<InquiryData[]>(`${API}/my`, {
+  return api.get<InquiryData[]>(`${API}/my`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -53,7 +53,7 @@ export const getClientInquiriesAPI = (token: string) => {
 export const getAgentInquiriesAPI = (token: string) => {
   if (!token) throw new Error("No token provided");
 
-  return axios.get<InquiryData[]>(`${API}/agent`, {
+  return api.get<InquiryData[]>(`${API}/agent`, {
     headers: { Authorization: `Bearer ${token}` },
   });
 };
@@ -67,7 +67,7 @@ export const respondToInquiryAPI = (
   if (!token) throw new Error("No token provided");
   if (!inquiryId) throw new Error("No inquiry ID provided");
 
-  return axios.patch(
+  return api.patch(
     `${API}/${inquiryId}/respond`,
     { response },
     {
@@ -81,7 +81,7 @@ export const closeInquiryAPI = (token: string, inquiryId: string) => {
   if (!token) throw new Error("No token provided");
   if (!inquiryId) throw new Error("No inquiry ID provided");
 
-  return axios.patch(
+  return api.patch(
     `${API}/${inquiryId}/close`,
     {},
     {
@@ -91,7 +91,7 @@ export const closeInquiryAPI = (token: string, inquiryId: string) => {
 };
 
 export const getMyInquiriesAPI = async (token: string) => {
-  const res = await axios.get<{ data: any[] }>(`${API}/inquiries/my`, {
+  const res = await api.get<{ data: any[] }>(`${API}/inquiries/my`, {
     headers: { Authorization: `Bearer ${token}` },
   });
   return res.data.data;
