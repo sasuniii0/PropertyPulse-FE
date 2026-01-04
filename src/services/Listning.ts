@@ -59,11 +59,20 @@ const API = import.meta.env.VITE_API_URL + "/api/v1/listning";
 // }
 
 // DELETE LISTING
-export const deleteListingAPI = (token: string, id: string) => {
-  return api.delete(`${API}/delete/${id}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
+// DELETE LISTING API
+export const deleteListingAPI = async (token: string, id: string) => {
+  try {
+    const res = await api.delete(`${API}/delete/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    console.log("Delete response:", res.data); // ✅ log backend response
+    return res.data;
+  } catch (err: any) {
+    console.error("Delete API error:", err.response?.data || err.message);
+    throw err;
+  }
 };
+
 
 // UPDATE LISTING
 export const updateListingAPI = (token: string, id: string, data: Partial<EdiitListningData>) => {

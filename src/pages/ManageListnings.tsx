@@ -85,18 +85,33 @@ useEffect(() => {
 
   // Confirm delete API
   const confirmDelete = async () => {
-    if (!deleteId) return;
+  if (!deleteId) {
+    console.warn("No deleteId set");
+    return;
+  }
 
-    try {
-      const token = localStorage.getItem('accessToken')!;
-      await deleteListingAPI(token, deleteId);
-      setListings(prev => prev.filter(l => l.id !== deleteId));
-      setDeleteId(null);
-    } catch (err) {
-      console.error(err);
-      alert('Delete failed');
+  try {
+    const token = localStorage.getItem("accessToken");
+    if (!token) {
+      alert("You must be logged in to delete a listing");
+      return;
     }
-  };
+
+    console.log("Deleting listing with ID:", deleteId);
+    const result = await deleteListingAPI(token, deleteId);
+    console.log("Delete result:", result);
+
+    // Remove from frontend state
+    setListings(prev => prev.filter(l => l._id !== deleteId)); // make sure to use _id
+    setDeleteId(null);
+    alert("Listing deleted successfully!");
+  } catch (err: any) {
+    console.error("Confirm delete failed:", err.response?.data || err.message);
+    alert(
+      "Delete failed: " + (err.response?.data?.message || err.message || "Unknown error")
+    );
+  }
+};
 
   // Open edit modal
 const handleEdit = (listing: any) => {
