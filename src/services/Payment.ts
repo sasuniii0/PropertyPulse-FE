@@ -18,7 +18,7 @@ export interface PaymentDetails {
 
 export const startAgentPayment = async (token: string) => {
   const res = await api.post(
-    import.meta.env.VITE_API_URL + "/api/v1/payment/chechout",
+    import.meta.env.VITE_API_URL + "/api/v1/payment/checkout",
     {},
     {
       headers: {
