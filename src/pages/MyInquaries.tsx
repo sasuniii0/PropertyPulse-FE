@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { MessageIcon, ClockIcon, CheckCircleIcon, AlertCircleIcon, EyeIcon, XIcon, MapPinIcon } from '../components/Icons';
 import { useAuth } from '../context/AuthContext';
 import { getClientInquiriesAPI, getAgentInquiriesAPI, respondToInquiryAPI, closeInquiryAPI, type InquiryData } from '../services/Inquiry';
+import { useNavigate } from 'react-router-dom';
 
 export default function MyInquiries() {
   const { user } = useAuth();
@@ -11,6 +12,8 @@ export default function MyInquiries() {
   const [filter, setFilter] = useState<'all' | 'PENDING' | 'RESPONDED' | 'CLOSED'>('all');
   const [selectedInquiry, setSelectedInquiry] = useState<string | null>(null);
   const [responseText, setResponseText] = useState<Record<string, string>>({});
+
+  const navigate =useNavigate();
 
   // Fetch inquiries on mount
   useEffect(() => {
@@ -357,7 +360,7 @@ export default function MyInquiries() {
                             {/* Actions */}
                             <div className="flex gap-2 pt-2">
                               <button 
-                                onClick={() => window.location.href = `/property/${inquiry.listing?._id}`}
+                                onClick={() => navigate(`/property/${inquiry.listing?._id}`)}
                                 className="px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white transition-colors text-xs font-medium"
                               >
                                 View Property
@@ -594,7 +597,7 @@ export default function MyInquiries() {
                             {/* Actions */}
                             <div className="flex gap-2 pt-2 flex-wrap">
                               <button 
-                                onClick={() => window.location.href = `/properties/${inquiry.listing?._id}`}
+                                onClick={() => navigate(`/properties/${inquiry.listing?._id}`)}
                                 className="px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white transition-colors text-xs font-medium"
                               >
                                 View Property

@@ -5,6 +5,7 @@ import { getPaymentDetails } from "../services/Payment";
 import { startAgentPayment } from "../services/Payment";
 import type { PaymentDetails } from "../services/Payment";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 // Define user type based on your schema
 interface UserProfile {
@@ -31,6 +32,7 @@ export default function MyProfile() {
   const [activeTab, setActiveTab] = useState<TabType>("profile");
   const [paymentData, setPaymentData] = useState<PaymentDetails | null>(null);
   const [paymentLoading, setPaymentLoading] = useState(false);
+  const navigate = useNavigate();
 
   // Settings state
   const [settings, setSettings] = useState({
@@ -98,7 +100,7 @@ export default function MyProfile() {
       toast.success("Account deleted");
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
-      window.location.href = "/";
+      navigate("/");
     } catch (err) {
       console.error(err);
       toast.error("Failed to delete account");
