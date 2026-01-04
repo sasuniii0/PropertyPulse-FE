@@ -24,7 +24,14 @@ export default function SignUp() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-    
+
+    // Simulate API call
+    setTimeout(() => {
+      console.log('Sign Up:', { name, email, contactNumber, password });
+      setIsLoading(false);
+    }, 1500);
+
+
     if(!name || !email || !contactNumber || !password || !confirmPassword || !role) {
       alert("Please fill all the details")
       return
