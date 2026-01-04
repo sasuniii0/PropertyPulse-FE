@@ -17,6 +17,7 @@ import type { EdiitListningData } from '../services/Listning';
 import Modal from '../components/Modal';
 import EditMap from '../components/Map';
 import 'maplibre-gl/dist/maplibre-gl.css';
+import { useNavigate } from 'react-router-dom';
 
 
 export default function ManageListings() {
@@ -30,6 +31,8 @@ export default function ManageListings() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [editData, setEditData] = useState<EdiitListningData | null>(null);
   const [saving, setSaving] = useState(false);
+
+  const navigate = useNavigate();
   
   // Fetch listings
 useEffect(() => {
@@ -187,7 +190,7 @@ const saveEdit = async () => {
           </div>
           <button
             className="flex items-center gap-2 px-5 py-2.5 bg-teal-500 hover:bg-teal-600 text-white transition-colors font-medium text-sm shadow-sm"
-            onClick={() => window.location.href = '/createListnings'}
+            onClick={() => navigate("/createListnings")}
           >
             <PlusIcon />
             New Listing
