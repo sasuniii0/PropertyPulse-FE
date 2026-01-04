@@ -147,8 +147,8 @@ export default function PropertyDetails() {
       );
       
       // 2️⃣ Fetch agent info
-      const agentRes = await fetch(`/api/agents/${property.agentId}`);
-      const agentData = await agentRes.json();
+      const agentRes = await api.get(`/api/agents/${property.agentId}`);
+      const agentData = agentRes.data;
       const agentEmail = agentData.email;
 
 
