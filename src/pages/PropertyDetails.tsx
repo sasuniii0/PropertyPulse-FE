@@ -7,6 +7,7 @@ import { createInquiryAPI } from '../services/Inquiry';
 import { useAuth } from "../context/AuthContext";
 import SaveButton from '../components/SaveButton';
 import api from "../services/Api";
+import axios from "axios";
 
 
 interface Location {
@@ -110,76 +111,54 @@ export default function PropertyDetails() {
   }, [id]);
 
   const handleSendInquiry = async (e: React.FormEvent) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    // Check if user is logged in
-    if (!user || !user.token) {
-      toast.error("Please log in to send an inquiry");
-      return;
-    }
+  if (!user || !user.token) return toast.error("Please log in to send an inquiry");
+  if (user.role !== 'CLIENT') return toast.error("Only clients can send inquiries");
+  if (!inquiryMessage.trim()) return toast.error("Please enter a message");
+  if (!property?._id) return toast.error("Property information is missing");
 
-    // Check if user is a client
-    if (user.role !== 'CLIENT') {
-      toast.error("Only clients can send inquiries");
-      return;
-    }
+  setIsSubmitting(true);
 
-    // Validate message
-    if (!inquiryMessage.trim()) {
-      toast.error("Please enter a message");
-      return;
-    }
+  try {
+    // 1️⃣ Create inquiry
+    await createInquiryAPI(user.token, property._id, inquiryMessage);
 
-    // Validate property exists
-    if (!property?._id) {
-      toast.error("Property information is missing");
-      return;
-    }
-
-    try {
-      setIsSubmitting(true);
-
-      // Call the API
-      await createInquiryAPI(
-        user.token,
-        property._id, // The listing ID
-        inquiryMessage
-      );
-      
-      // 2️⃣ Fetch agent info
-      const agentRes = await api.get(`/api/agents/${property.agentId}`);
-      const agentData = agentRes.data;
-      const agentEmail = agentData.email;
-
-
-    if (agentEmail) {
-      try {
-        await api.post('/email/send-inquiry', {
-          to: agentEmail,
-          subject: `New Inquiry for ${property.title}`,
-          html: `
-            <p>Hi ${agentData.name},</p>
-            <p>You have received a new inquiry from ${user.name} (${user.email}) for your property <strong>${property.title}</strong>.</p>
-            <p><strong>Message:</strong> ${inquiryMessage}</p>
-            <p>Regards, <br/> PropertyPulse Team</p>
-          `,
-        }, {
-          headers: { 'Content-Type': 'application/json' }
-        });
-
-        console.log("Inquiry email sent successfully!");
-      } catch (err) {
-        console.error("Failed to send inquiry email:", err);
-      }
-    }
-
-
-      toast.success("Inquiry sent successfully! The agent will respond soon.");
+    // 2️⃣ Get agent info safely
+    const agentId = property.agentId; // Make sure this exists
+    if (!agentId) {
+      console.warn("Agent ID not found for this property, skipping email");
+      toast.success("Inquiry sent! But agent email could not be delivered.");
       setShowContactModal(false);
-      setInquiryMessage(''); // Reset form
-    } catch (error: any) {
-      console.error("Failed to send inquiry:", error);
-      
+      setInquiryMessage('');
+      return;
+    }
+
+    const agentRes = await api.get(`/agents/${agentId}`);
+    const agentData = agentRes.data;
+
+    // 3️⃣ Fire-and-forget email to agent
+    if (agentData?.email) {
+      api.post('/email/send-inquiry', {
+        to: agentData.email,
+        subject: `New Inquiry for ${property.title}`,
+        html: `
+          <p>Hi ${agentData.name},</p>
+          <p>You have received a new inquiry from ${user.name} (${user.email}) for your property <strong>${property.title}</strong>.</p>
+          <p><strong>Message:</strong> ${inquiryMessage}</p>
+          <p>Regards, <br/> PropertyPulse Team</p>
+        `,
+      }).catch(err => console.error("Failed to send inquiry email:", err));
+    }
+
+    toast.success("Inquiry sent successfully! The agent will respond soon.");
+    setShowContactModal(false);
+    setInquiryMessage('');
+
+  } catch (error: any) {
+    console.error("Failed to send inquiry:", error);
+
+    if (axios.isAxiosError(error)) {
       if (error.response?.status === 401) {
         toast.error("Please log in again");
       } else if (error.response?.data?.message) {
@@ -187,10 +166,14 @@ export default function PropertyDetails() {
       } else {
         toast.error("Failed to send inquiry. Please try again.");
       }
-    } finally {
-      setIsSubmitting(false);
+    } else {
+      toast.error("An unexpected error occurred. Please try again.");
     }
-  };
+  } finally {
+    setIsSubmitting(false);
+  }
+};
+
 
   const handleContactAgent = () => {
     // Check if user is logged in
