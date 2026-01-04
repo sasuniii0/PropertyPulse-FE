@@ -52,14 +52,16 @@ export const updatePaymentStatus = async (token: string): Promise<AgentPaymentDa
   }
 };
 
-export const getPaymentDetails = async (token: string): Promise<PaymentDetails> => {
+export const getPaymentDetails = async (
+  token: string
+): Promise<PaymentDetails> => {
   if (!token) throw new Error("No access token");
 
-  const res = await api.get(import.meta.env.VITE_API_URL + "/api/v1/payment/details", {
+  const res = await api.get("/payment/details", {
     headers: {
       Authorization: `Bearer ${token}`,
     },
   });
 
-  return res.data.data; // ✅ correct
+  return res.data.data;
 };

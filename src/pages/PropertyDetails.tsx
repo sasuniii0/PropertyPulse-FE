@@ -126,6 +126,8 @@ export default function PropertyDetails() {
 
     // 2️⃣ Get agent info safely
     const agentId = property.agentId; // Make sure this exists
+    console.log(agentId);
+    
     if (!agentId) {
       console.warn("Agent ID not found for this property, skipping email");
       toast.success("Inquiry sent! But agent email could not be delivered.");
