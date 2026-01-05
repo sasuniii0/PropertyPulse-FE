@@ -1,8 +1,8 @@
-# PropertyPulse Frontend 🏠
+# PropertyPulse Frontend 
 
 A modern, feature-rich real estate platform built with React and TypeScript. PropertyPulse enables clients to search and save properties, agents to manage listings, and admins to oversee the entire platform.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [Features](#features)
 - [Tech Stack](#tech-stack)
@@ -15,7 +15,7 @@ A modern, feature-rich real estate platform built with React and TypeScript. Pro
 - [API Integration](#api-integration)
 - [Contributing](#contributing)
 
-## ✨ Features
+## Features
 
 ### For Clients
 - Browse and search property listings with advanced filters
@@ -43,7 +43,7 @@ A modern, feature-rich real estate platform built with React and TypeScript. Pro
 - Generate and download PDF reports
 - Monitor platform activity
 
-## 🛠 Tech Stack
+## Tech Stack
 
 - **Framework:** React 19.1.1
 - **Language:** TypeScript 5.9.3
@@ -64,13 +64,13 @@ A modern, feature-rich real estate platform built with React and TypeScript. Pro
 - **Notifications:** React Hot Toast 2.6.0
 - **State Management:** React Cookies (js-cookie 3.0.5)
 
-## 📦 Prerequisites
+## Prerequisites
 
 - **Node.js:** >= 20.0.0
 - **npm:** >= 8.0.0
 - **Modern web browser** with ES2020 support
 
-## 🚀 Installation
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -88,7 +88,7 @@ npm install
 cp .env.example .env
 ```
 
-## 🔐 Environment Variables
+## Environment Variables
 
 Create a `.env` file in the root directory:
 
@@ -108,7 +108,7 @@ VITE_APP_NAME=PropertyPulse
 VITE_APP_URL=http://localhost:5173
 ```
 
-## 🏃 Running the Application
+## Running the Application
 
 ### Development Mode
 ```bash
@@ -131,7 +131,7 @@ npm run preview
 npm run lint
 ```
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 propertypulse-frontend/
@@ -168,7 +168,7 @@ propertypulse-frontend/
 └── README.md              # This file
 ```
 
-## 🎯 Key Features
+## Key Features
 
 ### Authentication & Authorization
 - Role-based access control (Client, Agent, Admin)
@@ -219,7 +219,7 @@ propertypulse-frontend/
 - Custom property markers
 - Location search and selection
 
-## 🔌 API Integration
+## API Integration
 
 All API calls are centralized in the `services/` directory:
 
@@ -238,7 +238,7 @@ export const listingService = {
 };
 ```
 
-## 🎨 UI/UX Highlights
+## UI/UX Highlights
 
 - **Responsive Design:** Mobile-first approach with Tailwind CSS
 - **Modern UI:** Clean, intuitive interface with smooth animations
@@ -247,7 +247,7 @@ export const listingService = {
 - **Loading States:** Skeleton loaders and spinners
 - **Error Handling:** User-friendly error messages
 
-## 🧪 Development Guidelines
+## Development Guidelines
 
 ### Code Style
 - Follow TypeScript best practices
@@ -291,7 +291,7 @@ export const Component: React.FC<ComponentProps> = ({ props }) => {
 };
 ```
 
-## 📝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/AmazingFeature`)
@@ -299,24 +299,20 @@ export const Component: React.FC<ComponentProps> = ({ props }) => {
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 🐛 Known Issues
+## Known Issues
 
 - Map performance may be slow with large datasets
 - Some mobile browsers may have issues with image uploads
 - PDF generation requires modern browser support
 
-## 📄 License
+## License
 
 This project is proprietary and confidential.
 
-## 👥 Team
-
-PropertyPulse Development Team
-
-## 📞 Support
-
-For support, email support@propertypulse.com or open an issue in the repository.
+## Developer
+Sasuni Wijerathne
+Full Stack Developer
 
 ---
 
-**Built with ❤️ using React and TypeScript**
+**Built with using React and TypeScript**
