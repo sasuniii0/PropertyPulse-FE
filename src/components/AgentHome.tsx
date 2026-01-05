@@ -205,20 +205,22 @@ export default function AgentHome() {
                     <div
                         key={listing._id}
                         onClick={() => navigate(`/property/${listing._id}`)}
-                        className="group grid grid-cols-[96px_1fr] gap-4 p-4 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
+                        className="group flex gap-4 p-4 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
                     >
                         {/* Image */}
+                        <div className="flex-shrink-0">
                         <img
-                        src={listing.images?.[0] ?? "/placeholder.jpg"}
-                        alt={listing.title}
-                        className="w-24 h-24 object-cover rounded"
+                            src={listing.images?.[0] ?? "/placeholder.jpg"}
+                            alt={listing.title}
+                            className="w-24 h-24 object-cover rounded"
                         />
+                        </div>
 
                         {/* Content */}
-                        <div className="flex flex-col justify-between min-h-[96px]">
+                        <div className="flex flex-col justify-between flex-1 min-w-0">
                         {/* Top row */}
                         <div className="flex items-start justify-between gap-3">
-                            <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
+                            <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2 flex-1">
                             {listing.title}
                             </h3>
 
@@ -292,16 +294,16 @@ export default function AgentHome() {
                         className="p-3 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
                         onClick={() => navigate("/inquaries")}
                     >
-                        <div className="flex items-center justify-between mb-1">
-                        <div className="font-semibold text-gray-900 text-xs truncate">
+                        <div className="flex items-start justify-between gap-2 mb-1">
+                        <div className="font-semibold text-gray-900 text-xs flex-1 min-w-0">
                             {inquiry.name}
                         </div>
-                        <div className="text-[11px] text-gray-500 shrink-0">
+                        <div className="text-[11px] text-gray-500 shrink-0 whitespace-nowrap">
                             {new Date(inquiry.createdAt).toLocaleDateString()}
                         </div>
                         </div>
                         <p className="text-xs text-gray-600 line-clamp-2 mb-2">{inquiry.message}</p>
-                        <div className="text-xs text-teal-600 font-medium">{inquiry.email}</div>
+                        <div className="text-xs text-teal-600 font-medium break-words">{inquiry.email}</div>
                     </div>
                     ))}
                 </div>
