@@ -178,6 +178,21 @@ export default function AgentHome() {
                 <div className="text-xs text-gray-600">Check messages</div>
               </div>
             </button>
+
+            <button
+              onClick={() => navigate("/agent-tracking")}
+              className="flex items-center gap-4 p-4 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 transition-colors group"
+            >
+              <div className="w-12 h-12 bg-orange-600 flex items-center justify-center text-white">
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+                </svg>
+              </div>
+              <div className="text-left">
+                <div className="font-bold text-gray-900 text-sm">View Trackings</div>
+                <div className="text-xs text-gray-600">Check Analysis</div>
+              </div>
+            </button>
           </div>
         </div>
 
