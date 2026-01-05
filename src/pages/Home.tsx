@@ -6,7 +6,7 @@ import ActivityCard from "../components/ActivityCard";
 import { useState , useEffect } from "react";
 import { approveListingAPI, rejectListingAPI , getPendingListings, getTopAgentsAPI} from "../services/Admin";
 import type { ListingData} from "../services/Admin";
-import { SettingsIcon , HomeIcon,PulseIcon,PlusIcon,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
+import { SettingsIcon , HomeIcon,PulseIcon,ChartIcon,UserIcon } from "../components/Icons";
 import toast from "react-hot-toast";
 import { getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
 import SavedPropertiesMap from "../components/SavedPropertiesMap"; 
@@ -32,8 +32,8 @@ export default function Home() {
 
   console.log(setLocation);
   console.log(approvedListings);
+  console.log(myListings);
   
-
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
 
@@ -535,7 +535,6 @@ useEffect(() => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
 
-      <AgentHome />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
@@ -545,11 +544,7 @@ useEffect(() => {
           onPayNow={handlePayNow}
         />
 
-        {/* Welcome Section */}
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Agent Dashboard</h1>
-          <p className="text-gray-600 text-sm mt-0.5">Manage your property listings and track performance</p>
-        </div>
+        <AgentHome />
 
         {/* Stats */}
         <div className="grid md:grid-cols-4 gap-4">
@@ -568,79 +563,6 @@ useEffect(() => {
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-5 shadow-sm text-white">
             <div className="text-2xl font-bold">3</div>
             <div className="text-orange-100 text-xs mt-1">Sold This Month</div>
-          </div>
-        </div>
-
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-4">
-          <ActionCard icon={<PlusIcon />} title="Create New Listing" desc="Add a new property" color="bg-green-100" onClick={() => navigate("/createListnings")}/>
-          <ActionCard icon={<EditIcon />} title="Manage Listings" desc="Edit or remove properties" color="bg-teal-100" onClick={() => navigate("/manageListnings")}/>
-          <ActionCard icon={<ChartIcon />} title="View Analytics" desc="Track performance" color="bg-orange-100" onClick={() => navigate("/agent-tracking")}/>
-        </div>
-
-        {/* My Active Listings */}
-        <div className="bg-white shadow-sm border border-gray-100 p-5">
-          <div className="flex items-center justify-between mb-5">
-            <h2 className="text-lg font-bold text-gray-900">My Active Listings</h2>
-            <button className="text-teal-600 text-xs font-medium hover:underline">View All</button>
-          </div>
-          
-          {/* My Active Listings */}
-          <div className="grid md:grid-cols-3 gap-5">
-            {myListings.map((p) => (
-              <div
-                key={p._id}
-                onClick={() => {
-                          navigate(`/property/${p._id}`);
-                          window.scrollTo(0, 0); // scroll to top immediately
-                        }}
-                className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100"
-              >
-                <div className="relative h-44 overflow-hidden">
-                  <img
-                    src={p.images && p.images.length > 0 ? p.images[0] : "/placeholder.png"}
-                    alt={p.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <div className="p-4">
-                  <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
-                    <MapPinIcon />
-                    {p.location?.address || "Unknown Address"}
-                  </div>
-                  <div className="flex justify-between items-start mb-3">
-                    <div>
-                      <h3 className="font-bold text-gray-900 text-sm">{p.title || "Untitled"}</h3>
-                      <p className="text-teal-600 font-bold text-base mt-1">
-                        LKR {p.price?.toLocaleString() || "N/A"}
-                      </p>
-                    </div>
-                    <div className="flex gap-3 text-gray-500 text-xs">
-                      <span className="flex items-center gap-1">
-                        <BedIcon /> {p.bedrooms || 0}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <BathIcon /> {p.bathrooms || 0}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <button 
-                    className="flex-1 bg-teal-500 hover:bg-teal-600 text-white py-1.5 transition-colors text-xs font-medium"
-                    onClick={() => {
-                          navigate(`/property/${p._id}`);
-                          window.scrollTo(0, 0); // scroll to top immediately
-                        }}
-                    >
-                      View Details
-                    </button>
-                    {/* <button className="flex-1 bg-red-500 hover:bg-red-600 text-white py-1.5 transition-colors text-xs font-medium">
-                      Delete
-                    </button> */}
-                  </div>
-                </div>
-              </div>
-            ))}
           </div>
         </div>
 

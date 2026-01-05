@@ -182,74 +182,88 @@ export default function AgentHome() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Recent Listings */}
           <div className="lg:col-span-2 bg-white shadow-sm border border-gray-200 p-6">
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Recent Listings</h2>
-              <button
+                <h2 className="text-lg font-bold text-gray-900">Recent Listings</h2>
+                <button
                 onClick={() => navigate("/manageListnings")}
                 className="text-sm text-teal-600 font-semibold hover:text-teal-700"
-              >
+                >
                 View All →
-              </button>
+                </button>
             </div>
+
             {recentListings.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
+                <div className="text-center py-8 text-gray-500">
                 <p className="text-sm">No listings yet. Create your first property!</p>
-              </div>
+                </div>
             ) : (
-              <div className="space-y-4">
+                <div className="space-y-4">
                 {recentListings.map((listing) => (
-                  <div
+                    <div
                     key={listing._id}
-                    className="flex gap-4 p-4 border border-gray-200 hover:border-teal-600 hover:bg-teal-50 transition-all cursor-pointer"
                     onClick={() => navigate(`/property/${listing._id}`)}
-                  >
+                    className="group grid grid-cols-[96px_1fr] gap-4 p-4 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
+                    >
+                    {/* Image */}
                     <img
-                      src={listing.images?.[0] ?? "/placeholder.jpg"}
-                      alt={listing.title}
-                      className="w-24 h-24 object-cover"
+                        src={listing.images?.[0] ?? "/placeholder.jpg"}
+                        alt={listing.title}
+                        className="w-24 h-24 object-cover rounded"
                     />
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between mb-2">
-                        <h3 className="font-bold text-gray-900 text-sm">{listing.title}</h3>
+
+                    {/* Content */}
+                    <div className="flex flex-col justify-between min-h-[96px]">
+                        {/* Top row */}
+                        <div className="flex items-start justify-between gap-3">
+                        <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
+                            {listing.title}
+                        </h3>
+
                         <span
-                          className={`text-xs font-semibold px-2 py-1 ${
+                            className={`shrink-0 text-xs font-semibold px-2 py-1 rounded ${
                             listing.status === "APPROVED"
-                              ? "bg-green-100 text-green-700"
-                              : listing.status === "PENDING"
-                              ? "bg-yellow-100 text-yellow-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
+                                ? "bg-green-100 text-green-700"
+                                : listing.status === "PENDING"
+                                ? "bg-yellow-100 text-yellow-700"
+                                : "bg-red-100 text-red-700"
+                            }`}
                         >
-                          {listing.status}
+                            {listing.status}
                         </span>
-                      </div>
-                      <div className="flex items-center gap-2 text-xs text-gray-500 mb-2">
+                        </div>
+
+                        {/* Address */}
+                        <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
                         <MapPinIcon />
                         <span className="truncate">{listing.location.address}</span>
-                      </div>
-                      <div className="flex items-center justify-between">
+                        </div>
+
+                        {/* Bottom row */}
+                        <div className="flex items-center justify-between mt-2">
                         <p className="text-teal-600 font-bold text-sm">
-                          LKR {listing.price.toLocaleString()}
+                            LKR {listing.price.toLocaleString()}
                         </p>
+
                         {listing.bedrooms > 0 && (
-                          <div className="flex gap-3 text-gray-500 text-xs">
+                            <div className="flex items-center gap-4 text-gray-500 text-xs">
                             <span className="flex items-center gap-1">
-                              <BedIcon /> {listing.bedrooms}
+                                <BedIcon/>
+                                {listing.bedrooms}
                             </span>
                             <span className="flex items-center gap-1">
-                              <BathIcon /> {listing.bathrooms}
+                                <BathIcon/>
+                                {listing.bathrooms}
                             </span>
-                          </div>
+                            </div>
                         )}
-                      </div>
+                        </div>
                     </div>
-                  </div>
+                    </div>
                 ))}
-              </div>
+                </div>
             )}
-          </div>
+            </div>
 
           {/* Recent Inquiries */}
           <div className="bg-white shadow-sm border border-gray-200 p-6">
