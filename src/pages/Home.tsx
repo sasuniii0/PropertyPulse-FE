@@ -631,7 +631,8 @@ useEffect(() => {
                     </p>
                   </div>
                 </div>
-                <button className="px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium">
+                <button 
+                className="px-3 py-1.5 bg-teal-500 hover:bg-teal-600 text-white text-xs font-medium">
                   View Profile
                 </button>
               </div>

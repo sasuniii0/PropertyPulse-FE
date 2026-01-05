@@ -99,7 +99,7 @@ export default function UserManage() {
     }
   };
 
-  const openViewModal = (item: Agent | User) => {
+   const openViewModal = (item: Agent | User) => {
     setSelectedViewItem(item);
     setViewModalOpen(true);
   };
