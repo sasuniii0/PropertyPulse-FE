@@ -15,6 +15,114 @@ A modern, feature-rich real estate platform built with React and TypeScript. Pro
 - [API Integration](#api-integration)
 - [Contributing](#contributing)
 
+## Appearence of PropertyPulse
+
+### Welcome page
+![Welcome](./assets/welcome.png)
+
+### Signin page
+![signin](./assets/signin.png)
+
+### Signup page
+![signup](./assets/signup.png)
+
+### Client-dashboard
+![Client-Dashboard](./assets/client-dashboard.png)
+
+### Client-properties
+![Client-properties](./assets/client-properties.png)
+
+### Client-single-property
+![Client-single-property](./assets/client-single-property.png)
+
+### Client-send-inquiries
+![Client-send-inquiries](./assets/client-send-inquiry.png)
+
+### Client-search
+![Client-search](./assets/client-search.png)
+
+### Client-saved-properties
+![Client-saved-properties](./assets/client-saved-properties.png)
+
+### Client-property-comparison
+![Client-property-comparison](./assets/client-property-comparison.png)
+
+### Client-profile
+![Client-profile](./assets/client-profile.png)
+
+### Client-inquiries
+![Client-my-inquiries](./assets/client-my-inquaries.png)
+
+### Client-get-more-from-agent
+![Client-get-more-from-agent](./assets/client-more-from-agent.png)
+
+### Client-inquiry-view
+![Client-view-inquiry](./assets/client-inquiry-view.png)
+
+### Client-ai-analysis
+![Client-ai-analysis](./assets/client-ai-analysis.png)
+
+### Client-ai-analysis-report
+![Client-ai-analysis-report](./assets/client-ai-analys-report.png)
+
+### Agent-dashboard
+![Agent-dashboard](./assets/agent-dashboard.png)
+
+### Agent-create-listing
+![Agent-create-Listing](./assets/agent-create-listing.png)
+
+### Agent-inquiries
+![Agent-inquiries](./assets/agent-inquiries.png)
+
+### Agent-manage-listing
+![Agent-manage-listing](./assets/agent-manage-listing.png)
+
+### Agent-profile
+![Agent-profile](./assets/agent-profile.png)
+
+### Agent-payment
+![Agent-payment](./assets/agent-payment.png)
+
+### Agent-payment-notify
+![Agent-Payment-notify](./assets/agent-payment-notify.png)
+
+### Agent-payment-details
+![Agent-payment-details](./assets/agent-payment-details.png)
+
+### Agent-payment-success
+![Agent-payment-success](./assets/agent-payment-success.png)
+
+### Agent-property-tracking
+![Agent-property-tracking](./assets/agent-property-tracking.png)
+
+### Admin-dashboard
+![Admin-dashboard](./assets/admin-dashboard.png)
+
+### Admin-home
+![Admin-home](./assets/admin-home.png)
+
+### Admin-user-management
+![Admin-user-management](./assets/admin-user-management.png)
+
+### Admin-property-management
+![Admin-property-management](./assets/admin-property-management.png)
+
+### Admin-properties
+![Admin-properties](./assets/admin-properties.png)
+
+### Admin-profile
+![Admin-profile](./assets/admin-profile.png)
+
+### Admin-market-analysis
+![Admin-market-analysis](./assets/admin-market-analysis.png)
+
+### Admin-report-generating
+![Admin-report-generating](./assets/admin-repot-generating.png)
+
+### Footer
+![Footer](./assets/footer.png)
+
+
 ## Features
 
 ### For Clients
