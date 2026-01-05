@@ -13,7 +13,6 @@ import SavedPropertiesMap from "../components/SavedPropertiesMap";
 import type { Property } from "../components/SavedPropertiesMap";
 import type {UserData} from '../services/User'
 import {getRecentUsers} from '../services/Admin'
-import MyRecentInquiries from '../components/MyRecentInquiries'
 import { PaymentPopup } from "../components/PaymentPopup";
 import { startAgentPayment } from "../services/Payment";
 import api from "../services/Api";
@@ -282,7 +281,6 @@ useEffect(() => {
   if (user.role === "CLIENT") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-        <ClientHome />
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
           {/* Welcome Section */}
@@ -291,9 +289,7 @@ useEffect(() => {
             <p className="text-gray-600 text-sm mt-0.5">Find your dream property today</p>
           </div>
 
-
-          {/* Recent Inquiries */}
-          <MyRecentInquiries />
+          <ClientHome />
         </main>
       </div>
     );

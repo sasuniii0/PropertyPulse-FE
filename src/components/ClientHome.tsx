@@ -5,7 +5,7 @@ import { fetchLocationApiClient, getApprovedListingsAPI } from "../services/List
 import { MapPinIcon, BedIcon, BathIcon } from "../components/Icons";
 import RecentPropertiesSlideshow from "./RecentPropertiesSlideShow";
 import SavedPropertiesMap, { type Property } from "./SavedPropertiesMap";
-import { fetchLocationApi } from "../services/Admin";
+import MyRecentInquiries from "./MyRecentInquiries";
 
 const HeartIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -33,10 +33,8 @@ export default function ClientHome() {
   const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<any[]>([]);
   const [clientLocations, setClientLocations] = useState<Property[]>([]);
-  const [location, setLocation] = useState<Property[]>([]);
 
-  console.log(location);
-  
+  console.log("Client locations:", clientLocations);
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -55,27 +53,23 @@ export default function ClientHome() {
   }, [user?.token]);
 
   const featuredProperties = properties.slice(0, 6);
-  //const recentProperties = properties.slice(0, 4);
 
   useEffect(() => {
-      if (!user || loading) return; // Wait until auth is fully loaded
-    const getLocations = async () => {
+    if (!user?.token) return; // Wait until user token is available
+    
+    const getClientLocations = async () => {
       try {
-        const token = localStorage.getItem("accessToken"); 
-        if (!token) throw new Error("No token found");
-  
-        const data = await fetchLocationApi(token);
-        setLocation(data);
-  
-        const clientData = await fetchLocationApiClient(token);
+        console.log("Fetching client locations...");
+        const clientData = await fetchLocationApiClient(user.token);
+        console.log("Client locations fetched successfully:", clientData);
         setClientLocations(clientData);
       } catch (err) {
-        console.error("Failed to fetch locations in component:", err);
+        console.error("Failed to fetch client locations:", err);
       }
     };
   
-    getLocations();
-  }, []);
+    getClientLocations();
+  }, [user?.token]);
 
   if (loading) {
     return (
@@ -133,10 +127,16 @@ export default function ClientHome() {
         </div>
 
         {/* Map Section */}
-          <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
-            <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
+        <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
+          <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
+          {clientLocations.length > 0 ? (
             <SavedPropertiesMap properties={clientLocations} />
-          </section>
+          ) : (
+            <div className="text-center py-12 text-gray-500">
+              <p className="text-sm">No saved locations to display on the map.</p>
+            </div>
+          )}
+        </section>
 
         {/* Quick Actions */}
         <div className="bg-white shadow-sm border border-gray-200 p-6">
@@ -271,12 +271,12 @@ export default function ClientHome() {
                     </div>
 
                     <button 
-                    className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 transition-colors text-xs font-semibold"
-                    onClick={() => {
-                          navigate(`/property/${property._id}`);
-                          window.scrollTo(0, 0); // scroll to top immediately
-                        }}
-                        >
+                      className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 transition-colors text-xs font-semibold"
+                      onClick={() => {
+                        navigate(`/property/${property._id}`);
+                        window.scrollTo(0, 0);
+                      }}
+                    >
                       View Details
                     </button>
                   </div>
@@ -318,6 +318,10 @@ export default function ClientHome() {
             <p className="text-sm text-gray-600">Professional guidance throughout your journey</p>
           </div>
         </div>
+
+        
+          {/* Recent Inquiries */}
+          <MyRecentInquiries />
 
         {/* CTA Banner */}
         <div className="bg-gradient-to-r from-teal-600 to-teal-700 text-white p-8 border border-teal-800">
