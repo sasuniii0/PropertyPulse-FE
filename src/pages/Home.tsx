@@ -4,7 +4,7 @@ import ActionCard from "../components/ActionCard";
 import StatCard from "../components/StatCard";
 import ActivityCard from "../components/ActivityCard";
 import { useState , useEffect } from "react";
-import { approveListingAPI, rejectListingAPI , getPendingListings, fetchLocationApi} from "../services/Admin";
+import { approveListingAPI, rejectListingAPI , getPendingListings, fetchLocationApi, getTopAgentsAPI} from "../services/Admin";
 import type { ListingData} from "../services/Admin";
 import { SettingsIcon , HomeIcon,PulseIcon,SearchIcon,HeartIcon,PlusIcon,HomeIconSmall,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
 import toast from "react-hot-toast";
@@ -251,15 +251,24 @@ useEffect(() => {
         .catch(console.error);
     }, [user]);
 
-    const topAgents = [
-      {
-        rank: 1,
-        name: "Nimal Perera",
-        sales: 34,
-        value: "150M",
-        badge: "🥇",
-      },
-    ];
+    const [topAgents, setTopAgents] = useState<any[]>([]);
+
+    useEffect(() => {
+      if (!user?.token) return;
+
+      getTopAgentsAPI(user.token)
+        .then((res) => {
+          const ranked = res.agents.map((agent: any, index: number) => ({
+            ...agent,
+            rank: index + 1,
+            badge: index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "⭐",
+          }));
+
+          setTopAgents(ranked);
+        })
+        .catch(console.error);
+    }, [user]);
+
 
     useEffect(() => {
     return () => {

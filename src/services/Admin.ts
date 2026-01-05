@@ -157,3 +157,17 @@ export const getRecentUsers = async (token: string): Promise<UserData[]> => {
 
   return res.data.data;
 };
+
+export const getTopAgentsAPI = async (token: string) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/v1/admin/top-agents`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch top agents");
+  return res.json();
+};
