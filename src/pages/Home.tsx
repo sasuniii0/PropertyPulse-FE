@@ -19,6 +19,7 @@ import { PaymentPopup } from "../components/PaymentPopup";
 import { startAgentPayment } from "../services/Payment";
 import RecentPropertiesSlideshow from "../components/RecentPropertiesSlideShow";
 import api from "../services/Api";
+import { getDashboardMetricsAPI } from "../services/MarketAnalytics";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -234,6 +235,22 @@ useEffect(() => {
       loadApprovedListings();
     }, [user]);
 
+    const [metrics, setMetrics] = useState({
+      totalUsers: 0,
+      activeListings: 0,
+      activeAgents: 0,
+      pendingApprovals: 0,
+      monthlySales: 0,
+    });
+
+    useEffect(() => {
+      if (!user?.token) return;
+
+      getDashboardMetricsAPI(user.token)
+        .then((res) => setMetrics(res.metrics))
+        .catch(console.error);
+    }, [user]);
+
     const topAgents = [
       {
         rank: 1,
@@ -395,29 +412,28 @@ useEffect(() => {
         {/* Key Metrics */}
         <div className="grid md:grid-cols-5 gap-4">
           <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
-            <div className="text-2xl font-bold">1,248</div>
+            <div className="text-2xl font-bold">{metrics.totalUsers}</div>
             <div className="text-teal-100 text-xs mt-1">Total Users</div>
-            <div className="text-xs text-teal-200 mt-2">↑ 12% this month</div>
           </div>
+
           <div className="bg-gradient-to-br from-teal-500 to-teal-600 p-5 shadow-sm text-white">
-            <div className="text-2xl font-bold">452</div>
+            <div className="text-2xl font-bold">{metrics.activeListings}</div>
             <div className="text-teal-100 text-xs mt-1">Active Listings</div>
-            <div className="text-xs text-teal-200 mt-2">↑ 8% this month</div>
           </div>
+
           <div className="bg-gradient-to-br from-purple-500 to-purple-600 p-5 shadow-sm text-white">
-            <div className="text-2xl font-bold">89</div>
+            <div className="text-2xl font-bold">{metrics.activeAgents}</div>
             <div className="text-purple-100 text-xs mt-1">Active Agents</div>
-            <div className="text-xs text-purple-200 mt-2">↑ 5% this month</div>
           </div>
+
           <div className="bg-gradient-to-br from-orange-500 to-orange-600 p-5 shadow-sm text-white">
-            <div className="text-2xl font-bold">23</div>
+            <div className="text-2xl font-bold">{metrics.pendingApprovals}</div>
             <div className="text-orange-100 text-xs mt-1">Pending Approvals</div>
-            <div className="text-xs text-orange-200 mt-2">Requires attention</div>
           </div>
+
           <div className="bg-gradient-to-br from-green-500 to-green-600 p-5 shadow-sm text-white">
-            <div className="text-2xl font-bold">156</div>
+            <div className="text-2xl font-bold">{metrics.monthlySales}</div>
             <div className="text-green-100 text-xs mt-1">Sales This Month</div>
-            <div className="text-xs text-green-200 mt-2">↑ 18% vs last month</div>
           </div>
         </div>
 

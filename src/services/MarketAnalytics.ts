@@ -147,3 +147,32 @@ export const generateMonthlyReportAPI = async (
     report: result.report,
   };
 };
+
+export const getMonthlySalesAPI = async (token: string) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/v1/analytics/monthly-sales`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch sales");
+  return res.json();
+};
+
+export const getDashboardMetricsAPI = async (token: string) => {
+  const res = await fetch(
+    `${import.meta.env.VITE_API_URL}/api/v1/analytics/dashboard-metrics`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to fetch metrics");
+  return res.json();
+};
+
