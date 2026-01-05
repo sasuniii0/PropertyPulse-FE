@@ -182,38 +182,39 @@ const loadHistoricalAnalytics = async () => {
   };
 
   const generateMonthlyReport = async () => {
-    if (!user?.token) return;
+  if (!user?.token) return;
 
-    try {
-      const response = await fetch(
-        import.meta.env.VITE_API_URL + "/api/v1/analytics/generate-report",
-        {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        }
-      );
+  try {
+    const response = await fetch(
+      import.meta.env.VITE_API_URL + "/api/v1/analytics/generate-report",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      }
+    );
 
-      if (!response.ok) throw new Error('Failed to generate report');
+    if (!response.ok) throw new Error("Failed to generate report");
 
-      const result = await response.json();
-      toast.success(`Report generated for ${result.month}`);
-      
-      // Download the report as JSON
-      const dataStr = JSON.stringify(result.report, null, 2);
-      const dataBlob = new Blob([dataStr], { type: 'application/json' });
-      const url = URL.createObjectURL(dataBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `market-report-${result.month}.json`;
-      link.click();
-      URL.revokeObjectURL(url);
-    } catch (error: any) {
-      console.error('Failed to generate report:', error);
-      toast.error('Failed to generate monthly report');
-    }
-  };
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `market-report.pdf`;
+    document.body.appendChild(link);
+    link.click();
+
+    link.remove();
+    window.URL.revokeObjectURL(url);
+
+    toast.success("Monthly report downloaded");
+  } catch (error) {
+    console.error("Failed to generate report:", error);
+    toast.error("Failed to download monthly report");
+  }
+};
 
   // Prepare chart data for price history
   const priceChartData = {
