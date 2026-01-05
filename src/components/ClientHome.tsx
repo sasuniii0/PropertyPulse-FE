@@ -1,15 +1,11 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import { getApprovedListingsAPI } from "../services/Listning";
+import { fetchLocationApiClient, getApprovedListingsAPI } from "../services/Listning";
 import { MapPinIcon, BedIcon, BathIcon } from "../components/Icons";
-
-const SearchIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.35-4.35" />
-  </svg>
-);
+import RecentPropertiesSlideshow from "./RecentPropertiesSlideShow";
+import SavedPropertiesMap, { type Property } from "./SavedPropertiesMap";
+import { fetchLocationApi } from "../services/Admin";
 
 const HeartIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -36,7 +32,11 @@ export default function ClientHome() {
   const { user } = useAuth();
   const [loading, setLoading] = useState(true);
   const [properties, setProperties] = useState<any[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [clientLocations, setClientLocations] = useState<Property[]>([]);
+  const [location, setLocation] = useState<Property[]>([]);
+
+  console.log(location);
+  
 
   useEffect(() => {
     const fetchProperties = async () => {
@@ -57,10 +57,25 @@ export default function ClientHome() {
   const featuredProperties = properties.slice(0, 6);
   //const recentProperties = properties.slice(0, 4);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    navigate(`/search?q=${searchTerm}`);
-  };
+  useEffect(() => {
+      if (!user || loading) return; // Wait until auth is fully loaded
+    const getLocations = async () => {
+      try {
+        const token = localStorage.getItem("accessToken"); 
+        if (!token) throw new Error("No token found");
+  
+        const data = await fetchLocationApi(token);
+        setLocation(data);
+  
+        const clientData = await fetchLocationApiClient(token);
+        setClientLocations(clientData);
+      } catch (err) {
+        console.error("Failed to fetch locations in component:", err);
+      }
+    };
+  
+    getLocations();
+  }, []);
 
   if (loading) {
     return (
@@ -74,38 +89,7 @@ export default function ClientHome() {
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-teal-600 to-teal-800 text-white">
-        <div className="max-w-7xl mx-auto px-6 py-16">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4">
-              Find Your Dream Home
-            </h1>
-            <p className="text-xl text-teal-100 mb-8">
-              Discover the perfect property from thousands of listings
-            </p>
-
-            {/* Search Bar */}
-            <form onSubmit={handleSearch} className="flex gap-3">
-              <div className="flex-1 relative">
-                <input
-                  type="text"
-                  placeholder="Search by location, property type, or keyword..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full px-6 py-4 text-gray-900 border-2 border-transparent focus:border-teal-300 focus:outline-none"
-                />
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
-                  <SearchIcon />
-                </div>
-              </div>
-              <button
-                type="submit"
-                className="px-8 py-4 bg-white text-teal-600 font-bold hover:bg-teal-50 transition-colors"
-              >
-                Search
-              </button>
-            </form>
-          </div>
-        </div>
+        <RecentPropertiesSlideshow/>
       </div>
 
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-8">
@@ -129,7 +113,7 @@ export default function ClientHome() {
                 <HeartIcon />
               </div>
               <div>
-                <div className="text-3xl font-bold text-gray-900">0</div>
+                <div className="text-3xl font-bold text-gray-900">5</div>
                 <div className="text-sm text-gray-600 font-medium">Saved Favorites</div>
               </div>
             </div>
@@ -147,6 +131,12 @@ export default function ClientHome() {
             </div>
           </div>
         </div>
+
+        {/* Map Section */}
+          <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
+            <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
+            <SavedPropertiesMap properties={clientLocations} />
+          </section>
 
         {/* Quick Actions */}
         <div className="bg-white shadow-sm border border-gray-200 p-6">
@@ -280,7 +270,13 @@ export default function ClientHome() {
                       )}
                     </div>
 
-                    <button className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 transition-colors text-xs font-semibold">
+                    <button 
+                    className="w-full bg-teal-600 hover:bg-teal-700 text-white py-2 transition-colors text-xs font-semibold"
+                    onClick={() => {
+                          navigate(`/property/${property._id}`);
+                          window.scrollTo(0, 0); // scroll to top immediately
+                        }}
+                        >
                       View Details
                     </button>
                   </div>

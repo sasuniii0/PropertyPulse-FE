@@ -4,20 +4,18 @@ import ActionCard from "../components/ActionCard";
 import StatCard from "../components/StatCard";
 import ActivityCard from "../components/ActivityCard";
 import { useState , useEffect } from "react";
-import { approveListingAPI, rejectListingAPI , getPendingListings, fetchLocationApi, getTopAgentsAPI} from "../services/Admin";
+import { approveListingAPI, rejectListingAPI , getPendingListings, getTopAgentsAPI} from "../services/Admin";
 import type { ListingData} from "../services/Admin";
-import { SettingsIcon , HomeIcon,PulseIcon,SearchIcon,HeartIcon,PlusIcon,HomeIconSmall,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
+import { SettingsIcon , HomeIcon,PulseIcon,PlusIcon,EditIcon,ChartIcon,UserIcon,BedIcon,BathIcon,MapPinIcon } from "../components/Icons";
 import toast from "react-hot-toast";
 import { getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
 import SavedPropertiesMap from "../components/SavedPropertiesMap"; 
 import type { Property } from "../components/SavedPropertiesMap";
 import type {UserData} from '../services/User'
 import {getRecentUsers} from '../services/Admin'
-import {fetchLocationApiClient} from '../services/Listning'
 import MyRecentInquiries from '../components/MyRecentInquiries'
 import { PaymentPopup } from "../components/PaymentPopup";
 import { startAgentPayment } from "../services/Payment";
-import RecentPropertiesSlideshow from "../components/RecentPropertiesSlideShow";
 import api from "../services/Api";
 import { getDashboardMetricsAPI } from "../services/MarketAnalytics";
 import AgentHome from "../components/AgentHome";
@@ -32,7 +30,10 @@ export default function Home() {
   const [preview, ] = useState<string | null>(null);
   const [recentUsers, setRecentUsers] = useState<UserData[]>([]);
   const [location, setLocation] = useState<Property[]>([]);
-  const [clientLocations, setClientLocations] = useState<Property[]>([]);
+
+  console.log(setLocation);
+  console.log(approvedListings);
+  
 
   const [showPaymentPopup, setShowPaymentPopup] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<string | null>(null);
@@ -67,27 +68,7 @@ export default function Home() {
   checkPayment();
 }, [user]);
 
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user || loading) return; // Wait until auth is fully loaded
-  const getLocations = async () => {
-    try {
-      const token = localStorage.getItem("accessToken"); 
-      if (!token) throw new Error("No token found");
-
-      const data = await fetchLocationApi(token);
-      setLocation(data);
-
-      const clientData = await fetchLocationApiClient(token);
-      setClientLocations(clientData);
-    } catch (err) {
-      console.error("Failed to fetch locations in component:", err);
-    }
-  };
-
-  getLocations();
-}, []);
+const navigate = useNavigate();
 
 const handlePayNow = async () => {
   if (!user?.token) return;
@@ -310,99 +291,6 @@ useEffect(() => {
             <p className="text-gray-600 text-sm mt-0.5">Find your dream property today</p>
           </div>
 
-          <RecentPropertiesSlideshow/>
-          
-          {/* Quick Actions */}
-          <div className="grid md:grid-cols-4 gap-4">
-            <ActionCard icon={<SearchIcon />} title="Search Properties" desc="Browse all listings" color="bg-teal-100" onClick={() => navigate("/search")} />
-            <ActionCard icon={<HeartIcon />} title="Saved Properties" desc="View your favorites" color="bg-red-100" onClick={() => navigate("/favourites")}/>
-            <ActionCard icon={<UserIcon />} title="My Profile" desc="Update your details" color="bg-teal-100" onClick={() => navigate("/editme")}/>
-            <ActionCard icon={<HomeIconSmall />} title="My Inquiries" desc="Track your requests" color="bg-purple-100" onClick={() => navigate("/inquaries")}/>
-          </div>
-
-          {/* Map Section */}
-          <section className="bg-white shadow-sm border border-gray-100 p-5 rounded-lg">
-            <h2 className="text-lg font-bold mb-4">Property Locations Map</h2>
-            <SavedPropertiesMap properties={clientLocations} />
-          </section>
-
-          {/* Available Properties */}
-          <div className="bg-white shadow-sm border border-gray-100 p-5">
-            <h2 className="text-lg font-bold text-gray-900 mb-5">Available Properties</h2>
-            <div className="grid md:grid-cols-3 gap-5">
-              {approvedListings.map((p) => (
-                <div 
-                  key={p._id} 
-                  className="bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300 cursor-pointer group border border-gray-100"
-                >
-                  <div className="relative h-44 overflow-hidden">
-                    <img 
-                      src={p.images && p.images.length > 0 
-                          ? p.images[0] 
-                          : "/placeholder.png"} 
-                      alt={p.title || "Property Image"} 
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" 
-                      onError={(e) => {
-                        (e.currentTarget as HTMLImageElement).src = "/placeholder.png";
-                      }}
-                    />
-                  </div>
-                  {preview && (
-                    <div className="mt-4 w-48 h-48 border border-gray-200 overflow-hidden">
-                      <img 
-                        src={preview} 
-                        alt="Preview" 
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.currentTarget as HTMLImageElement).src = "/placeholder.png";
-                        }}
-                      />
-                    </div>
-                  )}
-
-                  <div className="p-4">
-                    <div className="flex items-center gap-1 text-xs text-gray-500 mb-2">
-                      <MapPinIcon />
-                      {p.location?.address || "Unknown Address"}
-                    </div>
-                    <div className="flex justify-between items-start mb-3">
-                      <div>
-                        <h3 className="font-bold text-gray-900 text-sm">{p.title || "Untitled"}</h3>
-                        <p className="text-teal-600 font-bold text-base mt-1">
-                          LKR {p.price?.toLocaleString() || "N/A"}
-                        </p>
-                      </div>
-                      <div className="flex gap-3 text-gray-500 text-xs">
-                        <span className="flex items-center gap-1"><BedIcon /> {p.bedrooms || 0}</span>
-                        <span className="flex items-center gap-1"><BathIcon /> {p.bathrooms || 0}</span>
-                      </div>
-                    </div>
-                    <button 
-                        onClick={() => {
-                          navigate(`/property/${p._id}`);
-                          window.scrollTo(0, 0); // scroll to top immediately
-                        }}
-                        className="w-full bg-teal-500 hover:bg-teal-600 text-white py-2 transition-colors text-xs font-medium"
-                      >
-                        View Details
-                      </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Market Overview */}
-          <div className="bg-white shadow-sm border border-gray-100 p-5">
-            <h2 className="text-base font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <PulseIcon /> Market Overview
-            </h2>
-            <div className="grid md:grid-cols-3 gap-5">
-              <StatCard label="Properties Available" value="452" />
-              <StatCard label="Average Price" value="LKR 320M" />
-              <StatCard label="New Listings This Week" value="38" />
-            </div>
-          </div>
 
           {/* Recent Inquiries */}
           <MyRecentInquiries />
