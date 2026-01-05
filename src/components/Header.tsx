@@ -338,7 +338,7 @@ export default function Header() {
                 <NavLink icon={<UserIcon />} label="Users" onClick={() => navigate("/admin/manage-users")} />
                 <NavLink icon={<HomeIcon />} label="Approvals" onClick={() => navigate("/listning/")} />
                 <NavLink icon={<ManagePropertiesIcon />} label="Properties" onClick={() => navigate("/admin-listning")} />
-                <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+                <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/admin/inquiries")} />
                 <NavLink icon={<UserIcon />} label="Me" onClick={() => navigate("/editme")} />
               </nav>
 

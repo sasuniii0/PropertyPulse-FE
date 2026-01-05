@@ -19,6 +19,7 @@ import PropertyComparison from "../pages/PropertyComparison";
 import MarketAnalytics from "../pages/MarketAnalytics"
 import AgentProperties from "../pages/AgentPropertyTracking";
 import Footer from "../components/Footer";
+import AdminInquiryPage from "../pages/AdminInquiry";
 
 const Welcome = lazy(() => import("../pages/Welcome"))
 const Signin = lazy(() => import("../pages/Signin"))
@@ -87,7 +88,7 @@ export default function Router() {
                         <Route path="/compare-properties" element={<PropertyComparison />} />
                         <Route path="/analytics" element={<MarketAnalytics />} />
                         <Route path="/agent-tracking" element={<AgentProperties />} />
-
+                        <Route path="/admin/inquiries" element={<AdminInquiryPage />} />
 
                     </Route>
                 </Routes>
