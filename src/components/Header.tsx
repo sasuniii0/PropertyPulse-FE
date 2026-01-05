@@ -11,9 +11,8 @@ const LogoutIcon = () => (
   </svg>
 );
 
-// SVG Icons
 const PulseIcon = () => (
-  <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M4 16L8 8L12 20L16 12L20 18L24 10L28 16" stroke="#0F766E" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
@@ -85,6 +84,12 @@ const CloseIcon = () => (
   </svg>
 );
 
+const InquiriesIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+  </svg>
+);
+
 export default function Header() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
@@ -98,95 +103,92 @@ export default function Header() {
     navigate("/signin");
   };
 
-  const NavButton = ({ icon: Icon, label, onClick, color = "teal" }: any) => (
+  const NavLink = ({ icon: Icon, label, onClick, isActive = false }: any) => (
     <button
-      className={`flex items-center gap-2 px-4 py-2 hover:bg-${color}-50 hover:text-${color}-600 font-medium transition-all group`}
+      className={`flex items-center gap-2 px-5 py-2.5 font-medium transition-all relative group ${
+        isActive
+          ? "text-teal-600 bg-teal-50"
+          : "text-gray-700 hover:text-teal-600 hover:bg-gray-50"
+      }`}
       onClick={onClick}
     >
-      <span className="group-hover:scale-110 transition-transform">{Icon}</span>
-      <span>{label}</span>
+      <span className="transition-transform group-hover:scale-110">{Icon}</span>
+      <span className="text-sm">{label}</span>
+      {isActive && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-teal-600"></div>}
     </button>
   );
 
-  const MobileNavButton = ({ icon: Icon, label, onClick, color = "teal" }: any) => (
+  const MobileNavLink = ({ icon: Icon, label, onClick }: any) => (
     <button
-      className={`flex items-center gap-3 px-6 py-4 hover:bg-${color}-50 hover:text-${color}-600 font-medium transition-all border-b border-gray-100 w-full text-left`}
+      className="flex items-center gap-4 px-6 py-4 text-gray-700 hover:bg-teal-50 hover:text-teal-600 font-medium transition-all border-b border-gray-100 w-full text-left group"
       onClick={() => {
         onClick();
         setMobileMenuOpen(false);
       }}
     >
-      <span>{Icon}</span>
-      <span>{label}</span>
+      <span className="transition-transform group-hover:scale-110">{Icon}</span>
+      <span className="text-sm">{label}</span>
     </button>
   );
 
   if (user.role === "CLIENT") {
     return (
       <>
-        <header className="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
-          <div className="max-w-7xl mx-auto px-6 md:px-8 py-3">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 py-0">
             <div className="flex items-center justify-between">
-              {/* Logo */}
+              {/* Left: Logo */}
               <div
-                className="flex items-center gap-2 cursor-pointer group"
+                className="flex items-center gap-3 cursor-pointer py-4 group"
                 onClick={() => navigate("/home")}
               >
-                <div className="group-hover:scale-110 transition-transform">
+                <div className="transition-transform group-hover:scale-110 group-hover:rotate-3">
                   <PulseIcon />
                 </div>
-                <span className="font-bold text-xl text-gray-800 group-hover:text-teal-600 transition-colors">
-                  PropertyPulse
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-bold text-xl text-gray-900 group-hover:text-teal-600 transition-colors leading-tight">
+                    PropertyPulse
+                  </span>
+                  <span className="text-xs text-gray-500 font-medium">Find Your Dream Home</span>
+                </div>
               </div>
 
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex items-center gap-1 text-gray-700">
-                <NavButton
-                  icon={<ListingsIcon />}
-                  label="Listings"
-                  onClick={() => navigate("/search")}
-                  color="teal"
-                />
-                <NavButton
-                  icon={<UserIcon />}
-                  label="My Profile"
-                  onClick={() => navigate("/editme")}
-                  color="blue"
-                />
-                <NavButton
-                  icon={<HeartIcon />}
-                  label="Favorites"
-                  onClick={() => navigate("/favourites")}
-                  color="red"
-                />
-                <NavButton
-                  icon={<ListingsIcon />}
-                  label="Inquiries"
-                  onClick={() => navigate("/inquaries")}
-                  color="purple"
-                />
+              {/* Center: Desktop Navigation */}
+              <nav className="hidden lg:flex items-center gap-1">
+                <NavLink icon={<ListingsIcon />} label="Listings" onClick={() => navigate("/search")} />
+                <NavLink icon={<HeartIcon />} label="Favorites" onClick={() => navigate("/favourites")} />
+                <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+                <NavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
               </nav>
 
-              {/* User Info & Actions */}
-              <div className="flex items-center gap-4">
-                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gray-50 border border-gray-200">
-                  <UserIcon />
-                  <span className="text-sm text-gray-600">
-                    <strong className="text-gray-900">{user.name}</strong>
-                  </span>
+              {/* Right: User Info & Logout */}
+              <div className="flex items-center gap-3">
+                {/* User Info - Desktop */}
+                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200">
+                  <div className="w-8 h-8 bg-teal-600 flex items-center justify-center text-white font-bold text-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-500 font-medium">Welcome back</span>
+                    <span className="text-sm font-bold text-gray-900">{user.name}</span>
+                  </div>
                 </div>
+
+                {/* Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-700 transition-all border border-gray-200"
+                  className="flex items-center justify-center w-11 h-11 bg-red-50 hover:bg-red-100 text-red-600 transition-all border border-red-200 group"
                   title="Logout"
                 >
-                  <LogoutIcon />
+                  <span className="transition-transform group-hover:translate-x-0.5">
+                    <LogoutIcon />
+                  </span>
                 </button>
+
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="md:hidden flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all"
+                  className="lg:hidden flex items-center justify-center w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all border border-gray-300"
                 >
                   {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
                 </button>
@@ -195,42 +197,25 @@ export default function Header() {
           </div>
         </header>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-[73px] bg-white z-40 overflow-y-auto border-b-2 border-gray-200">
-            <nav className="flex flex-col">
-              <div className="px-6 py-4 bg-gray-50 border-b-2 border-gray-200">
-                <div className="flex items-center gap-3">
-                  <UserIcon />
-                  <span className="text-sm text-gray-600">
-                    Welcome, <strong className="text-gray-900">{user.name}</strong>
-                  </span>
+          <div className="lg:hidden fixed inset-0 top-[81px] bg-white z-40 overflow-y-auto">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-100 px-6 py-5 border-b-2 border-teal-200">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-teal-600 flex items-center justify-center text-white font-bold text-lg">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs text-teal-700 font-semibold uppercase tracking-wide">Welcome back</span>
+                  <span className="text-base font-bold text-gray-900">{user.name}</span>
                 </div>
               </div>
-              <MobileNavButton
-                icon={<ListingsIcon />}
-                label="Listings"
-                onClick={() => navigate("/search")}
-                color="teal"
-              />
-              <MobileNavButton
-                icon={<UserIcon />}
-                label="My Profile"
-                onClick={() => navigate("/editme")}
-                color="blue"
-              />
-              <MobileNavButton
-                icon={<HeartIcon />}
-                label="Favorites"
-                onClick={() => navigate("/favourites")}
-                color="red"
-              />
-              <MobileNavButton
-                icon={<ListingsIcon />}
-                label="Inquiries"
-                onClick={() => navigate("/inquaries")}
-                color="purple"
-              />
+            </div>
+            <nav className="flex flex-col">
+              <MobileNavLink icon={<ListingsIcon />} label="Listings" onClick={() => navigate("/search")} />
+              <MobileNavLink icon={<HeartIcon />} label="Favorites" onClick={() => navigate("/favourites")} />
+              <MobileNavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+              <MobileNavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
             </nav>
           </div>
         )}
@@ -239,69 +224,61 @@ export default function Header() {
   } else if (user.role === "AGENT") {
     return (
       <>
-        <header className="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
-          <div className="max-w-7xl mx-auto px-6 md:px-8 py-3">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 py-0">
             <div className="flex items-center justify-between">
-              {/* Logo */}
+              {/* Left: Logo */}
               <div
-                className="flex items-center gap-2 cursor-pointer group"
+                className="flex items-center gap-3 cursor-pointer py-4 group"
                 onClick={() => navigate("/home")}
               >
-                <div className="group-hover:scale-110 transition-transform">
+                <div className="transition-transform group-hover:scale-110 group-hover:rotate-3">
                   <PulseIcon />
                 </div>
-                <span className="font-bold text-xl text-gray-800 group-hover:text-teal-600 transition-colors">
-                  PropertyPulse
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-bold text-xl text-gray-900 group-hover:text-teal-600 transition-colors leading-tight">
+                    PropertyPulse
+                  </span>
+                  <span className="text-xs text-gray-500 font-medium">Agent Dashboard</span>
+                </div>
               </div>
 
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex items-center gap-1 text-gray-700">
-                <NavButton
-                  icon={<CreateListingIcon />}
-                  label="Create New"
-                  onClick={() => navigate("/createListnings")}
-                  color="teal"
-                />
-                <NavButton
-                  icon={<ManageListingIcon />}
-                  label="Manage Listings"
-                  onClick={() => navigate("/manageListnings")}
-                  color="red"
-                />
-                <NavButton
-                  icon={<UserIcon />}
-                  label="My Profile"
-                  onClick={() => navigate("/editme")}
-                  color="blue"
-                />
-                <NavButton
-                  icon={<ListingsIcon />}
-                  label="Inquiries"
-                  onClick={() => navigate("/inquaries")}
-                  color="purple"
-                />
+              {/* Center: Desktop Navigation */}
+              <nav className="hidden lg:flex items-center gap-1">
+                <NavLink icon={<CreateListingIcon />} label="Create New" onClick={() => navigate("/createListnings")} />
+                <NavLink icon={<ManageListingIcon />} label="Manage Listings" onClick={() => navigate("/manageListnings")} />
+                <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+                <NavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
               </nav>
 
-              {/* User Info & Actions */}
-              <div className="flex items-center gap-4">
-                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gray-50 border border-gray-200">
-                  <UserIcon />
-                  <span className="text-sm text-gray-600">
-                    <strong className="text-gray-900">{user.name}</strong>
-                  </span>
+              {/* Right: User Info & Logout */}
+              <div className="flex items-center gap-3">
+                {/* User Info - Desktop */}
+                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-gray-50 to-gray-100 border border-gray-200">
+                  <div className="w-8 h-8 bg-teal-600 flex items-center justify-center text-white font-bold text-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-gray-500 font-medium">Agent</span>
+                    <span className="text-sm font-bold text-gray-900">{user.name}</span>
+                  </div>
                 </div>
+
+                {/* Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-700 transition-all border border-gray-200"
+                  className="flex items-center justify-center w-11 h-11 bg-red-50 hover:bg-red-100 text-red-600 transition-all border border-red-200 group"
                   title="Logout"
                 >
-                  <LogoutIcon />
+                  <span className="transition-transform group-hover:translate-x-0.5">
+                    <LogoutIcon />
+                  </span>
                 </button>
+
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="md:hidden flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all"
+                  className="lg:hidden flex items-center justify-center w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all border border-gray-300"
                 >
                   {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
                 </button>
@@ -310,42 +287,25 @@ export default function Header() {
           </div>
         </header>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-[73px] bg-white z-40 overflow-y-auto border-b-2 border-gray-200">
-            <nav className="flex flex-col">
-              <div className="px-6 py-4 bg-gray-50 border-b-2 border-gray-200">
-                <div className="flex items-center gap-3">
-                  <UserIcon />
-                  <span className="text-sm text-gray-600">
-                    Welcome, <strong className="text-gray-900">{user.name}</strong>
-                  </span>
+          <div className="lg:hidden fixed inset-0 top-[81px] bg-white z-40 overflow-y-auto">
+            <div className="bg-gradient-to-r from-teal-50 to-teal-100 px-6 py-5 border-b-2 border-teal-200">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-teal-600 flex items-center justify-center text-white font-bold text-lg">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs text-teal-700 font-semibold uppercase tracking-wide">Agent</span>
+                  <span className="text-base font-bold text-gray-900">{user.name}</span>
                 </div>
               </div>
-              <MobileNavButton
-                icon={<CreateListingIcon />}
-                label="Create New"
-                onClick={() => navigate("/createListnings")}
-                color="teal"
-              />
-              <MobileNavButton
-                icon={<ManageListingIcon />}
-                label="Manage Listings"
-                onClick={() => navigate("/manageListnings")}
-                color="red"
-              />
-              <MobileNavButton
-                icon={<UserIcon />}
-                label="My Profile"
-                onClick={() => navigate("/editme")}
-                color="blue"
-              />
-              <MobileNavButton
-                icon={<ListingsIcon />}
-                label="Inquiries"
-                onClick={() => navigate("/inquaries")}
-                color="purple"
-              />
+            </div>
+            <nav className="flex flex-col">
+              <MobileNavLink icon={<CreateListingIcon />} label="Create New" onClick={() => navigate("/createListnings")} />
+              <MobileNavLink icon={<ManageListingIcon />} label="Manage Listings" onClick={() => navigate("/manageListnings")} />
+              <MobileNavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+              <MobileNavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
             </nav>
           </div>
         )}
@@ -354,69 +314,62 @@ export default function Header() {
   } else if (user.role === "ADMIN") {
     return (
       <>
-        <header className="bg-white border-b-2 border-gray-200 sticky top-0 z-50 shadow-sm">
-          <div className="max-w-7xl mx-auto px-6 md:px-8 py-3">
+        <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+          <div className="max-w-7xl mx-auto px-6 py-0">
             <div className="flex items-center justify-between">
-              {/* Logo */}
+              {/* Left: Logo */}
               <div
-                className="flex items-center gap-2 cursor-pointer group"
+                className="flex items-center gap-3 cursor-pointer py-4 group"
                 onClick={() => navigate("/home")}
               >
-                <div className="group-hover:scale-110 transition-transform">
+                <div className="transition-transform group-hover:scale-110 group-hover:rotate-3">
                   <PulseIcon />
                 </div>
-                <span className="font-bold text-xl text-gray-800 group-hover:text-teal-600 transition-colors">
-                  PropertyPulse
-                </span>
+                <div className="flex flex-col">
+                  <span className="font-bold text-xl text-gray-900 group-hover:text-teal-600 transition-colors leading-tight">
+                    PropertyPulse
+                  </span>
+                  <span className="text-xs text-gray-500 font-medium">Admin Dashboard</span>
+                </div>
               </div>
 
-              {/* Desktop Navigation */}
-              <nav className="hidden md:flex items-center gap-1 text-gray-700">
-                <NavButton
-                  icon={<UserIcon />}
-                  label="Manage Users"
-                  onClick={() => navigate("/admin/manage-users")}
-                  color="blue"
-                />
-                <NavButton
-                  icon={<HomeIcon />}
-                  label="Property Approvals"
-                  onClick={() => navigate("/listning/")}
-                  color="teal"
-                />
-                <NavButton
-                  icon={<ManagePropertiesIcon />}
-                  label="Manage Properties"
-                  onClick={() => navigate("/admin-listning")}
-                  color="purple"
-                />
-                <NavButton
-                  icon={<UserIcon />}
-                  label="My Profile"
-                  onClick={() => navigate("/editme")}
-                  color="blue"
-                />
+              {/* Center: Desktop Navigation */}
+              <nav className="hidden lg:flex items-center gap-1">
+                <NavLink icon={<UserIcon />} label="Manage Users" onClick={() => navigate("/admin/manage-users")} />
+                <NavLink icon={<HomeIcon />} label="Property Approvals" onClick={() => navigate("/listning/")} />
+                <NavLink icon={<ManagePropertiesIcon />} label="Manage Properties" onClick={() => navigate("/admin-listning")} />
+                <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+                <NavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
               </nav>
 
-              {/* User Info & Actions */}
-              <div className="flex items-center gap-4">
-                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gray-50 border border-gray-200">
-                  <UserIcon />
-                  <span className="text-sm text-gray-600">
-                    <strong className="text-gray-900">{user.name}</strong>
-                  </span>
+              {/* Right: User Info & Logout */}
+              <div className="flex items-center gap-3">
+                {/* User Info - Desktop */}
+                <div className="hidden md:flex items-center gap-3 px-4 py-2 bg-gradient-to-r from-blue-50 to-blue-100 border border-blue-200">
+                  <div className="w-8 h-8 bg-blue-600 flex items-center justify-center text-white font-bold text-sm">
+                    {user.name.charAt(0).toUpperCase()}
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-xs text-blue-700 font-semibold uppercase tracking-wide">Administrator</span>
+                    <span className="text-sm font-bold text-gray-900">{user.name}</span>
+                  </div>
                 </div>
+
+                {/* Logout Button */}
                 <button
                   onClick={handleLogout}
-                  className="flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-red-50 hover:text-red-600 text-gray-700 transition-all border border-gray-200"
+                  className="flex items-center justify-center w-11 h-11 bg-red-50 hover:bg-red-100 text-red-600 transition-all border border-red-200 group"
                   title="Logout"
                 >
-                  <LogoutIcon />
+                  <span className="transition-transform group-hover:translate-x-0.5">
+                    <LogoutIcon />
+                  </span>
                 </button>
+
                 {/* Mobile Menu Button */}
                 <button
                   onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                  className="md:hidden flex items-center justify-center w-10 h-10 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all"
+                  className="lg:hidden flex items-center justify-center w-11 h-11 bg-gray-100 hover:bg-gray-200 text-gray-700 transition-all border border-gray-300"
                 >
                   {mobileMenuOpen ? <CloseIcon /> : <MenuIcon />}
                 </button>
@@ -425,42 +378,26 @@ export default function Header() {
           </div>
         </header>
 
-        {/* Mobile Menu */}
+        {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden fixed inset-0 top-[73px] bg-white z-40 overflow-y-auto border-b-2 border-gray-200">
-            <nav className="flex flex-col">
-              <div className="px-6 py-4 bg-gray-50 border-b-2 border-gray-200">
-                <div className="flex items-center gap-3">
-                  <UserIcon />
-                  <span className="text-sm text-gray-600">
-                    Welcome, <strong className="text-gray-900">{user.name}</strong>
-                  </span>
+          <div className="lg:hidden fixed inset-0 top-[81px] bg-white z-40 overflow-y-auto">
+            <div className="bg-gradient-to-r from-blue-50 to-blue-100 px-6 py-5 border-b-2 border-blue-200">
+              <div className="flex items-center gap-4">
+                <div className="w-12 h-12 bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-xs text-blue-700 font-semibold uppercase tracking-wide">Administrator</span>
+                  <span className="text-base font-bold text-gray-900">{user.name}</span>
                 </div>
               </div>
-              <MobileNavButton
-                icon={<UserIcon />}
-                label="Manage Users"
-                onClick={() => navigate("/admin/manage-users")}
-                color="blue"
-              />
-              <MobileNavButton
-                icon={<HomeIcon />}
-                label="Property Approvals"
-                onClick={() => navigate("/listning/")}
-                color="teal"
-              />
-              <MobileNavButton
-                icon={<ManagePropertiesIcon />}
-                label="Manage Properties"
-                onClick={() => navigate("/admin-listning")}
-                color="purple"
-              />
-              <MobileNavButton
-                icon={<UserIcon />}
-                label="My Profile"
-                onClick={() => navigate("/editme")}
-                color="blue"
-              />
+            </div>
+            <nav className="flex flex-col">
+              <MobileNavLink icon={<UserIcon />} label="Manage Users" onClick={() => navigate("/admin/manage-users")} />
+              <MobileNavLink icon={<HomeIcon />} label="Property Approvals" onClick={() => navigate("/listning/")} />
+              <MobileNavLink icon={<ManagePropertiesIcon />} label="Manage Properties" onClick={() => navigate("/admin-listning")} />
+              <MobileNavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
+              <MobileNavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
             </nav>
           </div>
         )}
