@@ -8,7 +8,7 @@ import { approveListingAPI, rejectListingAPI , getPendingListings, getTopAgentsA
 import type { ListingData} from "../services/Admin";
 import { SettingsIcon , HomeIcon,PulseIcon,ChartIcon,UserIcon } from "../components/Icons";
 import toast from "react-hot-toast";
-import { getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
+import { fetchLocationApiClient, getAllListingsAPI, getApprovedListingsAPI, getMyListningsAPI, type EdiitListningData } from "../services/Listning";
 import SavedPropertiesMap from "../components/SavedPropertiesMap"; 
 import type { Property } from "../components/SavedPropertiesMap";
 import type {UserData} from '../services/User'
@@ -182,26 +182,25 @@ useEffect(() => {
     }, [user]);
 
     useEffect(() => {
-  if (!user) return;
+      if (!user) return;
 
-  const loadAgentListings = async () => {
-    if (!user || loading) return; // Wait until auth is fully loaded
-    if (user.role === "AGENT") {
-      try {
-        const res = await getMyListningsAPI(user.token);
+      const loadAgentListings = async () => {
+        if (!user || loading) return; // Wait until auth is fully loaded
+        if (user.role === "AGENT") {
+          try {
+            const res = await getMyListningsAPI(user.token);
 
-        if (res.data?.success) {
-          setMyListings(res.data.listings); // ✅ FIX HERE
+            if (res.data?.success) {
+              setMyListings(res.data.listings); // ✅ FIX HERE
+            }
+          } catch (err) {
+            console.error("Failed to load agent listings:", err);
+          }
         }
-      } catch (err) {
-        console.error("Failed to load agent listings:", err);
-      }
-    }
-  };
+      };
 
-  loadAgentListings();
-}, [user]);
-
+      loadAgentListings();
+      }, [user]);
 
     useEffect(() => {
       if (!user) return;
@@ -259,6 +258,23 @@ useEffect(() => {
       }
     };
   }, [preview]);
+
+  useEffect(() => {
+      if (!user?.token) return; // Wait until user token is available
+      
+      const getClientLocations = async () => {
+        try {
+          console.log("Fetching client locations...");
+          const clientData = await fetchLocationApiClient(user.token);
+          console.log("Client locations fetched successfully:", clientData);
+          setLocation(clientData);
+        } catch (err) {
+          console.error("Failed to fetch client locations:", err);
+        }
+      };
+    
+      getClientLocations();
+    }, [user?.token]);
 
   if (loading) {
     return (
