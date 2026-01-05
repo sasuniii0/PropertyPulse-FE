@@ -18,6 +18,7 @@ import PaymentSuccess from "../pages/PaymentSuccess";
 import PropertyComparison from "../pages/PropertyComparison";
 import MarketAnalytics from "../pages/MarketAnalytics"
 import AgentProperties from "../pages/AgentPropertyTracking";
+import Footer from "../components/Footer";
 
 const Welcome = lazy(() => import("../pages/Welcome"))
 const Signin = lazy(() => import("../pages/Signin"))
@@ -91,10 +92,7 @@ export default function Router() {
                     </Route>
                 </Routes>
 
-                {/* Footer */}
-                <footer className="bg-gray-100 text-gray-700 py-4 text-center">
-                    <p>© 2025 Your Name. All rights reserved.</p>
-                </footer>
+                <Footer />
             </Suspense>
         </BrowserRouter>
     )
