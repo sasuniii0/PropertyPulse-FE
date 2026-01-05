@@ -89,7 +89,7 @@ const AdminInquiryPage: React.FC = () => {
 
       const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
       
-      const response = await fetch(`${apiUrl}/admin/inquiries`, {
+      const response = await fetch(`${apiUrl}/api/v1/inquiries/`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${token}`,
