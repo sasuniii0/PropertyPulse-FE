@@ -158,7 +158,7 @@ export default function Header() {
                 <NavLink icon={<ListingsIcon />} label="Listings" onClick={() => navigate("/search")} />
                 <NavLink icon={<HeartIcon />} label="Favorites" onClick={() => navigate("/favourites")} />
                 <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
-                <NavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
+                <NavLink icon={<UserIcon />} label="Me" onClick={() => navigate("/editme")} />
               </nav>
 
               {/* Right: User Info & Logout */}
@@ -248,7 +248,7 @@ export default function Header() {
                 <NavLink icon={<CreateListingIcon />} label="Create New" onClick={() => navigate("/createListnings")} />
                 <NavLink icon={<ManageListingIcon />} label="Manage Listings" onClick={() => navigate("/manageListnings")} />
                 <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
-                <NavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
+                <NavLink icon={<UserIcon />} label="Me" onClick={() => navigate("/editme")} />
               </nav>
 
               {/* Right: User Info & Logout */}
@@ -305,7 +305,7 @@ export default function Header() {
               <MobileNavLink icon={<CreateListingIcon />} label="Create New" onClick={() => navigate("/createListnings")} />
               <MobileNavLink icon={<ManageListingIcon />} label="Manage Listings" onClick={() => navigate("/manageListnings")} />
               <MobileNavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
-              <MobileNavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
+              <MobileNavLink icon={<UserIcon />} label="Me" onClick={() => navigate("/editme")} />
             </nav>
           </div>
         )}
@@ -335,11 +335,11 @@ export default function Header() {
 
               {/* Center: Desktop Navigation */}
               <nav className="hidden lg:flex items-center gap-1">
-                <NavLink icon={<UserIcon />} label="Manage Users" onClick={() => navigate("/admin/manage-users")} />
-                <NavLink icon={<HomeIcon />} label="Property Approvals" onClick={() => navigate("/listning/")} />
-                <NavLink icon={<ManagePropertiesIcon />} label="Manage Properties" onClick={() => navigate("/admin-listning")} />
+                <NavLink icon={<UserIcon />} label="Users" onClick={() => navigate("/admin/manage-users")} />
+                <NavLink icon={<HomeIcon />} label="Approvals" onClick={() => navigate("/listning/")} />
+                <NavLink icon={<ManagePropertiesIcon />} label="Properties" onClick={() => navigate("/admin-listning")} />
                 <NavLink icon={<InquiriesIcon />} label="Inquiries" onClick={() => navigate("/inquaries")} />
-                <NavLink icon={<UserIcon />} label="My Profile" onClick={() => navigate("/editme")} />
+                <NavLink icon={<UserIcon />} label="Me" onClick={() => navigate("/editme")} />
               </nav>
 
               {/* Right: User Info & Logout */}
