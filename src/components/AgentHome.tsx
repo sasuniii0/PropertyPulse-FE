@@ -182,126 +182,132 @@ export default function AgentHome() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2 bg-white shadow-sm border border-gray-200 p-6">
-            <div className="flex justify-between items-center mb-4">
+            {/* Recent Listings */}
+            <div className="lg:col-span-2 bg-white shadow-sm border border-gray-200 p-6">
+                <div className="flex justify-between items-center mb-2">
                 <h2 className="text-lg font-bold text-gray-900">Recent Listings</h2>
                 <button
-                onClick={() => navigate("/manageListnings")}
-                className="text-sm text-teal-600 font-semibold hover:text-teal-700"
+                    onClick={() => navigate("/manageListnings")}
+                    className="text-sm text-teal-600 font-semibold hover:text-teal-700"
                 >
-                View All →
+                    View All →
                 </button>
-            </div>
-
-            {recentListings.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                <p className="text-sm">No listings yet. Create your first property!</p>
                 </div>
-            ) : (
+                <div className="h-px bg-gray-100 mb-4" />
+
+                {recentListings.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                    <p className="text-sm">No listings yet. Create your first property!</p>
+                </div>
+                ) : (
                 <div className="space-y-4">
-                {recentListings.map((listing) => (
+                    {recentListings.map((listing) => (
                     <div
-                    key={listing._id}
-                    onClick={() => navigate(`/property/${listing._id}`)}
-                    className="group grid grid-cols-[96px_1fr] gap-4 p-4 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
+                        key={listing._id}
+                        onClick={() => navigate(`/property/${listing._id}`)}
+                        className="group grid grid-cols-[96px_1fr] gap-4 p-4 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
                     >
-                    {/* Image */}
-                    <img
+                        {/* Image */}
+                        <img
                         src={listing.images?.[0] ?? "/placeholder.jpg"}
                         alt={listing.title}
                         className="w-24 h-24 object-cover rounded"
-                    />
+                        />
 
-                    {/* Content */}
-                    <div className="flex flex-col justify-between min-h-[96px]">
+                        {/* Content */}
+                        <div className="flex flex-col justify-between min-h-[96px]">
                         {/* Top row */}
                         <div className="flex items-start justify-between gap-3">
-                        <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
+                            <h3 className="font-semibold text-gray-900 text-sm leading-tight line-clamp-2">
                             {listing.title}
-                        </h3>
+                            </h3>
 
-                        <span
+                            <span
                             className={`shrink-0 text-xs font-semibold px-2 py-1 rounded ${
-                            listing.status === "APPROVED"
+                                listing.status === "APPROVED"
                                 ? "bg-green-100 text-green-700"
                                 : listing.status === "PENDING"
                                 ? "bg-yellow-100 text-yellow-700"
                                 : "bg-red-100 text-red-700"
                             }`}
-                        >
+                            >
                             {listing.status}
-                        </span>
+                            </span>
                         </div>
 
                         {/* Address */}
                         <div className="flex items-center gap-2 text-xs text-gray-500 mt-1">
-                        <MapPinIcon />
-                        <span className="truncate">{listing.location.address}</span>
+                            <MapPinIcon />
+                            <span className="truncate">{listing.location.address}</span>
                         </div>
 
                         {/* Bottom row */}
                         <div className="flex items-center justify-between mt-2">
-                        <p className="text-teal-600 font-bold text-sm">
+                            <p className="text-teal-600 font-bold text-sm">
                             LKR {listing.price.toLocaleString()}
-                        </p>
+                            </p>
 
-                        {listing.bedrooms > 0 && (
+                            {listing.bedrooms > 0 && (
                             <div className="flex items-center gap-4 text-gray-500 text-xs">
-                            <span className="flex items-center gap-1">
-                                <BedIcon/>
+                                <span className="flex items-center gap-1">
+                                <BedIcon />
                                 {listing.bedrooms}
-                            </span>
-                            <span className="flex items-center gap-1">
-                                <BathIcon/>
+                                </span>
+                                <span className="flex items-center gap-1">
+                                <BathIcon />
                                 {listing.bathrooms}
-                            </span>
+                                </span>
                             </div>
-                        )}
+                            )}
+                        </div>
                         </div>
                     </div>
-                    </div>
-                ))}
+                    ))}
                 </div>
-            )}
+                )}
             </div>
 
-          {/* Recent Inquiries */}
-          <div className="bg-white shadow-sm border border-gray-200 p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-gray-900">Recent Inquiries</h2>
-              <button
-                onClick={() => navigate("/inquaries")}
-                className="text-sm text-teal-600 font-semibold hover:text-teal-700"
-              >
-                View All →
-              </button>
-            </div>
-            {recentInquiries.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <p className="text-sm">No inquiries yet.</p>
-              </div>
-            ) : (
-              <div className="space-y-3">
-                {recentInquiries.map((inquiry, index) => (
-                  <div
-                    key={index}
-                    className="p-3 border border-gray-200 hover:border-teal-600 hover:bg-teal-50 transition-all cursor-pointer"
+            {/* Recent Inquiries */}
+            <div className="bg-white shadow-sm border border-gray-200 p-6">
+                <div className="flex justify-between items-center mb-2">
+                <h2 className="text-lg font-bold text-gray-900">Recent Inquiries</h2>
+                <button
                     onClick={() => navigate("/inquaries")}
-                  >
-                    <div className="flex items-start justify-between mb-2">
-                      <div className="font-semibold text-gray-900 text-xs">{inquiry.name}</div>
-                      <div className="text-xs text-gray-500">
-                        {new Date(inquiry.createdAt).toLocaleDateString()}
-                      </div>
+                    className="text-sm text-teal-600 font-semibold hover:text-teal-700"
+                >
+                    View All →
+                </button>
+                </div>
+                <div className="h-px bg-gray-100 mb-4" />
+
+                {recentInquiries.length === 0 ? (
+                <div className="text-center py-8 text-gray-500">
+                    <p className="text-sm">No inquiries yet.</p>
+                </div>
+                ) : (
+                <div className="space-y-3">
+                    {recentInquiries.map((inquiry, index) => (
+                    <div
+                        key={index}
+                        className="p-3 border border-gray-200 hover:border-teal-500 hover:bg-teal-50 transition cursor-pointer"
+                        onClick={() => navigate("/inquaries")}
+                    >
+                        <div className="flex items-center justify-between mb-1">
+                        <div className="font-semibold text-gray-900 text-xs truncate">
+                            {inquiry.name}
+                        </div>
+                        <div className="text-[11px] text-gray-500 shrink-0">
+                            {new Date(inquiry.createdAt).toLocaleDateString()}
+                        </div>
+                        </div>
+                        <p className="text-xs text-gray-600 line-clamp-2 mb-2">{inquiry.message}</p>
+                        <div className="text-xs text-teal-600 font-medium">{inquiry.email}</div>
                     </div>
-                    <p className="text-xs text-gray-600 line-clamp-2 mb-2">{inquiry.message}</p>
-                    <div className="text-xs text-teal-600 font-medium">{inquiry.email}</div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
+                    ))}
+                </div>
+                )}
+            </div>
+            </div>
 
         {/* Performance Tips */}
         <div className="bg-gradient-to-r from-blue-50 to-blue-100 border-l-4 border-blue-600 p-6">
