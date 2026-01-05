@@ -20,6 +20,8 @@ import { startAgentPayment } from "../services/Payment";
 import RecentPropertiesSlideshow from "../components/RecentPropertiesSlideShow";
 import api from "../services/Api";
 import { getDashboardMetricsAPI } from "../services/MarketAnalytics";
+import AgentHome from "../components/AgentHome";
+import ClientHome from "../components/ClientHome";
 
 export default function Home() {
   const { user, loading } = useAuth();
@@ -299,6 +301,7 @@ useEffect(() => {
   if (user.role === "CLIENT") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+        <ClientHome />
         {/* Main Content */}
         <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
           {/* Welcome Section */}
@@ -647,6 +650,8 @@ useEffect(() => {
   // AGENT DASHBOARD
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+
+      <AgentHome />
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8 space-y-6">
