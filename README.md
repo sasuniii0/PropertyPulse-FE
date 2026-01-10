@@ -399,6 +399,14 @@ export const Component: React.FC<ComponentProps> = ({ props }) => {
 };
 ```
 
+## Live Demo
+
+Try the project online:
+
+- **Frontend:** [Live Frontend Demo](https://property-pulse-fe.vercel.app/)  
+
+> ⚠ Some features may require login or API access.
+
 ## Contributing
 
 1. Fork the repository
